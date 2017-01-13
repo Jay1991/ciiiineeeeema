@@ -1,0 +1,26 @@
+HKCR
+{
+	Zfpcom.ZekaFP.1 = s 'ZekaFP Class'
+	{
+		CLSID = s '{2394FFB1-BB5E-4454-9B40-6F75006D27AA}'
+	}
+	Zfpcom.ZekaFP = s 'ZekaFP Class'
+	{
+		CLSID = s '{2394FFB1-BB5E-4454-9B40-6F75006D27AA}'
+		CurVer = s 'Zfpcom.ZekaFP.1'
+	}
+	NoRemove CLSID
+	{
+		ForceRemove {2394FFB1-BB5E-4454-9B40-6F75006D27AA} = s 'ZekaFP Class'
+		{
+			ProgID = s 'Zfpcom.ZekaFP.1'
+			VersionIndependentProgID = s 'Zfpcom.ZekaFP'
+			ForceRemove 'Programmable'
+			InprocServer32 = s '%MODULE%'
+			{
+				val ThreadingModel = s 'Apartment'
+			}
+			'TypeLib' = s '{B1F547D6-DFAD-47C0-BDE6-407702E27360}'
+		}
+	}
+}

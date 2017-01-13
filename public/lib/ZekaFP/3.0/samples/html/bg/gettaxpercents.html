@@ -1,0 +1,86 @@
+<html>
+
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=windows-1251">
+<meta http-equiv="Content-Language" content="bg">
+<link rel="stylesheet" type="text/css" href="main.css">
+<script language="JavaScript" src="main.js"></script>
+<title>Данъчни ставки</title>
+<base target="_self">
+</head>
+
+<body>
+
+<script language="javascript">
+function work()
+{
+	result.innerText = "...";
+	var zfp = new ActiveXObject("Zfpcom.ZekaFP");
+	var res = zfp.Setup(parseInt(parent.frames.contents.comport.value, 10), parseInt(parent.frames.contents.baud.value, 10), 3, 1000);
+	res = zfp.GetTaxPercents();
+
+    result_color(zfp);
+	if (!zfp.errorCode)
+	{
+		taxgrp1.innerText = res.taxgrp1;
+		taxgrp2.innerText = res.taxgrp2;
+		taxgrp3.innerText = res.taxgrp3;
+		taxgrp4.innerText = res.taxgrp4;
+		taxgrp5.innerText = (0 <= res.taxgrp5) ? res.taxgrp5 : "не е зададена";
+		taxgrp6.innerText = (0 <= res.taxgrp6) ? res.taxgrp6 : "не е зададена";
+		taxgrp7.innerText = (0 <= res.taxgrp7) ? res.taxgrp7 : "не е зададена";
+		taxgrp8.innerText = (0 <= res.taxgrp8) ? res.taxgrp8 : "не е зададена";
+	}
+	
+	result.innerText = zfp.GetErrorString(zfp.errorCode, 1);
+		
+	zfpinput.innerText = zfp.GetInputHexFormated();
+	zfpoutput.innerText = zfp.GetResponseHexFormated();
+}
+</script>
+
+<h1>Данъчни ставки</h1>
+<p>
+<input type="button" value="Старт" name="start" language="JavaScript" onclick="work();">
+</p>
+<p>
+Резултат: <span id="result">няма</span> <br> <br>
+Данъчни ставки в %<br>
+група А: <span id="taxgrp1"> </span><br>
+група Б: <span id="taxgrp2"> </span><br>
+група В: <span id="taxgrp3"> </span><br>
+група Г: <span id="taxgrp4"> </span><br>
+група Д: <span id="taxgrp5"> </span><br>
+група Е: <span id="taxgrp6"> </span><br>
+група Ж: <span id="taxgrp7"> </span><br>
+група З: <span id="taxgrp8"> </span><br>
+</p>
+
+<p class="msghead">
+<script language="JavaScript">mf_text("api", "Детайли за програмния интерфейс (API)");</script>
+<br>
+<div id="api" class="msgbody">
+	Няма въведени
+	<br>
+</div>
+<script language="JavaScript">mf_text("protocol", "Детайли за протокола на комуникация");</script>
+<br>
+<div id="protocol" class="msgbody">
+	Няма въведени
+	<br>
+</div>
+<script language="JavaScript">mf_text("io", "Вход / Изход");</script>
+<br>
+<div id="io" class="msgbody">
+	<h2>Към фискалния принтер</h2>
+	<pre id="zfpinput">&nbsp;</pre>
+	<br>
+	<h2>От фискалния принтер</h2>
+	<pre id="zfpoutput">&nbsp;</pre>
+	<br>
+</div>
+</p>
+
+</body>
+
+</html>

@@ -1,0 +1,25 @@
+HKCR
+{
+	Zfpcom.CurrencyInfo.1 = s 'CurrencyInfo Class'
+	{
+		CLSID = s '{F661C687-5A22-40AB-B4A9-5C396057120A}'
+	}
+	Zfpcom.CurrencyInfo = s 'CurrencyInfo Class'
+	{
+		CLSID = s '{F661C687-5A22-40AB-B4A9-5C396057120A}'
+	}
+	NoRemove CLSID
+	{
+		ForceRemove {F661C687-5A22-40AB-B4A9-5C396057120A} = s 'CurrencyInfo Class'
+		{
+			ProgID = s 'Zfpcom.CurrencyInfo.1'
+			VersionIndependentProgID = s 'Zfpcom.CurrencyInfo'
+			ForceRemove 'Programmable'
+			InprocServer32 = s '%MODULE%'
+			{
+				val ThreadingModel = s 'Apartment'
+			}
+			'TypeLib' = s '{B1F547D6-DFAD-47C0-BDE6-407702E27360}'
+		}
+	}
+}

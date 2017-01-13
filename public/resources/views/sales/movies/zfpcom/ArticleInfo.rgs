@@ -1,0 +1,26 @@
+HKCR
+{
+	Zfpcom.ArticleInfo.1 = s 'ArticleInfo Class'
+	{
+		CLSID = s '{4B2E1B2E-4C07-471E-BC18-7497D0104348}'
+	}
+	Zfpcom.ArticleInfo = s 'ArticleInfo Class'
+	{
+		CLSID = s '{4B2E1B2E-4C07-471E-BC18-7497D0104348}'
+		CurVer = s 'Zfpcom.ArticleInfo.1'
+	}
+	NoRemove CLSID
+	{
+		ForceRemove {4B2E1B2E-4C07-471E-BC18-7497D0104348} = s 'ArticleInfo Class'
+		{
+			ProgID = s 'Zfpcom.ArticleInfo.1'
+			VersionIndependentProgID = s 'Zfpcom.ArticleInfo'
+			ForceRemove 'Programmable'
+			InprocServer32 = s '%MODULE%'
+			{
+				val ThreadingModel = s 'Apartment'
+			}
+			'TypeLib' = s '{B1F547D6-DFAD-47C0-BDE6-407702E27360}'
+		}
+	}
+}

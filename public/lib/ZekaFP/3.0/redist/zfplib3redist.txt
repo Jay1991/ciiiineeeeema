@@ -1,0 +1,33 @@
+The file zfplib3redist.exe contains a redistributable version of 
+Zeka Fiscal Printer support library installation. 
+
+You get 4 files installed into "Program Files\ZekaFP\3.0\bin".
+
+zfpcom.dll - the Zeka FP COM library
+zfpcom.tlb - the Zeka FP COM type library
+zfpcash.exe - the Zeka FP CashFile and FPrint replacer
+zfpcash.chm - the Zeka FP CashFile and FPrint replacer help
+
+No uninstall provided.
+
+You are not obligated to use this setup. It is provided only to help you.
+You could place those files in your product's installation and install them
+in any other way you like!
+
+If you run the file directly you get only one prompt. After you press Next
+the installer finishes. If you wish you could remove this prompt by using
+the command line like:
+
+zfplib3redist /SILENT
+   or
+zfplib3redist /VERYSILENT
+
+this will remove any user intervention.
+
+You could also specify the /DIR="x:\dirname" parameter to override the default 
+directory name displayed on the Select Destination Location wizard page. 
+A fully qualified pathname must be specified. 
+
+You are allowed to redistribute this installation inside your own installation
+or other media. This permission includes commercial usage.
+

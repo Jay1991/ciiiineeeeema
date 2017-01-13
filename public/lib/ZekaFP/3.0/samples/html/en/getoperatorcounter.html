@@ -1,0 +1,75 @@
+<html>
+
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=windows-1251">
+<meta http-equiv="Content-Language" content="bg">
+<link rel="stylesheet" type="text/css" href="main.css">
+<script language="JavaScript" src="main.js"></script>
+<title>Operator's report counter</title>
+<base target="_self">
+</head>
+
+<body>
+
+<script language="javascript">
+function work()
+{
+	result.innerText = "...";
+	var zfp = new ActiveXObject("Zfpcom.ZekaFP");
+	var res = zfp.Setup(parseInt(parent.frames.contents.comport.value, 10), parseInt(parent.frames.contents.baud.value, 10), 3, 1000);
+	res = zfp.GetOperatorCounter(parseInt(line.value, 10));
+
+    result_color(zfp);
+	if (!zfp.errorCode)
+	{
+		counter.innerText = res.counter;
+		var dt = new Date(res.datetime);
+		datetime.innerText = dt.toLocaleString();
+	}
+	
+	result.innerText = zfp.GetErrorString(zfp.errorCode, 0);
+		
+	zfpinput.innerText = zfp.GetInputHexFormated();
+	zfpoutput.innerText = zfp.GetResponseHexFormated();
+}
+</script>
+
+<h1>Operator's report counter</h1>
+<p>
+Operator (1-20): <input type="text" name="line" size="10" value="1">&nbsp;
+<input type="button" value="Start" name="start" language="JavaScript" onclick="work();">
+</p>
+<p>
+Result: <span id="result">None</span> <br> <br>
+Reports Counter: <span id="counter"> </span><br>
+Date: <span id="datetime"> </span><br>
+</p>
+
+<p class="msghead">
+<script language="JavaScript">mf_text("api", "Application Program Interface (API)");</script>
+<br>
+<div id="api" class="msgbody">
+	Not Entered
+	<br>
+</div>
+<script language="JavaScript">mf_text("protocol", "Comunication Protocol Details");</script>
+<br>
+<div id="protocol" class="msgbody">
+	Not Entered
+	<br>
+</div>
+<script language="JavaScript">mf_text("io", "Input / Output");</script>
+<br>
+<div id="io" class="msgbody">
+	<h2>To Fiscal Printer</h2>
+	<pre id="zfpinput">&nbsp;</pre>
+	<br>
+	<h2>To PC</h2>
+	<pre id="zfpoutput">&nbsp;</pre>
+	<br>
+</div>
+</p>
+
+</body>
+
+</html>

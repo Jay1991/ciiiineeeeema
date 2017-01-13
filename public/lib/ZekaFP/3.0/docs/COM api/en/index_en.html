@@ -1,0 +1,63 @@
+<html>
+
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=windows-1251">
+<link rel="stylesheet" type="text/css" href="../main.css">
+<title>Class CZekaFP</title>
+</head>
+
+<body>
+
+<pre>
+IZekaFP
+
+// interfaces which are returned as IZekaFP method result
+IGetCurrentBonInfoRes
+ITaxNumbers
+IPayTypes
+IZFPParameters
+IOperatorInfo
+IArticleInfo
+IDailySums
+IFiscalReportData
+IDailyReport
+</pre>
+
+<b><br>
+Remarks</b><p>The <b>IZekaFP</b> interface provides the user functionality for using 
+Zeka Fiscal Printer device. It includes all of the communications protocol 
+commands that are relative to the end user and some of the basic service 
+commands.</p>
+<p>The file zfpcom.dll contains the whole funtionality of <b>IZekaFP</b> and all result interfaces returned from IZekaFP methods</p>
+<p>zfpcom.tlb contains the Type library for all interfaces.</p>
+
+<p>All methods return only one result, in cases multiply results are needed, the result is an interface
+which properties contain all of the returned data. In some cases not all of the result interface properties are
+filled. In those cases we will enuminate the significant properties in the function documentation. When there is no
+such enumination this means that the function fill all the properies of the result interface.</p>
+
+<p>All methods of <b>IZekaFP</b> fill the errorCode property. This is how you discover an error.</p>
+
+<p><b>See Also</b>
+
+<br><br>
+
+<a href="IZekaFP_en.html">Methods of IZekaFP interface</a><br><br>
+Interfaces which are returned as IZekaFP method result<br>
+<a href="IGetCurrentBonInfoRes_en.html">Methods of IGetCurrentBonInfoRes interface</a><br>
+<a href="ITaxNumbers_en.html">Methods of ITaxNumbers interface</a><br>
+<a href="IPayTypes_en.html">Methods of IPayTypes interface</a><br>
+<a href="IZFPParameters_en.html">Methods of IZFPParameters interface</a><br>
+<a href="IOperatorInfo_en.html">Methods of IOperatorInfo interface</a><br>
+<a href="IArticleInfo_en.html">Methods of IArticleInfo interface</a><br>
+<a href="IDailySums_en.html">Methods of IDailySums interface</a><br>
+<a href="IFiscalReportData_en.html">Methods of IFiscalReportData interface</a><br>
+<a href="IDailyReport_en.html">Methods of IDailyReport interface</a><br>
+<a href="IZFPStatus_en.html">Methods of IZFPStatus interface</a><br>
+<a href="IInvoiceNumbers_en.html">Methods of IInvoiceNumbers interface</a><br>
+
+</p>
+
+</body>
+
+</html>

@@ -1,0 +1,239 @@
+<html>
+
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=windows-1251">
+<meta http-equiv="Content-Language" content="bg">
+<link rel="stylesheet" type="text/css" href="main.css">
+<script language="JavaScript" src="main.js"></script>
+<title>Contents</title>
+<base target="main">
+</head>
+
+<body onload="LoadFPCom()">
+
+<script language="JavaScript">
+function SaveFPCom(val)
+{
+    var d = new Date();
+    d.setDate(d.getDate() + 100);
+    document.cookie = 'FPCom=' + escape(val) + ';expires=' + d.toGMTString();
+}
+
+function getCookie(c_name)
+{
+  if (document.cookie.length>0)
+  {
+    c_start=document.cookie.indexOf(c_name + "=");
+    if (c_start!=-1)
+    { 
+      c_start=c_start + c_name.length+1; 
+      c_end=document.cookie.indexOf(";",c_start);
+      if (c_end==-1) c_end=document.cookie.length;
+      return unescape(document.cookie.substring(c_start,c_end));
+    } 
+  }
+  return "";
+}
+
+function LoadFPCom()
+{
+  val = getCookie('FPCom');
+  if (val != "" && val != 0)
+  {
+	comport.value = (val >> 24) & 0xFF;	
+	baud.value = val & 0x00FFFFFF;
+  }
+}
+
+function FindTheCom()
+{
+	var zfp = new ActiveXObject("Zfpcom.ZekaFP");
+	var val = zfp.FindFirstFPCOMEx();
+	if (val)
+	{
+		comport.value = (val >> 24) & 0xFF;	
+		baud.value = val & 0x00FFFFFF;
+		search_err.innerText = "";
+		SaveFPCom(val);
+	}
+	else
+	{
+	    search_err.style.color = "red";
+	    search_err.innerText = "\nНе е открит ФП.";
+	}
+}
+</script>
+
+<table border="0">
+<tr>
+<td>Сериен&nbsp;порт:&nbsp;</td>
+<td><select size="1" name="comport" id="comport">
+<option value="1" selected>COM1</option>
+<option value="2">COM2</option>
+<option value="3">COM3</option>
+<option value="4">COM4</option>
+<option value="5">COM5</option>
+<option value="6">COM6</option>
+<option value="7">COM7</option>
+<option value="8">COM8</option>
+<option value="9">COM9</option>
+<option value="10">COM10</option>
+<option value="11">COM11</option>
+<option value="12">COM12</option>
+</select>
+</td><td><input type="button" value="Търсене" name="findcom" onclick="FindTheCom()"></td></tr>
+<tr>
+<td>Скорост:</td>
+<td><select size="1" name="baud" id="baud">
+<option value="9600" selected>9600</option>
+<option value="19200">19200</option>
+<option value="38400">38400</option>
+<option value="57600">57600</option>
+<option value="115200">115200</option>
+</select></td></tr>
+<tr><td colspan="3" id="search_err" align="center"></td></tr>
+<tr><td colspan="3"><br /><script language="JavaScript">
+    var zfp = new ActiveXObject("Zfpcom.ZekaFP");
+    var val = zfp.zfplibVersion;
+    document.write('Версия на библиотеката: ' + ((val >> 16) & 0xFF) + '.' + ((val >> 8) & 0xFF) + '.' + (val & 0xFF));
+</script></td></tr>
+</table>
+<hr><p><a href="main.html">Начало</a></p>
+<p><b>Функции:</b></p>
+
+<p><script language="JavaScript">mf_contents("general", "Общи");</script></p>
+<div id="general" class="menuopt">
+<ul>
+<li><a href="getstatus.html">Статус</a></li>
+<li><a href="diagnostic.html">Диагностика</a></li>
+<li><a href="getversion.html">Версия на ФПР</a></li>
+<li><a href="displayclear.html">Изчистване на дисплея</a></li>
+<li><a href="display.html">Показване на дисплея</a></li>
+<li><a href="displaydatetime.html">Визуализация на дата/час</a></li>
+<li><a href="opentill.html">Отваряне на чекмедже</a></li>
+<li><a href="papercut.html">Срязване на хартията</a></li>
+<li><a href="linefeed.html">Изтикване на бонова лента</a></li>
+<li><a href="setprintmode.html">Ускоряване на печата</a></li>
+<li><a href="printlogo2.html">Печат на лого (разширен формат)</a></li>
+<li><a href="printlogo.html">Печат на лого</a></li>
+<li><a href="printtext.html">Печат свободен текст</a></li>
+<li><a href="barcodes.html">Печат на баркод</a></li>
+<li><a href="printtextkp.html">Печат текст на КП</a></li>
+</ul>
+</div>
+
+<p><script language="JavaScript">mf_contents("read", "Четене на");</script></p>
+<div id="read" class="menuopt">
+<ul>
+<li><a href="getfactorynumber.html">Индивидуален номер на устройството</a></li>
+<li><a href="getfiscalnumber.html">Номер на фискална памет</a></li>
+<li><a href="gettaxnumber.html">Идентификационен номер</a></li>
+<li><a href="gettaxpercents.html">Данъчни ставки</a></li>
+<li><a href="getdecimalpoint.html">Десетична точка във ФПР</a></li>
+<li><a href="getpaytypes.html">Информация за плащания</a></li>
+<li><a href="getparameters.html">Параметри</a></li>
+<li><a href="getejmode.html">Режим на ЕКЛ</a></li>
+<li><a href="getclicheline.html">Ред от клишето</a></li>
+<li><a href="getdepartment.html">Информация за департамент</a></li>
+<li><a href="getarticleinfo.html">Информация за артикул</a></li>
+<li><a href="getdatetime.html">Дата/час</a></li>
+<li><a href="getlogoinfo.html">Проверка на текущо лого</a></li>
+<li><a href="readfiscalmemory.html">Съдържание на фискална памет</a></li>
+<li><a href="getlastfiscalreportdata.html">Последна дата на фискален отчет</a></li>
+<li><a href="getfreefiscalspace.html">Брой свободни записи във ФП</a></li>
+<li><a href="getinvoicenextnumber.html">Диапазон номера на фактури</a></li>
+</ul>
+<ul>
+<li><a href="getdailyreport.html">Информация за дневния отчет</a></li>
+<li><a href="getdailyinfo.html">Дневни суми и броячи</a></li>
+<li><a href="getdailysums.html">Дневни суми по данъчни групи</a></li>
+<li><a href="getdailypayments.html">Дневни суми (налични)</a></li>
+<li><a href="getdailyincomes.html">Дневни суми (получени)</a></li>
+<li><a href="getdailychange.html">Дневни суми (върнати)</a></li>
+<li><a href="getdailyofficialincomes.html">Дневни суми (служебно въведени)</a></li>
+<li><a href="getdailyofficialexpenses.html">Дневни суми (служебно изведени)</a></li>
+</ul>
+<ul>
+<li><a href="getoperatoruserpass.html">Име и парола на оператор</a></li>
+<li><a href="getoperatorinfo.html">Суми на оператор (общо)</a></li>
+<li><a href="getoperatorreceives.html">Суми на оператор (получени)</a></li>
+<li><a href="getoperatorincomes.html">Суми на оператор (въведени)</a></li>
+<li><a href="getoperatorexpenses.html">Суми на оператор (изведени)</a></li>
+<li><a href="getoperatorchange.html">Суми на оператор (върнати)</a></li>
+<li><a href="getoperatorcounter.html">Операторски отчет (брояч)</a></li>
+</ul>
+</div>
+
+<p><script language="JavaScript">mf_contents("bons", "Операции с бонове");</script></p>
+<div id="bons" class="menuopt">
+<ul>
+<li><a href="openbon.html">Отваряне на служебен бон</a></li>
+<li><a href="closebon.html">Затваряне на служебен бон</a></li>
+<li><a href="openfiscalbon.html">Отваряне на фискален бон</a></li>
+<li><a href="openinvoice.html">Отваряне на фискален бон - фактура</a></li>
+<li><a href="sellfree.html">Свободна продажба</a></li>
+<li><a href="selldb.html">Продажба на артикул от базата данни</a></li>
+<li><a href="selldepartment.html">Продажба от департамент</a></li>
+<li><a href="calcintermediatesum.html">Междинна сума</a></li>
+<li><a href="adddiscount.html">Отстъпки и надбавки</a></li>
+<li><a href="payment.html">Плащане</a></li>
+<li><a href="closefiscalbon.html">Затваряне на фискален бон</a></li>
+<li><a href="closebonincash.html">Директно приключване на бона в брой</a></li>
+<li><a href="terminatebon.html">Прекратяване на бон</a></li>
+<li><a href="printduplicate.html">Печат на дубликат</a></li>
+<li><a href="officialsums.html">Служебни суми</a></li>
+<li><a href="getbonnumber.html">Номер на бон</a></li>
+<li><a href="getcurrentboninfo.html">Информация за текущия бон</a></li>
+</ul>
+</div>
+
+<p><script language="JavaScript">mf_contents("reports", "Отчети");</script></p>
+<div id="reports" class="menuopt">
+<ul>
+<li><a href="reportspecialfiscal.html">Специален фискален отчет</a></li>
+<li><a href="reportej.html">Отчет на ЕКЛ</a></li>
+<li><a href="reportfiscalbyblock.html">Фискален отчет по номера</a></li>
+<li><a href="reportfiscalbydate.html">Фискален отчет по дати</a></li>
+<li><a href="reportdaily.html">Дневен финансов отчет</a></li>
+<li><a href="reportoperator.html">Отчет по оператори</a></li>
+<li><a href="reportarticles.html">Отчет по артикули</a></li>
+<li><a href="reportdepartments.html">Отчет по департаменти</a></li>
+</ul>
+</div>
+
+<p><script language="JavaScript">mf_contents("sets", "Задаване на");</script></p>
+<div id="sets" class="menuopt">
+<ul>
+<li><a href="setpaytype.html">Имена на плащане</a></li>
+<li><a href="setparameters.html">Параметри</a></li>
+<li><a href="setclicheline.html">Ред на клише</a></li>
+<li><a href="setdepartment.html">Департамент</a></li>
+<li><a href="setoperatoruserpass.html">Име и парола на оператор</a></li>
+<li><a href="setarticleinfo.html">Артикул от базата данни</a></li>
+<li><a href="setlogofile2.html">Лого (разширен формат)</a></li>
+<li><a href="setlogofile.html">Лого</a></li>
+<li><a href="setlogo.html">Избор на текущо лого</a></li>
+<li><a href="setlocaldatetime.html">Дата и час от компютъра</a></li>
+<li><a href="setdatetime.html">Дата и час</a></li>
+<li><a href="setexternaldisplayfile.html">Програмиране на външен дисплей</a></li>
+<li><a href="setinvoicenumbersrange.html">Диапазон номера на фактури</a></li>
+</ul>
+</div>
+
+<p><script language="JavaScript">mf_contents("gs_cmd", "GS команди");</script></p>
+<div id="gs_cmd" class="menuopt">
+
+<ul>
+<li><a href="getversion_gs.html">Версия на ФПР</a></li>
+<li><a href="enablecomm_gs.html">Разрешаване/забрана на комуникацията</a></li>
+<li><a href="setspeed_gs.html">Избор на скорост</a></li>
+<li><a href="scaleprotocol_gs.html">Зареждане на протокол на везна</a></li>
+</ul>
+
+</div>
+
+<a href="sendcommanddirect.html">Директно изпращане на команда</a><br>
+
+</body>
+
+</html>

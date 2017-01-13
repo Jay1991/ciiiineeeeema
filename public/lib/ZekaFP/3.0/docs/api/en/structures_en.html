@@ -1,0 +1,72 @@
+<html>
+
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=windows-1251">
+<meta http-equiv="Content-Language" content="bg">
+<link rel="stylesheet" type="text/css" href="../main.css">
+<title>Zeka FP structures</title>
+</head>
+
+<body>
+
+<p><b>Zeka FP structures</b>
+</p>
+
+<pre>
+typedef struct {
+	double taxGrp1;	// sum accumulated in tax group A
+	double taxGrp2;	// sum accumulated in tax group B
+	double taxGrp3;	// sum accumulated in tax group C
+	double taxGrp4;	// sum accumulated in tax group D
+	double taxGrp5;	// sum accumulated in tax group E
+	double taxGrp6;	// sum accumulated in tax group F
+	double taxGrp7;	// sum accumulated in tax group G
+	double taxGrp8;	// sum accumulated in tax group H
+} TZfpTaxGroups;
+
+typedef struct {
+	WORD fpnum;		// Fiscal Printer place number
+	BOOL logo;		// information about logo printing status (0 = not printed, otherwise printed)
+	BOOL till;		// till status (0 = don't have a till, otherwise till is present)
+	BOOL autocut;		// auto cutter status (0 = don't have one, otherwise present)
+	BOOL transparent;	// transparent display status (0 = no display or not transparent, otherwise transparent display)
+	BOOL shortEJ;		// Electronic Journal mode (0 = full, 1 = short)
+	BOOL currency;		// use currnecy in receipt (0 = no, 1 = yes)
+} TZfpParams;
+
+// GetCurrentBonInfo flags
+#define ZFPB_OPENBO	1	// the receipt is open
+#define ZFPB_NOVOID	2	// void operations are not allowed
+#define ZFPB_DDS	4	// VAT info is printed
+#define ZFPB_PODRBON	8       // detailed info is printed
+#define ZFPB_PAYSTART	16	// payment is started
+#define ZFPB_PAYEND	32	// payment is finished
+
+typedef struct {
+	DWORD flags;		// receipt's flags
+	int purchases;		// the total number of purchases in the receipt
+	double change;		// last receipt change sum
+	BYTE changeType;	// last receipt change payment type
+	TZfpTaxGroups taxGroups; // tax sums
+} TZfpReceiptInfo;
+
+typedef struct {
+	char type0[12];		// name of payment type 0
+	char type1[12];		// name of payment type 1
+	char type2[12];		// name of payment type 2
+	char type3[12];		// name of payment type 3
+	char type4[12];		// name of payment type 4
+	double exchRate;		// exchange rate
+} TZfpPayTypes;
+</pre>
+
+</p>
+<p><b>See also</b>
+
+<br>
+
+<a href="index_en.html">Notes</a> | <a href="members_en.html">Class members</a>
+
+</p>
+</body>
+</html>

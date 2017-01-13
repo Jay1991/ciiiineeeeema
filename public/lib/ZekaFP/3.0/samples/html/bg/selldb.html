@@ -1,0 +1,92 @@
+<html>
+
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=windows-1251">
+<meta http-equiv="Content-Language" content="bg">
+<link rel="stylesheet" type="text/css" href="main.css">
+<script language="JavaScript" src="main.js"></script>
+<title>Продажба/Корекция на артикул от базата данни</title>
+<base target="_self">
+</head>
+
+<body>
+
+<script language="javascript">
+function work()
+{
+	result.innerText = "...";
+	var zfp = new ActiveXObject("Zfpcom.ZekaFP");
+	var res = zfp.Setup(parseInt(parent.frames.contents.comport.value, 10), parseInt(parent.frames.contents.baud.value, 10), 3, 1000);
+	if ( price.value.length > 0 && price.value > 0 )
+	{
+	    res = zfp.SellDBEx2(voided.checked ? true : false, parseInt(number.value, 10), parseFloat(price.value), parseFloat(quantity.value), parseFloat(discount.value), percent.checked ? 0 : 1);
+	}
+	else
+	{
+	    res = zfp.SellDBEx(voided.checked ? true : false, parseInt(number.value, 10), parseFloat(quantity.value), parseFloat(discount.value), percent.checked ? 0 : 1);
+	}
+
+	result_color(zfp);
+	result.innerText = zfp.GetErrorString(zfp.errorCode, 1);
+		
+	zfpinput.innerText = zfp.GetInputHexFormated();
+	zfpoutput.innerText = zfp.GetResponseHexFormated();
+}
+</script>
+
+<h1>Продажба/Корекция на артикул от базата данни</h1>
+<table border=0 cellspacing=6>
+<tr><td colspan=2>
+Корекция: <input type="checkbox" name="voided" value="0">
+</td></tr>
+<tr><td>
+Номер в базата данни (1 - 99999):</td><td><input type="text" name="number" size="12" value="1">
+</td></tr>
+<tr><td>
+Цена (ако е различна от БД):</td><td><input type="text" name="price" size="12" value=""></td>
+<td>(функцията не се поддържа от всички ФП)
+</td></tr>
+<tr><td>
+Количество:</td><td><input type="text" name="quantity" size="12" value="1.0">
+</td></tr>
+<tr><td>
+Отстъпка / Надбавка:</td><td><input type="text" name="discount" size="12" value="0">
+</td></tr>
+<tr><td colspan=2 align=right>
+в проценти: <input type="checkbox" name="percent" checked>
+</td></tr>
+</table><br />
+<input type="button" value="Продажба / Корекция" name="start" language="JavaScript" onclick="work();">
+
+<p>
+Резултат: <span id="result">няма</span>
+</p>
+
+<p class="msghead">
+<script language="JavaScript">mf_text("api", "Детайли за програмния интерфейс (API)");</script>
+<br>
+<div id="api" class="msgbody">
+	Няма въведени
+	<br>
+</div>
+<script language="JavaScript">mf_text("protocol", "Детайли за протокола на комуникация");</script>
+<br>
+<div id="protocol" class="msgbody">
+	Няма въведени
+	<br>
+</div>
+<script language="JavaScript">mf_text("io", "Вход / Изход");</script>
+<br>
+<div id="io" class="msgbody">
+	<h2>Към фискалния принтер</h2>
+	<pre id="zfpinput">&nbsp;</pre>
+	<br>
+	<h2>От фискалния принтер</h2>
+	<pre id="zfpoutput">&nbsp;</pre>
+	<br>
+</div>
+</p>
+
+</body>
+
+</html>

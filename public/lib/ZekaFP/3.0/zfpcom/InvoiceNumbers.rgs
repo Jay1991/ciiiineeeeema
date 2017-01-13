@@ -1,0 +1,26 @@
+HKCR
+{
+	Zfpcom.InvoiceNumbers.1 = s 'InvoiceNumbers Class'
+	{
+		CLSID = s '{BEBD9667-9A17-44A0-B568-E1A9232619C5}'
+	}
+	Zfpcom.InvoiceNumbers = s 'InvoiceNumbers Class'
+	{
+		CLSID = s '{BEBD9667-9A17-44A0-B568-E1A9232619C5}'
+		CurVer = s 'Zfpcom.InvoiceNumbers.1'
+	}
+	NoRemove CLSID
+	{
+		ForceRemove {BEBD9667-9A17-44A0-B568-E1A9232619C5} = s 'InvoiceNumbers Class'
+		{
+			ProgID = s 'Zfpcom.InvoiceNumbers.1'
+			VersionIndependentProgID = s 'Zfpcom.InvoiceNumbers'
+			ForceRemove 'Programmable'
+			InprocServer32 = s '%MODULE%'
+			{
+				val ThreadingModel = s 'Apartment'
+			}
+			'TypeLib' = s '{B1F547D6-DFAD-47C0-BDE6-407702E27360}'
+		}
+	}
+}

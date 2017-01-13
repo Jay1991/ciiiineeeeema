@@ -1,0 +1,231 @@
+<html>
+
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=windows-1251">
+<meta http-equiv="Content-Language" content="bg">
+<link rel="stylesheet" type="text/css" href="main.css">
+<script language="JavaScript" src="main.js"></script>
+<title>Contents</title>
+<base target="main">
+</head>
+
+<body onload="LoadFPCom()">
+
+<script language="JavaScript">
+function SaveFPCom(val)
+{
+    var d = new Date();
+    d.setDate(d.getDate() + 100);
+    document.cookie = 'FPCom=' + escape(val) + ';expires=' + d.toGMTString();
+}
+
+function getCookie(c_name)
+{
+  if (document.cookie.length>0)
+  {
+    c_start=document.cookie.indexOf(c_name + "=");
+    if (c_start!=-1)
+    { 
+      c_start=c_start + c_name.length+1; 
+      c_end=document.cookie.indexOf(";",c_start);
+      if (c_end==-1) c_end=document.cookie.length;
+      return unescape(document.cookie.substring(c_start,c_end));
+    } 
+  }
+  return "";
+}
+
+function LoadFPCom()
+{
+  val = getCookie('FPCom');
+  if (val != "" && val != 0)
+  {
+	comport.value = (val >> 24) & 0xFF;	
+	baud.value = val & 0x00FFFFFF;
+  }
+}
+
+function FindTheCom()
+{
+	var zfp = new ActiveXObject("Zfpcom.ZekaFP");
+	var val = zfp.FindFirstFPCOMEx();
+	if (val)
+	{
+		comport.value = (val >> 24) & 0xFF;	
+		baud.value = val & 0x00FFFFFF;
+		search_err.innerText = "";
+		SaveFPCom(val);
+	}
+	else
+	{
+	    search_err.style.color = "red";
+	    search_err.innerText = "\nPrinter not found.";
+	}
+}
+</script>
+
+<table border="0">
+<tr>
+<td>Serial&nbsp;port:&nbsp;</td>
+<td><select size="1" name="comport" id="comport">
+<option value="1" selected>COM1</option>
+<option value="2">COM2</option>
+<option value="3">COM3</option>
+<option value="4">COM4</option>
+<option value="5">COM5</option>
+<option value="6">COM6</option>
+<option value="7">COM7</option>
+<option value="8">COM8</option>
+<option value="9">COM9</option>
+<option value="10">COM10</option>
+<option value="11">COM11</option>
+<option value="12">COM12</option>
+</select>
+</td><td><input type="button" value="Find" name="findcom" onclick="FindTheCom()"></td></tr>
+<tr>
+<td>Baud rate:</td>
+<td><select size="1" name="baud" id="baud">
+<option value="9600" selected>9600</option>
+<option value="19200">19200</option>
+<option value="38400">38400</option>
+<option value="57600">57600</option>
+<option value="115200">115200</option>
+</select></td></tr>
+<tr><td colspan="3" id="search_err" align="center"></td></tr>
+<tr><td colspan="3"><br /><script language="JavaScript">
+    var zfp = new ActiveXObject("Zfpcom.ZekaFP");
+    var val = zfp.zfplibVersion;
+    document.write('Library version: ' + ((val >> 16) & 0xFF) + '.' + ((val >> 8) & 0xFF) + '.' + (val & 0xFF));
+</script></td></tr>
+</table>
+<hr>
+<p><a href="main.html">Home</a></p>
+<p><b>Functions:</b></p>
+
+<p><script language="JavaScript">mf_contents("general", "General");</script></p>
+<div id="general" class="msgbody">
+<p><span lang="en-us"><a href="getstatus.html">Status</a></span><br>
+<a href="diagnostic.html">Diagnostics</a><br>
+<a href="getversion.html">Version</a><br>
+<a href="displayclear.html">Clear Display</a><br>
+<a href="display.html">Show on Display</a><br>
+<a href="displaydatetime.html">Show date/time</a><br>
+<a href="opentill.html">Open the Cash Drawer</a><br>
+<a href="papercut.html">Paper cut</a><br>
+<a href="linefeed.html">Print LineFeed</a><br>
+<a href="setprintmode.html">Optimize Printing</a><br>
+<a href="printlogo2.html">Print LOGO (new format)</a><br>
+<a href="printlogo.html">Print LOGO</a><br>
+<a href="printtext.html">Print Text</a><br>
+<a href="barcodes.html">Print Barcode</a>
+</p>
+</div>
+
+<p><script language="JavaScript">mf_contents("read", "Read of");</script></p>
+<div id="read" class="msgbody">
+<p><a href="getfactorynumber.html"><span lang="en-us">Serial</span> Number</a><br>
+<a href="getfiscalnumber.html"><span lang="en-us">Fiscal</span> Memory Number</a><br>
+<a href="gettaxnumber.html"><span lang="en-us">TAX number</span></a><br>
+<a href="gettaxpercents.html">VAT Classes</a><br>
+<a href="getdecimalpoint.html">Decimal Point</a><br>
+<a href="getpaytypes.html">Payment Types</a><br>
+<a href="getparameters.html">Parameters</a><br>
+<a href="getclicheline.html">Header/Footer line</a><br>
+<a href="getdepartment.html">Department Information</a><br>
+<a href="getarticleinfo.html">PLU Information</a><br>
+<a href="getdatetime.html">Date/Time</a><br>
+<a href="getlogoinfo.html">Get Current Logo</a><br>
+<a href="readfiscalmemory.html">Fiscal Memory Contents</a><br>
+<a href="getlastfiscalreportdata.html">Last Date of Daily Fiscal Report</a><br>
+<a href="getfreefiscalspace.html">Count of free fiscal records</a><br>
+<br>
+<a href="getdailyinfo.html">Daily Information</a><br>
+<a href="getdailyreport.html">Daily Report</a><br>
+<a href="getdailysums.html">Daily accumulators</a><br>
+<a href="getdailypayments.html">Daily Sums (net cash)</a><br>
+<a href="getdailyincomes.html">Daily Sums (total cash)</a><br>
+<a href="getdailyofficialincomes.html">Daily Sums (Office RA)</a><br>
+<a href="getdailyofficialexpenses.html">Daily Sums (Office PO)</a><br>
+<br>
+<a href="getoperatoruserpass.html">Operator Name and Password</a><br>
+<a href="getoperatorinfo.html">Operator's Report</a><br>
+<a href="getoperatorreceives.html">Operator's Total Cash</a><br>
+<a href="getoperatorincomes.html">Operator's Sums RA</a><br>
+<a href="getoperatorexpenses.html">Operator's Sums PO</a><br>
+<a href="getoperatorcounter.html">Operator's report counter</a>
+</p>
+</div>
+
+<p><script language="JavaScript">mf_contents("bons", "Receipt Operations");</script></p>
+<div id="bons" class="msgbody">
+<p><a href="openbon.html">Open NonFiscal Receipt</a><br>
+<a href="closebon.html">Close NonFiscal Receipt</a><br>
+<a href="openinvoice.html">Open Fiscal Receipt</a><br>
+<a href="sellfree.html">Register Free Sale</a><br>
+<a href="selldb.html">Register Sale from FP database</a><br>
+<a href="selldepartment.html">Register Sale from department</a><br>
+<a href="calcintermediatesum.html">SubTotal</a><br>
+<a href="adddiscount.html">Discount / Addition</a><br>
+<a href="payment.html">Payment</a><br>
+<a href="closefiscalbon.html">Close Fiscal Receipt</a><br>
+<a href="closebonincash.html">Direct Receipt Completion in Cash</a><br>
+<a href="terminatebon.html">Terminate Receipt</a><br>
+<a href="printduplicate.html">Print Copy of Most Recent Receipt</a><br>
+<a href="officialsums.html">Official Money (RA/PO)</a><br>
+<a href="getbonnumber.html">Most Recent Receipt Number</a><br>
+<a href="getcurrentboninfo.html">Current Receipt Information</a>
+</p>
+</div>
+
+<p><script language="JavaScript">mf_contents("reports", "Reports");</script></p>
+<div id="reports" class="msgbody">
+<p><a href="reportspecialfiscal.html">Special Fiscal Report</a><br>
+<a href="reportfiscalbyblock.html">Fiscal Report by Block Number</a><br>
+<a href="reportfiscalbydate.html">Fiscal Report by Date Period</a><br>
+<a href="reportdaily.html">Daily Fiscal Report</a><br>
+<a href="reportej.html">Electronic Journal (EJ) report</a><br>
+<a href="reportejro.html">EJ print receipt</a><br>
+<a href="reportdepartments.html">Department Report</a><br>
+<a href="reportoperator.html">Operators Report</a><br>
+<a href="reportarticles.html">PLU Report</a>
+</p>
+</div>
+
+<p><script language="JavaScript">mf_contents("sets", "Programming of");</script></p>
+<div id="sets" class="msgbody">
+<a href="setparameters.html">Parameters</a><br>
+<a href="setclicheline.html">Header/Footer line</a><br>
+<a href="setdepartment.html">Department</a><br>
+<a href="setoperatoruserpass.html">Operators Name and Password</a><br>
+<a href="setarticleinfo.html">PLU from FP database</a><br>
+<a href="setarticleprice.html">PLU Price only</a><br>
+<a href="setlogofile2.html">Logo (new format)</a><br>
+<a href="setlogofile.html">Logo</a><br>
+<a href="setlogo.html">Set Current Logo</a><br>
+<a href="setlocaldatetime.html">Date and Time From PC</a><br>
+<a href="setdatetime.html">Date and Time</a><br>
+<a href="setexternaldisplayfile.html">External display setup</a></p>
+</div>
+
+<p><script language="JavaScript">mf_contents("fiscal", "Fiscal functions");</script></p>
+<div id="fiscal" class="msgbody">
+<p><a href="setserialnumber.html">Set manifacture number</a><br>
+<a href="settaxpercents.html">Set VAT Classes</a><br>
+<a href="serviceintervention.html">Service Intervention</a></p>
+<a href="updateclicheke.html">Update Header/Footer - Kenya</a></p>
+</div>
+
+<p><script language="JavaScript">mf_contents("gs_cmd", "GS commands");</script></p>
+<div id="gs_cmd" class="msgbody">
+
+<p>
+<a href="getversion_gs.html">Version</a><br>
+<a href="enablecomm_gs.html">Enable/disable communication</a><br>
+<a href="scaleprotocol_gs.html">Load Scale Protocol</a><br>
+</p>
+
+</div>
+<a href="sendcommanddirect.html">Send direct command</a><br>
+</body>
+
+</html>

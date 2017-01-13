@@ -1,0 +1,120 @@
+<html>
+
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=windows-1251">
+<meta http-equiv="Content-Language" content="bg">
+<link rel="stylesheet" type="text/css" href="main.css">
+<script language="JavaScript" src="main.js"></script>
+<title>Печат на баркод</title>
+<base target="_self">
+</head>
+
+<body>
+
+<script language="javascript">
+function enable(state)
+{
+	result.innerText = "...";
+	var zfp = new ActiveXObject("Zfpcom.ZekaFP");
+	var res = zfp.Setup(parseInt(parent.frames.contents.comport.value, 10), parseInt(parent.frames.contents.baud.value, 10), 3, 1000);
+	
+	res = zfp.EnableBarcode(state);
+
+	result_color(zfp);
+	result.innerText = zfp.GetErrorString(zfp.errorCode, 1);
+
+	zfpinput.innerText = zfp.GetInputHexFormated();
+	zfpoutput.innerText = zfp.GetResponseHexFormated();
+}
+
+function format()
+{
+	result.innerText = "...";
+	var zfp = new ActiveXObject("Zfpcom.ZekaFP");
+	var res = zfp.Setup(parseInt(parent.frames.contents.comport.value, 10), parseInt(parent.frames.contents.baud.value, 10), 3, 1000);
+	
+	res = zfp.FormatBarcode(format_text.value);
+
+	result_color(zfp);
+	result.innerText = zfp.GetErrorString(zfp.errorCode, 1);
+
+	zfpinput.innerText = zfp.GetInputHexFormated();
+	zfpoutput.innerText = zfp.GetResponseHexFormated();
+}
+
+function print()
+{
+	result.innerText = "...";
+	var zfp = new ActiveXObject("Zfpcom.ZekaFP");
+	var res = zfp.Setup(parseInt(parent.frames.contents.comport.value, 10), parseInt(parent.frames.contents.baud.value, 10), 3, 1000);
+	
+	res = zfp.PrintBarcode(barcode.value, type.value);
+
+	result_color(zfp);
+	result.innerText = zfp.GetErrorString(zfp.errorCode, 1);
+
+	zfpinput.innerText = zfp.GetInputHexFormated();
+	zfpoutput.innerText = zfp.GetResponseHexFormated();
+}
+</script>
+
+<h1>Печат на баркод</h1>
+<table border="1" cellspacing="0" cellpadding="10" width="70%">
+<tr><td>
+<input type="button" value="Разреши" name="enable_btn" language="JavaScript" onclick="enable(1);"><br /><br />
+<input type="button" value="Забрани" name="disable_btn" language="JavaScript" onclick="enable(0);"><br /><br />
+<input type="button" value="Формат&nbsp;" name="format_btn" language="JavaScript" onclick="format();">
+&nbsp;&nbsp;&nbsp;<input type="text" value="ddmmyyhhNNNN" name="format_text" /><br />
+</td></tr></table>
+<i>Формат на баркода след фискален бон</i><br /><br />
+<table border="1" cellspacing="0" cellpadding="10" width="70%">
+<tr><td>
+<input type="button" value="&nbsp;Печат&nbsp;&nbsp;" name="print_btn" language="JavaScript" onclick="print();">
+&nbsp;&nbsp;&nbsp;<input type="text" value="201234567890" name="barcode" />
+&nbsp;&nbsp;Тип: 
+<select size="1" name="type" id="type">
+<option value="0">UPC-A</option>
+<option value="1">UPC-E</option>
+<option value="2" selected>EAN 13</option>
+<option value="3">EAN 8</option>
+<option value="4">Code 39</option>
+<option value="5">ITF 2</option>
+<option value="6">Codabar</option>
+<option value="72">Code 93</option>
+<option value="73">Code 128</option>
+</select>
+</td></tr></table>
+<i>Отпечатване на баркод извън бон</i>
+<br><br>
+<p>
+Резултат: <span id="result">няма</span>
+</p>
+
+<p class="msghead">
+<script language="JavaScript">mf_text("api", "Детайли за програмния интерфейс (API)");</script>
+<br>
+<div id="api" class="msgbody">
+	Няма въведени
+	<br>
+</div>
+<script language="JavaScript">mf_text("protocol", "Детайли за протокола на комуникация");</script>
+<br>
+<div id="protocol" class="msgbody">
+	Няма въведени
+	<br>
+</div>
+<script language="JavaScript">mf_text("io", "Вход / Изход");</script>
+<br>
+<div id="io" class="msgbody">
+	<h2>Към фискалния принтер</h2>
+	<pre id="zfpinput">&nbsp;</pre>
+	<br>
+	<h2>От фискалния принтер</h2>
+	<pre id="zfpoutput">&nbsp;</pre>
+	<br>
+</div>
+</p>
+
+</body>
+
+</html>

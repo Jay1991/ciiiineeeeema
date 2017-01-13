@@ -1,0 +1,82 @@
+<html>
+
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=windows-1251">
+<meta http-equiv="Content-Language" content="bg">
+<link rel="stylesheet" type="text/css" href="main.css">
+<script language="JavaScript" src="main.js"></script>
+<title>RA / PO Official Money</title>
+<base target="_self">
+</head>
+
+<body>
+
+<script language="javascript">
+function work()
+{
+	result.innerText = "...";
+	var zfp = new ActiveXObject("Zfpcom.ZekaFP");
+	var res = zfp.Setup(parseInt(parent.frames.contents.comport.value, 10), parseInt(parent.frames.contents.baud.value, 10), 3, 1000);
+	res = zfp.OfficialSumsEx(parseInt(line.value, 10), pass.value, parseInt(paytype.value, 10), parseFloat(sum.value), note.value);
+
+	result_color(zfp);
+	result.innerText = zfp.GetErrorString(zfp.errorCode, 0);
+		
+	zfpinput.innerText = zfp.GetInputHexFormated();
+	zfpoutput.innerText = zfp.GetResponseHexFormated();
+}
+</script>
+
+<h1>RA / PO Official Money</h1>
+<table>
+<tr><td>
+Operator Number:</td><td><input type="text" name="line" size="10" value="1">
+</td></tr>
+<tr><td>
+Password:</td><td><input type="text" name="pass" size="10" value="0000">
+</td></tr>
+<tr><td>
+Payment Type (0-4):</td><td><input type="text" name="paytype" size="10" value="0">
+</td></tr>
+<tr><td>
+Sum:</td><td><input type="text" name="sum" size="10" value="1.00">
+</td></tr>
+<tr><td>
+Note (optional):</td><td><input type="text" name="note" size="20">
+</td></tr>
+</table>
+<p>
+<input type="button" value="Open" name="start" language="JavaScript" onclick="work();">
+</p>
+<p>
+Result: <span id="result">None</span>
+</p>
+
+<p class="msghead">
+<script language="JavaScript">mf_text("api", "Application Program Interface (API)");</script>
+<br>
+<div id="api" class="msgbody">
+	Not Entered
+	<br>
+</div>
+<script language="JavaScript">mf_text("protocol", "Comunication Protocol Details");</script>
+<br>
+<div id="protocol" class="msgbody">
+	Not Entered
+	<br>
+</div>
+<script language="JavaScript">mf_text("io", "Input / Output");</script>
+<br>
+<div id="io" class="msgbody">
+	<h2>To Fiscal Printer</h2>
+	<pre id="zfpinput">&nbsp;</pre>
+	<br>
+	<h2>To PC</h2>
+	<pre id="zfpoutput">&nbsp;</pre>
+	<br>
+</div>
+</p>
+
+</body>
+
+</html>

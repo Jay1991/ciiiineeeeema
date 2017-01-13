@@ -1,0 +1,26 @@
+HKCR
+{
+	Zfpcom.ZFPStatus.1 = s 'ZFPStatus Class'
+	{
+		CLSID = s '{046BF363-4057-4489-B9C6-5C28D48DAF8D}'
+	}
+	Zfpcom.ZFPStatus = s 'ZFPStatus Class'
+	{
+		CLSID = s '{046BF363-4057-4489-B9C6-5C28D48DAF8D}'
+		CurVer = s 'Zfpcom.ZFPStatus.1'
+	}
+	NoRemove CLSID
+	{
+		ForceRemove {046BF363-4057-4489-B9C6-5C28D48DAF8D} = s 'ZFPStatus Class'
+		{
+			ProgID = s 'Zfpcom.ZFPStatus.1'
+			VersionIndependentProgID = s 'Zfpcom.ZFPStatus'
+			ForceRemove 'Programmable'
+			InprocServer32 = s '%MODULE%'
+			{
+				val ThreadingModel = s 'Apartment'
+			}
+			'TypeLib' = s '{B1F547D6-DFAD-47C0-BDE6-407702E27360}'
+		}
+	}
+}

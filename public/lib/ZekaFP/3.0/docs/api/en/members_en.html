@@ -1,0 +1,3532 @@
+<html>
+
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=windows-1251">
+<link rel="stylesheet" type="text/css" href="../main.css">
+<script language="JavaScript" src="../main.js"></script>
+<title>Class CZekaFP members</title>
+</head>
+
+<body>
+
+<p class="msghead">
+
+<p><b>Construction / Setup / Error handling</b></p>
+
+<script language="JavaScript">mf_text("CZekaFP", "CZekaFP");</script>
+&nbsp;-&nbsp;Contruct and setup the class
+<br>
+<div id="CZekaFP" class="msgbody">
+<pre>
+CZekaFP(WORD wCom, DWORD baud = ZBR_9600, WORD retries = 3, DWORD retryWait = 1000);
+</pre>
+<h3>Parameters:</h3>
+<dl>
+	<dt>
+	wCom
+	<dd>
+		Select the Serial COM port number to use (1 = COM1)
+	</dd></dt>
+	<dt>
+	baud
+	<dd>
+		Select COM port baud rate. Supported baud rates: 9600 and 19200 bps
+	</dd></dt>
+	<dt>
+	retries 
+	<dd>
+		How many retries the functions to make before giving up and reporting 
+		the BUSY error
+	</dd></dt>
+	<dt>
+	retryWait 
+	<dd>
+		How long the functions should wait between each retry (in miliseconds)
+	</dd></dt>
+</dl>
+<br>
+</div>
+
+<script language="JavaScript">mf_text("Setup", "Setup");</script>&nbsp;-&nbsp; Setup 
+the class or change the current setup of a working class
+<br>
+<div id="Setup" class="msgbody">
+<pre>
+void Setup(WORD wCom, DWORD baud = ZBR_9600, WORD retries = 3, DWORD retryWait = 1000);
+</pre>
+<h3>Parameters:</h3>
+<dl>
+	<dt>
+	wCom
+	<dd>
+		Select the Serial COM port number to use (1 = COM1)
+	</dd></dt>
+	<dt>
+	baud
+	<dd>
+		Select COM port baud rate. Supported baud rates: 9600 and 19200 bps
+	</dd></dt>
+	<dt>
+	retries 
+	<dd>
+		How many retries the functions to make before giving up and reporting 
+		the BUSY error
+	</dd></dt>
+	<dt>
+	retryWait 
+	<dd>
+		How long the functions should wait between each retry (in miliseconds)
+	</dd></dt>
+</dl>
+<br>
+</div>
+
+<script language="JavaScript">mf_text("SetZFPType", "SetZFPType");</script>&nbsp;-&nbsp; 
+Set the fiscal printer type
+<br>
+<div id="SetZFPType" class="msgbody">
+<pre>
+int SetZFPType(int type);
+</pre>
+<h3>Parameters:</h3>
+<dl>
+	<dt>
+	type
+	<dd>
+		Fiscal printer type (ZFPT_BG for Bulgaria, ZFPT_RO for Romania)
+	</dd></dt>
+</dl>
+<h3>Return Value:</h3>
+<p>ZFPE_SUCCESS on success, otherwise an error code</p>
+<h3>Remarks:</h3>
+<p>Several commands which are working with tax groups depends on this 
+information. Different countries are using different tax groups count. If you 
+don't call this function ZFPT_BG is used by default.</p>
+<br>
+</div>
+
+<script language="JavaScript">mf_text("GetZFPType", "GetZFPType");</script>&nbsp;-&nbsp; 
+Return the fiscal printer type
+<br>
+<div id="GetZFPType" class="msgbody">
+<pre>
+int GetZFPType();
+</pre>
+<h3>Return Value:</h3>
+<p>ZFPT_BG for Bulgaria or ZFPT_RO for Romania</p>
+<h3>Remarks:</h3>
+<p>This type is setup using <b>int SetZFPType(int type);</b> function and is 
+ZFPT_BG by default</p>
+<br>
+</div>
+
+<script language="JavaScript">mf_text("BusyWait", "BusyWait");</script>&nbsp;-&nbsp; 
+Wait for the fiscal printer to become ready after any report command
+<br>
+<div id="BusyWait" class="msgbody">
+<pre>
+int BusyWait(DWORD timeout);
+</pre>
+<h3>Parameters:</h3>
+<dl>
+	<dt>
+	timeout
+	<dd>
+		Maximum wait time in miliseconds or ZFP_INFINITE (0xFFFFFFFF) to wait forever
+	</dd></dt>
+</dl>
+<h3>Return Value:</h3>
+<p>ZFPE_NOFPRINTER if there is no fiscal printer connected<br>
+ZFPE_FPBUSYTIMEOUT if the timeout has passed ZFPE_SUCCESS if the fiscal printer 
+is ready
+</p>
+<h3>Remarks:</h3>
+<p>This command could be used to wait for the fiscal printer to finish its 
+current task. To setup every report command to wait automatically use 
+SetAutoBusyWait with timeout value different than ZFP_NOBUSYWAIT. It is possible 
+for the command to return error before the timeout passed if the printer 
+connection has been lost meanwhile. This way if you wish to wait as long as needed but
+the printer gets disconnected your program won't hang. Use this function carefully because
+this is a blocking call.</p>
+<br>
+</div>
+
+<script language="JavaScript">mf_text("SetAutoBusyWait", "SetAutoBusyWait");</script>
+&nbsp;-&nbsp; Set / stop automatic fiscal printer wait after any report command.
+<br>
+<div id="SetAutoBusyWait" class="msgbody">
+<pre>
+void SetAutoBusyWait(DWORD timeout);
+</pre>
+<h3>Parameters:</h3>
+<dl>
+	<dt>
+	timeout
+	<dd>
+		Maximum wait time in miliseconds or ZFP_INFINITE (0xFFFFFFFF) for infinite waiting or ZFP_NOBUSYWAIT (0) to stop the automatic waiting.
+	</dd></dt>
+</dl>
+<h3>Remarks:</h3>
+<p>This command setup whether the library to call BusyWait(timeout) after each report command, but only if the command
+completed succesfully. In such case the report command result is the same as BusyWait(timeout) result. There is no such
+waiting by default.<br>
+<br>
+Why do we need this waiting?<br>
+When you send correct report command the fiscal printer return you "success" and start the report. 
+The report lenght is not known in advance because it depends on the quiantity of the stored data.
+It is possible to get ZFPE_FPRINTERBUSY (fisca printer is busy) error if you send any command meanwhile.
+If you set SetAutoBusyWait(ZFP_INFINITE) durring the setup the report function will return only when the
+fiscal printer is ready for the next command.</p>
+<br>
+</div>
+
+<script language="JavaScript">mf_text("FindFirstFPCOM", "FindFirstFPCOM");</script>
+&nbsp;-&nbsp;Search for Zeka fiscal printer on all COM ports and return the first COM port 
+number with Zeka Fiscal Printer connected.
+<br>
+<div id="FindFirstFPCOM" class="msgbody">
+<pre>
+DWORD FindFirstFPCOM();
+</pre>
+<h3>Return Value:</h3>
+<p>On success the lower 16 bits contain the COM port number the higher 16 bit 
+contain the baud rate (9600 or 19200), the result is zero if no fiscal printer 
+is found</p>
+<h3>Remarks:</h3>
+<p>This function is obsolete - use FindFirstFPCOMEx() instead.</p>
+<br>
+</div>
+
+<script language="JavaScript">mf_text("GetLibraryVersion", "GetLibraryVersion");</script>&nbsp;-&nbsp; 
+Returns the version of this software library.
+<br>
+<div id="GetLibraryVersion" class="msgbody">
+<pre>
+int GetLibraryVersion();
+</pre>
+<h3>Return Value:</h3>
+<p>Returns the version of this software library. The lowest 3 bytes are used.
+If the result is 0x010203, the version is 1.2.3 -> 1 (0x01) . 2 (0x02) . 3 (0x03)  
+</p>
+<br>
+</div>
+
+<script language="JavaScript">mf_text("GetErrorString", "GetErrorString");</script>
+&nbsp;-&nbsp; Return text description of an error code
+<br>
+<div id="GetErrorString" class="msgbody">
+<pre>
+static void GetErrorString(int error, int lang, char* buf);
+</pre>
+<h3>Parameters:</h3>
+<dl>
+	<dt>
+	error
+	<dd>
+		error code
+	</dd></dt>
+	<dt>
+	lang
+	<dd>
+		Language identifier describing the requested description language (0 = 
+		English, 1 = Bulgarian)
+	</dd></dt>
+	<dt>
+	buf
+	<dd>
+		The buffer to copy error descriotion. This buffer has to be at least 
+		ZFP_MAXERRORBUFLEN bytes long!
+	</dd></dt>
+</dl>
+<br>
+</div>
+
+<p><b>Buffers</b></p>
+
+<script language="JavaScript">mf_text("GetInputBuffer", "GetInputBuffer");</script>
+&nbsp;-&nbsp;Return the input buffer and its length
+<br>
+<div id="GetInputBuffer" class="msgbody">
+<pre>
+int GetInputBuffer(BYTE* buf)
+</pre>
+<h3>Parameters:</h3>
+<dl>
+	<dt>
+	buf
+	<dd>
+		The buffer to copy class input buffer to. This buffer needs to be at 
+		least ZFP_MAXBUFLEN bytes long!
+	</dd></dt>
+</dl>
+<h3>Return Value:</h3>
+<p>The lenght of input buffer on success, otherwise 0 - which means that no 
+command has been sent before calling this function</p>
+<h3>Remarks:</h3>
+<p>This is the exact buffer send to the Zeka Fiscal Printer durring the last 
+command function call. It can be used for better undersanding and learning the 
+protocol and for debugging. You don't need to call this function for normal 
+daily operations. The function returns an array of bytes which is NOT zero 
+terminated. You need the function return value to know the size of the data 
+returned</p>
+<br>
+</div>
+
+<script language="JavaScript">mf_text("GetResponseBuffer", "GetResponseBuffer");</script>
+&nbsp;-&nbsp;Return the response buffer and its length
+<br>
+<div id="GetResponseBuffer" class="msgbody">
+<pre>
+int GetResponseBuffer(BYTE* buf)
+</pre>
+<h3>Parameters:</h3>
+<dl>
+	<dt>
+	buf
+	<dd>
+		The buffer to copy class response buffer to. This buffer needs to be at 
+		least ZFP_MAXBUFLEN bytes long!
+	</dd></dt>
+</dl>
+<h3>Return Value:</h3>
+<p>The lenght of response buffer on success, otherwise 0 - which means that no 
+response has been sent by the last called command function</p>
+<h3>Remarks:</h3>
+<p>This is the exact buffer send from the Zeka Fiscal Printer durring the last 
+command function call. It can be used for better undersanding and learning the 
+protocol and for debugging. You don't need to call this function for normal 
+daily operations. The function returns an array of bytes which is NOT zero 
+terminated. You need the function return value to know the size of the data 
+returned</p>
+<br>
+</div>
+
+<script language="JavaScript">mf_text("GetInputHexFormated", "GetInputHexFormated");</script>
+&nbsp;-&nbsp;Get the input buffer as a zero terminated string containing formated 
+hexadecimal values
+<br>
+<div id="GetInputHexFormated" class="msgbody">
+<pre>
+void GetInputHexFormated(char* buf)
+</pre>
+<h3>Parameters:</h3>
+<dl>
+	<dt>
+	buf
+	<dd>
+		The buffer to copy hex input buffer to. This buffer needs to be at least 
+		ZFP_MAXHEXBUFLEN bytes long!
+	</dd></dt>
+</dl>
+<h3>Remarks:</h3>
+<p>This is the exact buffer send to the Zeka Fiscal Printer durring the last 
+command function call. It can be used for better undersanding and learning the 
+protocol and for debugging. You don't need to call this function for normal 
+daily operations.
+</p>
+<br>
+</div>
+
+<script language="JavaScript">mf_text("GetResponseHexFormated", "GetResponseHexFormated");</script>
+&nbsp;-&nbsp;Get the response buffer as a zero terminated string containing formated 
+hexadecimal values
+<br>
+<div id="GetResponseHexFormated" class="msgbody">
+<pre>
+void GetResponseHexFormated(char* buf)
+</pre>
+<h3>Parameters:</h3>
+<dl>
+	<dt>
+	buf
+	<dd>
+		The buffer to copy class response buffer to. This buffer needs to be at 
+		least ZFP_MAXHEXBUFLEN bytes long!
+	</dd></dt>
+</dl>
+<h3>Remarks:</h3>
+<p>This is the exact buffer send from the Zeka Fiscal Printer durring the last 
+command function call. It can be used for better undersanding and learning the 
+protocol and for debugging. You don't need to call this function for normal 
+daily operations.
+</p>
+<br>
+</div>
+
+<p><b>Commands</b></p>
+
+<script language="JavaScript">mf_text("GetStatus", "GetStatus");</script>
+&nbsp;-&nbsp;Get Fiscal Printer status bytes
+<br>
+<div id="GetStatus" class="msgbody">
+<pre>
+int GetStatus(BYTE* status);
+</pre>
+<h3>Parameters:</h3>
+<dl>
+	<dt>
+	status
+	<dd>
+		The buffer to copy status bytes to. This buffer needs to be 5 bytes 
+		long!
+	</dd></dt>
+</dl>
+<h3>Return Value:</h3>
+<p>ZFPE_SUCCESS on success, otherwise an error code</p>
+<br>
+</div>
+
+<script language="JavaScript">mf_text("GetVersion", "GetVersion");</script>
+&nbsp;-&nbsp;Get Fiscal Printer version information
+<br>
+<div id="GetVersion" class="msgbody">
+<pre>
+int GetVersion(char* version);
+</pre>
+<h3>Parameters:</h3>
+<dl>
+	<dt>
+	version
+	<dd>
+		A buffer to receive zero terminated string with the version info. This 
+		buffer needs to be at least 40 bytes long
+	</dd></dt>
+</dl>
+<h3>Return Value:</h3>
+<p>ZFPE_SUCCESS on success, otherwise an error code</p>
+<br>
+</div>
+
+<script language="JavaScript">mf_text("Diagnostic", "Diagnostic");</script>
+&nbsp;-&nbsp;Print diagnosting information
+<br>
+<div id="Diagnostic" class="msgbody">
+<pre>
+int Diagnostic();
+</pre>
+<h3>Return Value:</h3>
+<p>ZFPE_SUCCESS on success, otherwise an error code</p>
+<br>
+</div>
+
+<script language="JavaScript">mf_text("DisplayClear", "DisplayClear");</script>
+&nbsp;-&nbsp;Clear the external display
+<br>
+<div id="DisplayClear" class="msgbody">
+<pre>
+int DisplayClear();
+</pre>
+<h3>Return Value:</h3>
+<p>ZFPE_SUCCESS on success, otherwise an error code</p>
+<br>
+</div>
+
+<script language="JavaScript">mf_text("DisplayLine1", "DisplayLine1");</script>
+&nbsp;-&nbsp;Display text on the first line of the display
+<br>
+<div id="DisplayLine1" class="msgbody">
+<pre>
+int DisplayLine1(const char* line);
+</pre>
+<h3>Parameters:</h3>
+<dl>
+	<dt>
+	line
+	<dd>
+		A buffer containing a zero terminated string with the text to display. 
+		If the text is bigger than 20 characters, it is truncated
+	</dd></dt>
+</dl>
+<h3>Return Value:</h3>
+<p>ZFPE_SUCCESS on success, otherwise an error code</p>
+<br>
+</div>
+
+<script language="JavaScript">mf_text("DisplayLine2", "DisplayLine2");</script>
+&nbsp;-&nbsp;Display text on the second line of the display
+<br>
+<div id="DisplayLine2" class="msgbody">
+<pre>
+int DisplayLine2(const char* line);
+</pre>
+<h3>Parameters:</h3>
+<dl>
+	<dt>
+	line
+	<dd>
+		A buffer containing a zero terminated string with the text to display. 
+		If the text is bigger than 20 characters, it is truncated
+	</dd></dt>
+</dl>
+<h3>Return Value:</h3>
+<p>ZFPE_SUCCESS on success, otherwise an error code</p>
+<br>
+</div>
+
+<script language="JavaScript">mf_text("Display", "Display");</script>
+&nbsp;-&nbsp;Display text on the both lines of the display
+<br>
+<div id="Display" class="msgbody">
+<pre>
+int Display(const char* line);
+</pre>
+<h3>Parameters:</h3>
+<dl>
+	<dt>
+	line
+	<dd>
+		A buffer containing a zero terminated string with the text to display. 
+		If the text is bigger than 40 characters, it is truncated
+	</dd></dt>
+</dl>
+<h3>Return Value:</h3>
+<p>ZFPE_SUCCESS on success, otherwise an error code</p>
+<br>
+</div>
+
+<script language="JavaScript">mf_text("DisplayDateTime", "DisplayDateTime");</script>
+&nbsp;-&nbsp;Display current date and time on the external display
+<br>
+<div id="DisplayDateTime" class="msgbody">
+<pre>
+int DisplayDateTime();
+</pre>
+<h3>Return Value:</h3>
+<p>ZFPE_SUCCESS on success, otherwise an error code</p>
+<br>
+</div>
+
+<script language="JavaScript">mf_text("OpenTill", "OpenTill");</script>
+&nbsp;-&nbsp;Open the till (Safe box)
+<br>
+<div id="OpenTill" class="msgbody">
+<pre>
+int OpenTill();
+</pre>
+<h3>Return Value:</h3>
+<p>ZFPE_SUCCESS on success, otherwise an error code</p>
+<br>
+</div>
+
+<script language="JavaScript">mf_text("PaperCut", "PaperCut");</script>
+&nbsp;-&nbsp;Cut the paper
+<br>
+<div id="PaperCut" class="msgbody">
+<pre>
+int PaperCut();
+</pre>
+<h3>Return Value:</h3>
+<p>ZFPE_SUCCESS on success, otherwise an error code</p>
+<br>
+</div>
+
+<script language="JavaScript">mf_text("LineFeed", "LineFeed");</script>
+&nbsp;-&nbsp;Print an empty line
+<br>
+<div id="LineFeed" class="msgbody">
+<pre>
+int LineFeed();
+</pre>
+<h3>Return Value:</h3>
+<p>ZFPE_SUCCESS on success, otherwise an error code</p>
+<br>
+</div>
+
+<br>
+
+<script language="JavaScript">mf_text("GetFactFiscNums", "GetFactFiscNums");</script>
+&nbsp;-&nbsp;Get factory number and fiscal number
+<br>
+<div id="GetFactFiscNums" class="msgbody">
+<pre>
+int GetFactFiscNums(char* factory, char* fiscal);
+</pre>
+<h3>Parameters:</h3>
+<dl>
+	<dt>
+	factory
+	<dd>
+		A buffer to receive zero terminated string with the factory number. This 
+		buffer needs to be at least 14 bytes long
+	</dd></dt>
+	<dt>
+	fiscal
+	<dd>
+		A buffer to receive zero terminated string with the fiscal number. This 
+		buffer needs to be at least 14 bytes long
+	</dd></dt>
+</dl>
+<h3>Return Value:</h3>
+<p>ZFPE_SUCCESS on success, otherwise an error code</p>
+<br>
+</div>
+
+<script language="JavaScript">mf_text("GetTaxNumber", "GetTaxNumber");</script>
+&nbsp;-&nbsp;Get the Fiscal Printer tax number
+<br>
+<div id="GetTaxNumber" class="msgbody">
+<pre>
+int GetTaxNumber(char* taxnumber);
+</pre>
+<h3>Parameters:</h3>
+<dl>
+	<dt>
+	taxnumber
+	<dd>
+		A buffer to receive zero terminated string with the tax number. This 
+		buffer needs to be at least 14 bytes long
+	</dd></dt>
+</dl>
+<h3>Return Value:</h3>
+<p>ZFPE_SUCCESS on success, otherwise an error code</p>
+<br>
+</div>
+
+<script language="JavaScript">mf_text("GetTaxPercents", "GetTaxPercents");</script>
+&nbsp;-&nbsp;Get the Fiscal Printer tax percents for different tax groups
+<br>
+<div id="GetTaxPercents" class="msgbody">
+<pre>
+int GetTaxPercents(double* tgr1, double* tgr2, double* tgr3, double* tgr4 = NULL);
+</pre>
+<h3>Parameters:</h3>
+<dl>
+	<dt>
+	tgr1
+	<dd>
+		A pointer to receive the tax percent for tax group A
+	</dd></dt>
+	<dt>
+	tgr2
+	<dd>
+		A pointer to receive the tax percent for tax group B
+	</dd></dt>
+	<dt>
+	tgr3
+	<dd>
+		A pointer to receive the tax percent for tax group C
+	</dd></dt>
+	<dt>
+	tgr4
+	<dd>
+		A pointer to receive the tax percent for tax group D (for Romania only)
+	</dd></dt>
+</dl>
+<h3>Return Value:</h3>
+<p>ZFPE_SUCCESS on success, otherwise an error code</p>
+<h3>Remarks:</h3>
+<p>The value of the tgr4 parameter is filled only then you work with Romanian 
+fiscal printer. To choose the fiscal printer type you wish you work with, use 
+int SetZFPType(int type); function (by default Bulgarian settings are used)</p>
+<br>
+</div>
+
+<script language="JavaScript">mf_text("GetDecimalPoint", "GetDecimalPoint");</script>
+&nbsp;-&nbsp;Get the decimal point position
+<br>
+<div id="GetDecimalPoint" class="msgbody">
+<pre>
+int GetDecimalPoint(int* point);
+</pre>
+<h3>Parameters:</h3>
+<dl>
+	<dt>
+	point
+	<dd>
+		A pointer to receive the decimal point position
+	</dd></dt>
+</dl>
+<h3>Return Value:</h3>
+<p>ZFPE_SUCCESS on success, otherwise an error code</p>
+<br>
+</div>
+
+<script language="JavaScript">mf_text("GetPayTypes", "GetPayTypes");</script>
+&nbsp;-&nbsp;Get pay type names as strings
+<br>
+<div id="GetPayTypes" class="msgbody">
+<pre>
+int GetPayTypes(char* type1, char* type2, char* type3, char* type4, char* type5);
+</pre>
+<h3>Parameters:</h3>
+<dl>
+	<dt>
+	type1 to type5
+	<dd>
+		A buffer to receive zero terminated string with the current pay type 
+		name. This buffer needs to be at least 12 bytes long
+	</dd></dt>
+</dl>
+<h3>Return Value:</h3>
+<p>ZFPE_SUCCESS on success, otherwise an error code</p>
+<br>
+</div>
+
+<script language="JavaScript">mf_text("GetParameters", "GetParameters");</script>
+&nbsp;-&nbsp;Get different Fiscal Printer parameters
+<br>
+<div id="GetParameters" class="msgbody">
+<pre>
+int GetParameters(int* fpNum, int* logo, int* till, int* autocut, int* transparent);
+</pre>
+<h3>Parameters:</h3>
+<dl>
+	<dt>
+	fpNum
+	<dd>
+		A pointer to receive the Fiscal Printer place number
+	</dd></dt>
+	<dt>
+	logo
+	<dd>
+		A pointer to receive information about logo printing status (0 = not 
+		printed, otherwise printed)
+	</dd></dt>
+	<dt>
+	till
+	<dd>
+		A pointer to receive till status (0 = don't have a till, otherwise till 
+		is present)
+	</dd></dt>
+	<dt>
+	autocut
+	<dd>
+		A pointer to receive auto cutter status (0 = don't have one, otherwise 
+		present)
+	</dd></dt>
+	<dt>
+	transparent
+	<dd>
+		A pointer to receive transparent display status (0 = no display or not 
+		transparent, otherwise transparent display)
+	</dd></dt>
+</dl>
+<h3>Return Value:</h3>
+<p>ZFPE_SUCCESS on success, otherwise an error code</p>
+<br>
+</div>
+
+<script language="JavaScript">mf_text("GetEJMode", "GetEJMode");</script>
+&nbsp;-&nbsp;Get electronic journal (EJ) print mode
+<br>
+<div id="GetEJMode" class="msgbody">
+<pre>
+int GetEJMode(int* isShort);
+</pre>
+<h3>Parameters:</h3>
+<dl>
+	<dt>
+	isShort
+	<dd>
+		A pointer to receive print mode (0 = extended, otherwise short mode is selected)
+	</dd></dt>
+</dl>
+<h3>Return Value:</h3>
+<p>ZFPE_SUCCESS on success, otherwise an error code</p>
+<br>
+</div>
+
+<script language="JavaScript">mf_text("GetFreeFiscalSpace", "GetFreeFiscalSpace");</script>
+&nbsp;-&nbsp;Get the count of free fiscal records
+<br>
+<div id="GetFreeFiscalSpace" class="msgbody">
+<pre>
+int GetFreeFiscalSpace(int* records);
+</pre>
+<h3>Parameters:</h3>
+<dl>
+	<dt>
+	records
+	<dd>
+		A pointer to receive the count of free fiscal records
+	</dd></dt>
+</dl>
+<h3>Return Value:</h3>
+<p>ZFPE_SUCCESS on success, otherwise an error code</p>
+<br>
+</div>
+
+<script language="JavaScript">mf_text("GetDateTime", "GetDateTime");</script>
+&nbsp;-&nbsp;Get the current date and time
+<br>
+<div id="GetDateTime" class="msgbody">
+<pre>
+int GetDateTime(int* dd, int* mm, int* yy, int* hh, int* mmm);
+</pre>
+<h3>Parameters:</h3>
+<dl>
+	<dt>
+	dd
+	<dd>
+		A pointer to receive the current day of the month
+	</dd></dt>
+	<dt>
+	mm
+	<dd>
+		A pointer to receive the current month
+	</dd></dt>
+	<dt>
+	yy
+	<dd>
+		A pointer to receive the current year
+	</dd></dt>
+	<dt>
+	hh
+	<dd>
+		A pointer to receive the current hour
+	</dd></dt>
+	<dt>
+	mmm
+	<dd>
+		A pointer to receive the current minute
+	</dd></dt>
+</dl>
+<h3>Return Value:</h3>
+<p>ZFPE_SUCCESS on success, otherwise an error code</p>
+<br>
+</div>
+
+<script language="JavaScript">mf_text("GetClicheLine", "GetClicheLine");</script>
+&nbsp;-&nbsp;Get cliche line text by given line number
+<br>
+<div id="GetClicheLine" class="msgbody">
+<pre>
+int GetClicheLine(BYTE lineNum, char* text);
+</pre>
+<h3>Parameters:</h3>
+<dl>
+	<dt>
+	lineNum
+	<dd>
+		Specify the line to read text from. Line numbers are from 1 to 8
+	</dd></dt>
+	<dt>
+	text
+	<dd>
+		A buffer to receive zero terminated string with the requested line text. 
+		This buffer needs to be at least 40 bytes long
+	</dd></dt>
+</dl>
+<h3>Return Value:</h3>
+<p>ZFPE_SUCCESS on success, otherwise an error code</p>
+<br>
+</div>
+
+<script language="JavaScript">mf_text("GetDepartment", "GetDepartment");</script>
+&nbsp;-&nbsp;Get informaton about a department
+<br>
+<div id="GetDepartment" class="msgbody">
+<pre>
+int GetDepartment(WORD number, char* name, char* taxgrp, double* turnover);
+</pre>
+<h3>Parameters:</h3>
+<dl>
+	<dt>
+	number
+	<dd>
+		Department number
+	</dd></dt>
+	<dt>
+	name
+	<dd>
+		A buffer to receive zero terminated string with the current pay type 
+		name. This buffer needs to be at least 22 bytes long
+	</dd></dt>
+	<dt>
+	taxgrp
+	<dd>
+		A pointer to receive the tax group
+	</dd></dt>
+	<dt>
+	turnover
+	<dd>
+		A pointer to receive the turnover
+	</dd></dt>
+</dl>
+<h3>Return Value:</h3>
+<p>ZFPE_SUCCESS on success, otherwise an error code</p>
+<br>
+</div>
+
+<script language="JavaScript">mf_text("GetOperatorUserPass", "GetOperatorUserPass");</script>
+&nbsp;-&nbsp;Get operator user name and password by given operator number
+<br>
+<div id="GetOperatorUserPass" class="msgbody">
+<pre>
+int GetOperatorUserPass(BYTE oper, char* name, char* passwd);
+</pre>
+<h3>Parameters:</h3>
+<dl>
+	<dt>
+	oper
+	<dd>
+		Specify the operator number from 1 to 9.
+	</dd></dt>
+	<dt>
+	name
+	<dd>
+		A buffer to receive zero terminated string with the operator name. This 
+		buffer needs to be at least 22 bytes long
+	</dd></dt>
+	<dt>
+	passwd
+	<dd>
+		A buffer to receive zero terminated string with the operator password. 
+		This buffer needs to be at least 5 bytes long
+	</dd></dt>
+</dl>
+<h3>Return Value:</h3>
+<p>ZFPE_SUCCESS on success, otherwise an error code</p>
+<br>
+</div>
+
+<script language="JavaScript">mf_text("PrintLogo", "PrintLogo");</script>
+&nbsp;-&nbsp;Print the logo
+<br>
+<div id="PrintLogo" class="msgbody">
+<pre>
+int PrintLogo();
+</pre>
+<h3>Return Value:</h3>
+<p>ZFPE_SUCCESS on success, otherwise an error code</p>
+<br>
+</div>
+
+<br>
+
+<script language="JavaScript">mf_text("OpenBon", "OpenBon");</script>
+&nbsp;-&nbsp;Open non fiscal receipt
+<br>
+<div id="OpenBon" class="msgbody">
+<pre>
+int OpenBon(BYTE oper, const char* passwd);
+</pre>
+<h3>Parameters:</h3>
+<dl>
+	<dt>
+	oper
+	<dd>
+		Specify the operator number from 1 to 9.
+	</dd></dt>
+	<dt>
+	passwd
+	<dd>
+		A buffer containing zero terminated operator password. This buffer is 
+		cut to the first 4 characters
+	</dd></dt>
+</dl>
+<h3>Return Value:</h3>
+<p>ZFPE_SUCCESS on success, otherwise an error code</p>
+<br>
+</div>
+
+<script language="JavaScript">mf_text("OpenBonWithEJ", "OpenBonWithEJ");</script>
+&nbsp;-&nbsp;Open non fiscal receipt with an option to record it in the EJ
+<br>
+<div id="OpenBonWithEJ" class="msgbody">
+<pre>
+int OpenBonWithEJ(BYTE oper, const char* passwd, BOOL hasEJ);
+</pre>
+<h3>Parameters:</h3>
+<dl>
+	<dt>
+	oper
+	<dd>
+		Specify the operator number from 1 to 9.
+	</dd></dt>
+	<dt>
+	passwd
+	<dd>
+		A buffer containing zero terminated operator password. This buffer is 
+		cut to the first 4 characters
+	</dd></dt>
+	<dt>
+	hasEJ
+	<dd>
+		boolean value 1 for record in EJ or 0 for no EJ record 
+		(Zeka FP03 and newer only, ignored in older models).
+	</dd></dt>
+</dl>
+<h3>Return Value:</h3>
+<p>ZFPE_SUCCESS on success, otherwise an error code</p>
+<br>
+</div>
+
+<script language="JavaScript">mf_text("CloseBon", "CloseBon");</script>
+&nbsp;-&nbsp;Close a receipt previously opened with OpenBon()
+<br>
+<div id="CloseBon" class="msgbody">
+<pre>
+int CloseBon();
+</pre>
+<h3>Return Value:</h3>
+<p>ZFPE_SUCCESS on success, otherwise an error code</p>
+<br>
+</div>
+
+<script language="JavaScript">mf_text("OpenFiscalBon", "OpenFiscalBon");</script>
+&nbsp;-&nbsp;Open fiscal receipt 
+<br>
+<div id="OpenFiscalBon" class="msgbody">
+<pre>
+int OpenFiscalBon(BYTE oper, const char* passwd, BYTE detailed, BYTE dds);
+</pre>
+<h3>Parameters:</h3>
+<dl>
+	<dt>
+	oper
+	<dd>
+		Specify the operator number from 1 to 9.
+	</dd></dt>
+	<dt>
+	passwd
+	<dd>
+		A buffer containing zero terminated operator password. This buffer is 
+		cut to the first 4 characters
+	</dd></dt>
+	<dt>
+	detailed
+	<dd>
+		flag for detailed output (use 0 = do not print, 1 = print)
+	</dd></dt>
+	<dt>
+	dds
+	<dd>
+		flag for printing the DDS tax sum (use 0 = do not print, 1 = print)
+	</dd></dt>
+</dl>
+<h3>Return Value:</h3>
+<p>ZFPE_SUCCESS on success, otherwise an error code</p>
+<br>
+</div>
+
+<script language="JavaScript">mf_text("OpenInvoice", "OpenInvoice");</script>
+&nbsp;-&nbsp;Open fiscal receipt - invoice
+<br>
+<div id="OpenInvoice" class="msgbody">
+<pre>
+int OpenInvoice(BYTE oper, const char* passwd, const char* client, const char* receiver, const char* vatNum, const char* identNum, const char* address);
+</pre>
+<h3>Parameters:</h3>
+<dl>
+	<dt>
+	oper
+	<dd>
+		Specify the operator number from 1 to 9.
+	</dd></dt>
+	<dt>
+	passwd
+	<dd>
+		A buffer containing zero terminated operator password. This buffer is 
+		cut to the first 4 characters
+	</dd></dt>
+	<dt>
+	client
+	<dd>
+		A buffer containing zero terminated client's name. This buffer is cut to 
+		the first 26 characters
+	</dd></dt>
+	<dt>
+	receiver
+	<dd>
+		A buffer containing zero terminated receiver's name. This buffer is cut 
+		to the first 16 characters
+	</dd></dt>
+	<dt>
+	vatNum
+	<dd>
+		A buffer containing zero terminated client's VAT number. This buffer is 
+		cut to the first 13 characters
+	</dd></dt>
+	<dt>
+	identNum
+	<dd>
+		A buffer containing zero terminated client's identification number. This buffer is cut 
+		to the first 13 characters
+	</dd></dt>
+	<dt>
+	address
+	<dd>
+		A buffer containing zero terminated client's address. This buffer is cut 
+		to the first 30 characters
+	</dd></dt>
+</dl>
+<h3>Return Value:</h3>
+<p>ZFPE_SUCCESS on success, otherwise an error code</p>
+<br>
+</div>
+
+<script language="JavaScript">mf_text("SellFree", "SellFree");</script>
+&nbsp;-&nbsp;Sells an article
+<br>
+<div id="SellFree" class="msgbody">
+<pre>
+int SellFree(const char* name, char taxgrp, double price, double quantity = 1.0, double discount = 0.0);
+</pre>
+<h3>Parameters:</h3>
+<dl>
+	<dt>
+	name
+	<dd>
+		A buffer containing zero terminated article name. This buffer is cut to 
+		the first 36 characters
+	</dd></dt>
+	<dt>
+	taxgrp
+	<dd>
+		Specify the tax group. Can be some of these values: 0x80, 0x81, 0x82, 0, 1, 2, '0', '1', '2'
+	</dd></dt>
+	<dt>
+	price
+	<dd>
+		Specify the price.
+	</dd></dt>
+	<dt>
+	quantity 
+	<dd>
+		Specify the quantity.
+	</dd></dt>
+	<dt>
+	discount
+	<dd>
+		Specify the discount/addition in percents.
+	</dd></dt>
+</dl>
+<h3>Return Value:</h3>
+<p>ZFPE_SUCCESS on success, otherwise an error code</p>
+<br>
+</div>
+
+<script language="JavaScript">mf_text("SellDB", "SellDB");</script>
+&nbsp;-&nbsp;Sells an article from the Fiscal Printer internal database
+<br>
+<div id="SellDB" class="msgbody">
+<pre>
+int SellDB(BOOL isVoid, WORD number, double quantity = 1.0, double discount = 0.0);
+</pre>
+<h3>Parameters:</h3>
+<dl>
+	<dt>
+	isVoid
+	<dd>
+		flag specifying is this a void operation or a sell
+	</dd></dt>
+	<dt>
+	number
+	<dd>
+		Specify the article database number from 1 to 1000.
+	</dd></dt>
+	<dt>
+	quantity 
+	<dd>
+		Specify the quantity.
+	</dd></dt>
+	<dt>
+	discount
+	<dd>
+		Specify the discount/addition in percents.
+	</dd></dt>
+</dl>
+<h3>Return Value:</h3>
+<p>ZFPE_SUCCESS on success, otherwise an error code</p>
+<h3>Remarks:</h3>
+<p>Use the new function SellDBEx() instead.</p>
+<br>
+</div>
+
+<script language="JavaScript">mf_text("SellDepartment", "SellDepartment");</script>
+&nbsp;-&nbsp;Sell from department
+<br>
+<div id="SellDepartment" class="msgbody">
+<pre>
+int SellDepartment(const char* name, WORD depNum, double price, double quantity, double discount);
+</pre>
+<h3>Parameters:</h3>
+<dl>
+	<dt>
+	name
+	<dd>
+		A buffer containing zero terminated article name. This buffer is cut to 
+		the first 36 characters.
+	</dd></dt>
+	<dt>
+	depNum
+	<dd>
+		Department number.
+	</dd></dt>
+	<dt>
+	price
+	<dd>
+		Specify the price.
+	</dd></dt>
+	<dt>
+	quantity 
+	<dd>
+		Specify the quantity.
+	</dd></dt>
+	<dt>
+	discount
+	<dd>
+		Specify the discount/addition in percents.
+	</dd></dt>
+</dl>
+<h3>Return Value:</h3>
+<p>ZFPE_SUCCESS on success, otherwise an error code</p>
+<br>
+</div>
+
+<script language="JavaScript">mf_text("CalcIntermediateSum", "CalcIntermediateSum");</script>
+&nbsp;-&nbsp;Calculate the intermediate sum
+<br>
+<div id="CalcIntermediateSum" class="msgbody">
+<pre>
+// flags CalcIntermediateSum
+#define ZFP_ISPRINT					1		// print the intermediate sum
+#define ZFP_ISSHOW					2		// show the intermediate sum on the display
+#define ZFP_ISPERCENT				4       // the discount/addition is in percents
+
+int CalcIntermediateSum(double* sum, DWORD flags = 0, double discount = 0.0, char taxgrp = -1);
+</pre>
+<h3>Parameters:</h3>
+<dl>
+	<dt>
+	flags
+	<dd>
+		flags specifying additional actions to be taken
+	</dd></dt>
+	<dt>
+	sum
+	<dd>
+		Receive the intermediate sum.
+	</dd></dt>
+	<dt>
+	discount
+	<dd>
+		Specify the discount/addition as a sum or in percents (depends on 
+		ZFP_ISPERCENT flag).
+	</dd></dt>
+	<dt>
+	taxgrp 
+	<dd>
+		Specify the tax group (ignored in bulgarian version of Zeka FP).
+	</dd></dt>
+</dl>
+<h3>Return Value:</h3>
+<p>ZFPE_SUCCESS on success, otherwise an error code</p>
+<br>
+</div>
+
+<script language="JavaScript">mf_text("Payment", "Payment");</script>
+&nbsp;-&nbsp;Register a payment
+<br>
+<div id="Payment" class="msgbody">
+<pre>
+int Payment(double sum, BYTE type = 0, BOOL noRest = FALSE);
+</pre>
+<h3>Parameters:</h3>
+<dl>
+	<dt>
+	sum
+	<dd>
+		Specify the sum to be paid
+	</dd></dt>
+	<dt>
+	type
+	<dd>
+		Specify the payment type number (0, 1, 2 or 3)
+	</dd></dt>
+	<dt>
+	noRest
+	<dd>
+		Specify that payment doesn't require a change (affective only with 
+		certain payment types)
+	</dd></dt>
+</dl>
+<h3>Return Value:</h3>
+<p>ZFPE_SUCCESS on success, otherwise an error code</p>
+<h3>Remarks:</h3>
+<p>See also PaymentEx() function</p>
+<br>
+</div>
+
+<script language="JavaScript">mf_text("PrintText", "PrintText");</script>
+&nbsp;-&nbsp;Print a text
+<br>
+<div id="PrintText" class="msgbody">
+<pre>
+// PrintText modes
+#define ZFP_TEXTALIGNLEFT			0		// left alignment
+#define ZFP_TEXTALIGNRIGHT			1		// right alignment
+#define ZFP_TEXTALIGNCENTER			2		// center text
+
+int PrintText(const char *text, int align = ZFP_TEXTALIGNLEFT);
+</pre>
+<h3>Parameters:</h3>
+<dl>
+	<dt>
+	text
+	<dd>
+		A buffer containing zero terminated text to be printed. This buffer is 
+		cut to the first 34 characters
+	</dd></dt>
+	<dt>
+	align
+	<dd>
+		Text alignment mode
+	</dd></dt>
+</dl>
+<h3>Return Value:</h3>
+<p>ZFPE_SUCCESS on success, otherwise an error code</p>
+<h3>Remarks:</h3>
+<p>The free text can be used to print any text not only inside a receipt</p>
+<br>
+</div>
+
+<script language="JavaScript">mf_text("GetCurrentBonInfo", "GetCurrentBonInfo");</script>
+&nbsp;-&nbsp;Get information about the current open fiscal receipt
+<br>
+<div id="GetCurrentBonInfo" class="msgbody">
+<pre>
+// flags GetCurrentBonInfo flags
+#define ZFPB_OPENBON				1		// the receipt is open
+#define ZFPB_NOVOID					2		// void operations are not allowed
+#define ZFPB_DDS					4		// VAT info is printed
+#define ZFPB_PODRBON				8       // detailed info is printed
+#define ZFPB_PAYSTART				16		// payment is started
+#define ZFPB_PAYEND					32		// payment is finished
+
+int GetCurrentBonInfo(DWORD* flags, int* purchases, double* taxgrp1, double* taxgrp2, double* taxgrp3, double* taxgrp4 = NULL, double* taxgrp5 = NULL);
+</pre>
+<h3>Parameters:</h3>
+<dl>
+	<dt>
+	flags
+	<dd>
+		A pointer to receive the receipt's flags (see the definitions and 
+		comments above)
+	</dd></dt>
+	<dt>
+	purchases
+	<dd>
+		The total number of purchases in the receipt
+	</dd></dt>
+	<dt>
+	taxgrp1
+	<dd>
+		A pointer to receive the sum for tax group A
+	</dd></dt>
+	<dt>
+	taxgrp2
+	<dd>
+		A pointer to receive the sum for tax group B
+	</dd></dt>
+	<dt>
+	taxgrp3
+	<dd>
+		A pointer to receive the sum for tax group C
+	</dd></dt>
+	<dt>
+	taxgrp4
+	<dd>
+		A pointer to receive the sum for tax group D (for Romania only)
+	</dd></dt>
+	<dt>
+	taxgrp5
+	<dd>
+		A pointer to receive the sum for tax group E (for Romania only)
+	</dd></dt>
+</dl>
+<h3>Return Value:</h3>
+<p>ZFPE_SUCCESS on success, otherwise an error code</p>
+<h3>Remarks:</h3>
+<p>On succesful call you need to check the value of the ZFPB_OPENBON flag first. 
+If this flag is 0 no other information is valid and we do not have an open 
+fiscal receipt</p>
+<p>The values of the taxgrp4 and taxgrp5 parameters are filled only then you 
+work with Romanian fiscal printer. To choose the fiscal printer type you wish 
+you work with, use int SetZFPType(int type); function (by default Bulgarian 
+settings are used)</p>
+<br>
+</div>
+
+<script language="JavaScript">mf_text("CloseFiscalBon", "CloseFiscalBon");</script>
+&nbsp;-&nbsp;Close previously opened fiscal receipt
+<br>
+<div id="CloseFiscalBon" class="msgbody">
+<pre>
+int CloseFiscalBon();
+</pre>
+<h3>Return Value:</h3>
+<p>ZFPE_SUCCESS on success, otherwise an error code</p>
+<br>
+</div>
+
+<script language="JavaScript">mf_text("PrintDuplicate", "PrintDuplicate");</script>
+&nbsp;-&nbsp;Print a duplicate of the last fiscal receipt
+<br>
+<div id="PrintDuplicate" class="msgbody">
+<pre>
+int PrintDuplicate();
+</pre>
+<h3>Return Value:</h3>
+<p>ZFPE_SUCCESS on success, otherwise an error code</p>
+<br>
+</div>
+
+<script language="JavaScript">mf_text("GetBonNumber", "GetBonNumber");</script>
+&nbsp;-&nbsp;Get the number of the last printed fiscal receipt
+<br>
+<div id="GetBonNumber" class="msgbody">
+<pre>
+int GetBonNumber(int* number);
+</pre>
+<h3>Parameters:</h3>
+<dl>
+	<dt>
+	number
+	<dd>
+		Receive the number of the last receipt
+	</dd></dt>
+</dl>
+<h3>Return Value:</h3>
+<p>ZFPE_SUCCESS on success, otherwise an error code</p>
+<br>
+</div>
+
+<br>
+
+<script language="JavaScript">mf_text("OfficialSums", "OfficialSums");</script>
+&nbsp;-&nbsp;Register an official sum addition or withdraw
+<br>
+<div id="OfficialSums" class="msgbody">
+<pre>
+int OfficialSums(BYTE oper, const char* passwd, BYTE type, double sum, const char* note = NULL);
+</pre>
+<h3>Parameters:</h3>
+<dl>
+	<dt>
+	oper
+	<dd>
+		Specify the operator number from 1 to 9.
+	</dd></dt>
+	<dt>
+	passwd
+	<dd>
+		A buffer containing zero terminated operator password. This buffer is 
+		cut to the first 4 characters
+	</dd></dt>
+	<dt>
+	type
+	<dd>
+		Specify the payment type number (0, 1, 2 or 3)
+	</dd></dt>
+	<dt>
+	sum
+	<dd>
+		Specify the sum
+	</dd></dt>
+	<dt>
+	note
+	<dd>
+		Optional note.
+	</dd></dt>
+</dl>
+<h3>Return Value:</h3>
+<p>ZFPE_SUCCESS on success, otherwise an error code</p>
+<br>
+</div>
+
+<script language="JavaScript">mf_text("GetArticleInfo", "GetArticleInfo");</script>
+&nbsp;-&nbsp;Receive information about selected article from the internal Fiscal Printer 
+database
+<br>
+<div id="GetArticleInfo" class="msgbody">
+<pre>
+int GetArticleInfo(WORD number, char* name, double* price, char* taxgrp, double* turnover, double* sells,
+		WORD* counter, int* dd, int* mm, int* yy, int* hh, int* mmm);
+</pre>
+<h3>Parameters:</h3>
+<dl>
+	<dt>
+	number
+	<dd>
+		Specify the article database number from 1 to 1000.
+	</dd></dt>
+	<dt>
+	name
+	<dd>
+		A buffer to receive zero terminated article name. This buffer should be 
+		at least 22 characters long
+	</dd></dt>
+	<dt>
+	price
+	<dd>
+		Receive the price.
+	</dd></dt>
+	<dt>
+	taxgrp
+	<dd>
+		Receive the tax group. Should be 0x80, 0x81, 0x82
+	</dd></dt>
+	<dt>
+	turnover
+	<dd>
+		Receive the turnover
+	</dd></dt>
+	<dt>
+	sells
+	<dd>
+		Receive the sells number.
+	</dd></dt>
+	<dt>
+	counter
+	<dd>
+		Receive the number of the last report.
+	</dd></dt>
+	<dt>
+	dd, mm, yy, hh, mmm
+	<dd>
+		Receive the day of the month, month, year, hour and minute respectively, 
+		of the last report.
+	</dd></dt>
+</dl>
+<h3>Return Value:</h3>
+<p>ZFPE_SUCCESS on success, otherwise an error code</p>
+<br>
+</div>
+
+<script language="JavaScript">mf_text("GetDailySums", "GetDailySums");</script>
+&nbsp;-&nbsp;Get daily sums for different tax groups
+<br>
+<div id="GetDailySums" class="msgbody">
+<pre>
+int GetDailySums(double* taxgrp1, double* taxgrp2, double* taxgrp3, double* taxgrp4 = NULL, double* taxgrp5 = NULL);
+</pre>
+<h3>Parameters:</h3>
+<dl>
+	<dt>
+	taxgrp1
+	<dd>
+		A pointer to receive the sum for tax group A
+	</dd></dt>
+	<dt>
+	taxgrp2
+	<dd>
+		A pointer to receive the sum for tax group B
+	</dd></dt>
+	<dt>
+	taxgrp3
+	<dd>
+		A pointer to receive the sum for tax group C
+	</dd></dt>
+	<dt>
+	taxgrp4
+	<dd>
+		A pointer to receive the sum for tax group D (for Romania only)
+	</dd></dt>
+	<dt>
+	taxgrp5
+	<dd>
+		A pointer to receive the sum for tax group E (for Romania only)
+	</dd></dt>
+</dl>
+<h3>Return Value:</h3>
+<p>ZFPE_SUCCESS on success, otherwise an error code</p>
+<h3>Remarks:</h3>
+<p>The values of the taxgrp4 and taxgrp5 parameters are filled only then you 
+work with Romanian fiscal printer. To choose the fiscal printer type you wish 
+you work with, use int SetZFPType(int type); function (by default Bulgarian 
+settings are used)</p>
+<br>
+</div>
+
+<script language="JavaScript">mf_text("GetDailyInfo", "GetDailyInfo");</script>
+&nbsp;-&nbsp;Get daily info
+<br>
+<div id="GetDailyInfo" class="msgbody">
+<pre>
+int GetDailyInfo(int* clients, int* discounts, double* sumdiscount, int* adding, double* sumadding, int* voids, double* sumvoids);
+</pre>
+<h3>Parameters:</h3>
+<dl>
+	<dt>
+	clients
+	<dd>
+		A pointer to receive the number of the clients
+	</dd></dt>
+	<dt>
+	discounts
+	<dd>
+		A pointer to receive the number of the discounts
+	</dd></dt>
+	<dt>
+	sumdiscount
+	<dd>
+		A pointer to receive the total sum for daily discounts
+	</dd></dt>
+	<dt>
+	adding
+	<dd>
+		A pointer to receive the number of the additions
+	</dd></dt>
+	<dt>
+	sumadding
+	<dd>
+		A pointer to receive the total sum for daily additions
+	</dd></dt>
+	<dt>
+	voids
+	<dd>
+		A pointer to receive the number of the voids
+	</dd></dt>
+	<dt>
+	sumvoids
+	<dd>
+		A pointer to receive the total sum for daily voids
+	</dd></dt>
+</dl>
+<h3>Return Value:</h3>
+<p>ZFPE_SUCCESS on success, otherwise an error code</p>
+<br>
+</div>
+
+<script language="JavaScript">mf_text("GetDailyPayments", "GetDailyPayments");</script>
+&nbsp;-&nbsp;Get daily sums for different pay types
+<br>
+<div id="GetDailyPayments" class="msgbody">
+<pre>
+int GetDailyPayments(double* paytype0, double* paytype1, double* paytype2, double* paytype3, double* paytype4);
+</pre>
+<h3>Parameters:</h3>
+<dl>
+	<dt>
+	paytype0 .. paytype4
+	<dd>
+		A pointer to receive daily sum for pay type 0 to 4
+	</dd></dt>
+</dl>
+<h3>Return Value:</h3>
+<p>ZFPE_SUCCESS on success, otherwise an error code</p>
+<br>
+</div>
+
+<script language="JavaScript">mf_text("GetDailyIncomes", "GetDailyIncomes");</script>
+&nbsp;-&nbsp;Get daily income sums for different pay types
+<br>
+<div id="GetDailyIncomes" class="msgbody">
+<pre>
+int GetDailyIncomes(double* paytype0, double* paytype1, double* paytype2, double* paytype3, double* paytype4);
+</pre>
+<h3>Parameters:</h3>
+<dl>
+	<dt>
+	paytype0 .. paytype4
+	<dd>
+		A pointer to receive daily income sum for pay type 0 to 4
+	</dd></dt>
+</dl>
+<h3>Return Value:</h3>
+<p>ZFPE_SUCCESS on success, otherwise an error code</p>
+<br>
+</div>
+
+<script language="JavaScript">mf_text("GetDailyOfficialIncomes", "GetDailyOfficialIncomes");</script>
+&nbsp;-&nbsp;Get daily official income sums for different pay types
+<br>
+<div id="GetDailyOfficialIncomes" class="msgbody">
+<pre>
+int GetDailyOfficialIncomes(double* paytype0, double* paytype1, double* paytype2, double* paytype3, double* paytype4, DWORD* operations);
+</pre>
+<h3>Parameters:</h3>
+<dl>
+	<dt>
+	paytype0 .. paytype4
+	<dd>
+		A pointer to receive daily income sum for pay type 0 to 4
+	</dd></dt>
+	<dt>
+	operations
+	<dd>
+		A pointer to receive the total number of daily incomming operations
+	</dd></dt>
+</dl>
+<h3>Return Value:</h3>
+<p>ZFPE_SUCCESS on success, otherwise an error code</p>
+<br>
+</div>
+
+<script language="JavaScript">mf_text("GetDailyOfficialExpenses", "GetDailyOfficialExpenses");</script>
+&nbsp;-&nbsp;Get daily official expense sums for different pay types
+<br>
+<div id="GetDailyOfficialExpenses" class="msgbody">
+<pre>
+int GetDailyOfficialExpenses(double* paytype0, double* paytype1, double* paytype2, double* paytype3, double* paytype4, DWORD* operations);
+</pre>
+<h3>Parameters:</h3>
+<dl>
+	<dt>
+	paytype0 .. paytype4
+	<dd>
+		A pointer to receive daily expense sum for pay type 0 to 4
+	</dd></dt>
+	<dt>
+	operations
+	<dd>
+		A pointer to receive the total number of daily expense operations
+	</dd></dt>
+</dl>
+<h3>Return Value:</h3>
+<p>ZFPE_SUCCESS on success, otherwise an error code</p>
+<br>
+</div>
+
+<script language="JavaScript">mf_text("GetDailyReport", "GetDailyReport");</script>
+&nbsp;-&nbsp;Get report counter, last fiscal memory report number, electronic cash line 
+number (if present), last report's date
+<br>
+<div id="GetDailyReport" class="msgbody">
+<pre>
+int GetDailyReport(DWORD* counter, DWORD* lastreport, DWORD* ecl, int* dd, int* mm, int* yy, int* hh, int* mmm);
+</pre>
+<h3>Parameters:</h3>
+<dl>
+	<dt>
+	counter
+	<dd>
+		A pointer to receive the report counter
+	</dd></dt>
+	<dt>
+	lastreport
+	<dd>
+		Receive the number of the last fiscal report.
+	</dd></dt>
+	<dt>
+	ecl
+	<dd>
+		Receive the electronic cash line number (if present).
+	</dd></dt>
+	<dt>
+	dd, mm, yy, hh, mmm
+	<dd>
+		Receive the day of the month, month, year, hour and minute respectively, 
+		of the last report.
+	</dd></dt>
+</dl>
+<h3>Return Value:</h3>
+<p>ZFPE_SUCCESS on success, otherwise an error code</p>
+<br>
+</div>
+
+<script language="JavaScript">mf_text("GetLastFiscalReportData", "GetLastFiscalReportData");</script>
+&nbsp;-&nbsp;The date and numbers of the last report
+<br>
+<div id="GetLastFiscalReportData" class="msgbody">
+<pre>
+int GetLastFiscalReportData(int* dd, int* mm, int* yy, int* lastReport, int* lastZeroRam);
+</pre>
+<h3>Parameters:</h3>
+<dl>
+	<dt>
+	dd, mm, yy, hh, mmm
+	<dd>
+		Receive the day of the month, month, year, hour and minute respectively, 
+		of the last report.
+	</dd></dt>
+	<dt>
+	lastReport
+	<dd>
+		Receive the number of the last report.
+	</dd></dt>
+	<dt>
+	lastZeroRam
+	<dd>
+		Receive the number of the last zero ram report.
+	</dd></dt>
+</dl>
+<h3>Return Value:</h3>
+<p>ZFPE_SUCCESS on success, otherwise an error code</p>
+<br>
+</div>
+
+<br>
+
+<script language="JavaScript">mf_text("GetOperatorInfo", "GetOperatorInfo");</script>
+&nbsp;-&nbsp;Get daily info for an operator
+<br>
+<div id="GetOperatorInfo" class="msgbody">
+<pre>
+int GetOperatorInfo(BYTE oper, int* clients, int* discounts, double* sumdiscount, int* adding, double* sumadding, int* voids, double* sumvoids);
+</pre>
+<h3>Parameters:</h3>
+<dl>
+	<dt>
+	oper
+	<dd>
+		Specify the operator number from 1 to 9.
+	</dd></dt>
+	<dt>
+	clients
+	<dd>
+		A pointer to receive the number of the clients
+	</dd></dt>
+	<dt>
+	discounts
+	<dd>
+		A pointer to receive the number of the discounts
+	</dd></dt>
+	<dt>
+	sumdiscount
+	<dd>
+		A pointer to receive the total sum for daily discounts
+	</dd></dt>
+	<dt>
+	adding
+	<dd>
+		A pointer to receive the number of the additions
+	</dd></dt>
+	<dt>
+	sumadding
+	<dd>
+		A pointer to receive the total sum for daily additions
+	</dd></dt>
+	<dt>
+	voids
+	<dd>
+		A pointer to receive the number of the voids
+	</dd></dt>
+	<dt>
+	sumvoids
+	<dd>
+		A pointer to receive the total sum for daily voids
+	</dd></dt>
+</dl>
+<h3>Return Value:</h3>
+<p>ZFPE_SUCCESS on success, otherwise an error code</p>
+<br>
+</div>
+
+<script language="JavaScript">mf_text("GetOperatorIncomes", "GetOperatorIncomes");</script>
+&nbsp;-&nbsp;Get daily income sums per operator for different pay types
+<br>
+<div id="GetOperatorIncomes" class="msgbody">
+<pre>
+int GetOperatorIncomes(BYTE oper, double* paytype0, double* paytype1, double* paytype2, double* paytype3, double* paytype4, DWORD* operations);
+</pre>
+<h3>Parameters:</h3>
+<dl>
+	<dt>
+	oper
+	<dd>
+		Specify the operator number from 1 to 9.
+	</dd></dt>
+	<dt>
+	paytype0 .. paytype4
+	<dd>
+		A pointer to receive daily income sum for pay type 0 to 4
+	</dd></dt>
+	<dt>
+	operations
+	<dd>
+		A pointer to receive the total number of daily income operations
+	</dd></dt>
+</dl>
+<h3>Return Value:</h3>
+<p>ZFPE_SUCCESS on success, otherwise an error code</p>
+<br>
+</div>
+
+<script language="JavaScript">mf_text("GetOperatorExpenses", "GetOperatorExpenses");</script>
+&nbsp;-&nbsp;Get daily expense sums per operator for different pay types
+<br>
+<div id="GetOperatorExpenses" class="msgbody">
+<pre>
+int GetOperatorExpenses(BYTE oper, double* paytype0, double* paytype1, double* paytype2, double* paytype3, double* paytype4, DWORD* operations);
+</pre>
+<h3>Parameters:</h3>
+<dl>
+	<dt>
+	oper
+	<dd>
+		Specify the operator number from 1 to 9.
+	</dd></dt>
+	<dt>
+	paytype0 .. paytype4
+	<dd>
+		A pointer to receive daily expense sum for pay type 0 to 4
+	</dd></dt>
+	<dt>
+	operations
+	<dd>
+		A pointer to receive the total number of daily expense operations
+	</dd></dt>
+</dl>
+<h3>Return Value:</h3>
+<p>ZFPE_SUCCESS on success, otherwise an error code</p>
+<br>
+</div>
+
+<script language="JavaScript">mf_text("GetOperatorReceives", "GetOperatorReceives");</script>
+&nbsp;-&nbsp;Get daily received sums per operator for different pay types
+<br>
+<div id="GetOperatorReceives" class="msgbody">
+<pre>
+int GetOperatorReceives(BYTE oper, double* paytype0, double* paytype1, double* paytype2, double* paytype3, double* paytype4);
+</pre>
+<h3>Parameters:</h3>
+<dl>
+	<dt>
+	oper
+	<dd>
+		Specify the operator number from 1 to 9.
+	</dd></dt>
+	<dt>
+	paytype0 .. paytype4
+	<dd>
+		A pointer to receive daily receive sum for pay type 0 to 4
+	</dd></dt>
+</dl>
+<h3>Return Value:</h3>
+<p>ZFPE_SUCCESS on success, otherwise an error code</p>
+<br>
+</div>
+
+<script language="JavaScript">mf_text("GetOperatorCounter", "GetOperatorCounter");</script>
+&nbsp;-&nbsp;Get operator report counter and report date
+<br>
+<div id="GetOperatorCounter" class="msgbody">
+<pre>
+int GetOperatorCounter(BYTE oper, double* count, int* dd, int* mm, int* yy, int* hh, int* mmm);
+</pre>
+<h3>Parameters:</h3>
+<dl>
+	<dt>
+	oper
+	<dd>
+		Specify the operator number from 1 to 9.
+	</dd></dt>
+	<dt>
+	count
+	<dd>
+		Receive the number of the last report.
+	</dd></dt>
+	<dt>
+	dd, mm, yy, hh, mmm
+	<dd>
+		Receive the day of the month, month, year, hour and minute respectively, 
+		of the last report.
+	</dd></dt>
+</dl>
+<h3>Return Value:</h3>
+<p>ZFPE_SUCCESS on success, otherwise an error code</p>
+<br>
+</div>
+
+<p><b>Setup commands &amp; tools</b></p>
+
+<script language="JavaScript">mf_text("SetPayType", "SetPayType");</script>
+&nbsp;-&nbsp;Set pay type name text
+<br>
+<div id="SetPayType" class="msgbody">
+<pre>
+int SetPayType(BYTE type, const char* line);
+</pre>
+<h3>Parameters:</h3>
+<dl>
+	<dt>
+	type
+	<dd>
+		Specify the payment type number (1, 2 or 3)
+	</dd></dt>
+	<dt>
+	line
+	<dd>
+		A buffer containing zero terminated payment type name. This buffer is 
+		cut to the first 10 characters
+	</dd></dt>
+</dl>
+<h3>Return Value:</h3>
+<p>ZFPE_SUCCESS on success, otherwise an error code</p>
+<br>
+</div>
+
+<script language="JavaScript">mf_text("SetParameters", "SetParameters");</script>
+&nbsp;-&nbsp;Set different Fiscal Printer parameters
+<br>
+<div id="SetParameters" class="msgbody">
+<pre>
+int SetParameters(WORD fpnum, BOOL logo, BOOL till, BOOL autocut, BOOL transparent);
+</pre>
+<h3>Parameters:</h3>
+<dl>
+	<dt>
+	fpNum
+	<dd>
+		Specify the Fiscal Printer place number
+	</dd></dt>
+	<dt>
+	logo
+	<dd>
+		logo printing status (0 = not printed, otherwise printed)
+	</dd></dt>
+	<dt>
+	till
+	<dd>
+		till status (0 = don't have a till, otherwise till is present)
+	</dd></dt>
+	<dt>
+	autocut
+	<dd>
+		auto cutter status (0 = don't have one, otherwise present)
+	</dd></dt>
+	<dt>
+	transparent
+	<dd>
+		transparent display status (0 = no display or not transparent, otherwise 
+		transparent display)
+	</dd></dt>
+</dl>
+<h3>Return Value:</h3>
+<p>ZFPE_SUCCESS on success, otherwise an error code</p>
+<br>
+</div>
+
+<script language="JavaScript">mf_text("SetDateTime", "SetDateTime");</script>
+&nbsp;-&nbsp;Set the current date and time of the Fiscal Printer
+<br>
+<div id="SetDateTime" class="msgbody">
+<pre>
+int SetDateTime(WORD dd, WORD mm, WORD yy, WORD hh, WORD mmm, WORD ss);
+</pre>
+<h3>Parameters:</h3>
+<dl>
+	<dt>
+	dd
+	<dd>
+		current day of the month
+	</dd></dt>
+	<dt>
+	mm
+	<dd>
+		current month
+	</dd></dt>
+	<dt>
+	yy
+	<dd>
+		current year
+	</dd></dt>
+	<dt>
+	hh
+	<dd>
+		current hour
+	</dd></dt>
+	<dt>
+	mmm
+	<dd>
+		current minute
+	</dd></dt>
+</dl>
+<h3>Return Value:</h3>
+<p>ZFPE_SUCCESS on success, otherwise an error code</p>
+<br>
+</div>
+
+<script language="JavaScript">mf_text("SetClicheLine", "SetClicheLine");</script>
+&nbsp;-&nbsp;Set cliche line text by given line number
+<br>
+<div id="SetClicheLine" class="msgbody">
+<pre>
+int SetClicheLine(BYTE lineNum, const char* text);
+</pre>
+<h3>Parameters:</h3>
+<dl>
+	<dt>
+	lineNum
+	<dd>
+		Specify the line to setup text. Line numbers are from 1 to 8
+	</dd></dt>
+	<dt>
+	text
+	<dd>
+		A buffer containing zero terminated string with the clishe line text. 
+		This buffer is cut to the first 38 characters
+	</dd></dt>
+</dl>
+<h3>Return Value:</h3>
+<p>ZFPE_SUCCESS on success, otherwise an error code</p>
+<br>
+</div>
+
+<script language="JavaScript">mf_text("SetOperatorUserPass", "SetOperatorUserPass");</script>
+&nbsp;-&nbsp;Set operator user name and password by given operator number
+<br>
+<div id="SetOperatorUserPass" class="msgbody">
+<pre>
+int SetOperatorUserPass(BYTE oper, const char* name, const char* password);
+</pre>
+<h3>Parameters:</h3>
+<dl>
+	<dt>
+	oper
+	<dd>
+		Specify the operator number from 1 to 9.
+	</dd></dt>
+	<dt>
+	name
+	<dd>
+		zero terminated string with the operator name. This buffer is cut to the 
+		first 20 characters
+	</dd></dt>
+	<dt>
+	password
+	<dd>
+		zero terminated string with the operator password. This buffer is cut to 
+		the first 4 characters
+	</dd></dt>
+</dl>
+<h3>Return Value:</h3>
+<p>ZFPE_SUCCESS on success, otherwise an error code</p>
+<br>
+</div>
+
+<script language="JavaScript">mf_text("SetArticleInfo", "SetArticleInfo");</script>
+&nbsp;-&nbsp;Set information about selected article from the internal Fiscal Printer 
+database
+<br>
+<div id="SetArticleInfo" class="msgbody">
+<pre>
+int SetArticleInfo(WORD number, const char* name, double price, char taxgrp, WORD depNum = 0);
+</pre>
+<h3>Parameters:</h3>
+<dl>
+	<dt>
+	number
+	<dd>
+		Specify the article database number from 1 to 1000.
+	</dd></dt>
+	<dt>
+	name
+	<dd>
+		zero terminated article name. This buffer is cut to the first 20 
+		characters
+	</dd></dt>
+	<dt>
+	price
+	<dd>
+		price
+	</dd></dt>
+	<dt>
+	taxgrp
+	<dd>
+		Specify the tax group. Can be some of these values: 0x80, 0x81, 0x82, 0, 1, 2, '0', '1', '2'
+	</dd></dt>
+	<dt>
+	depNum 
+	<dd>
+		Department number
+	</dd></dt>
+</dl>
+<h3>Return Value:</h3>
+<p>ZFPE_SUCCESS on success, otherwise an error code</p>
+<br>
+</div>
+
+<script language="JavaScript">mf_text("SetLogoFile", "SetLogoFile");</script>
+&nbsp;-&nbsp;Setup logo from bitmap file
+<br>
+<div id="SetLogoFile" class="msgbody">
+<pre>
+int SetLogoFile(const char* filename);
+</pre>
+<h3>Parameters:</h3>
+<dl>
+	<dt>
+	filename
+	<dd>
+		zero terminated file name.
+	</dd></dt>
+</dl>
+<h3>Return Value:</h3>
+<p>ZFPE_SUCCESS on success, otherwise an error code</p>
+<h3>Remarks:</h3>
+<p>The logo has to be bitmap (.BMP) file with 1 bpp and dimensions 384 x 80. 
+The resulted file is 3902 bytes long</p>
+<br>
+</div>
+
+<script language="JavaScript">mf_text("SetLocalDateTime", "SetLocalDateTime");</script>
+&nbsp;-&nbsp;Setup Fiscal Printer date and time based on the local date and time of the 
+computer
+<br>
+<div id="SetLocalDateTime" class="msgbody">
+<pre>
+int SetLocalDateTime();
+</pre>
+<h3>Return Value:</h3>
+<p>ZFPE_SUCCESS on success, otherwise an error code</p>
+<br>
+</div>
+
+<script language="JavaScript">mf_text("SetExternalDisplayFile", "SetExternalDisplayFile");</script>
+&nbsp;-&nbsp;External display programming
+<br>
+<div id="SetExternalDisplayFile" class="msgbody">
+<pre>
+int SetExternalDisplayFile(const char* password, const char* filename);
+</pre>
+<h3>Parameters:</h3>
+<dl>
+	<dt>
+	password
+	<dd>
+		Zero terminated buffer containing the password. This buffer is cut to 
+		the first 6 characters.
+	</dd></dt>
+	<dt>
+	filename
+	<dd>
+		Zero terminated file name.
+	</dd></dt>
+</dl>
+<h3>Return Value:</h3>
+<p>ZFPE_SUCCESS on success, otherwise an error code</p>
+<br>
+</div>
+
+<script language="JavaScript">mf_text("SetExternalDisplayData", "SetExternalDisplayData");</script>
+&nbsp;-&nbsp;External display programming
+<br>
+<div id="SetExternalDisplayData" class="msgbody">
+<pre>
+int SetExternalDisplayData(const char* password, const BYTE* data, int datalen);
+</pre>
+<h3>Parameters:</h3>
+<dl>
+	<dt>
+	password
+	<dd>
+		Zero terminated buffer containing the password. This buffer is cut to 
+		the first 6 characters.
+	</dd></dt>
+	<dt>
+	data
+	<dd>
+		Buffer containing the data needed for display programming. The contants 
+		is the same as the file in SetExternalDisplayFile()
+	</dd></dt>
+	<dt>
+	datalen
+	<dd>
+		The data length. Should not be more than 101 bytes!
+	</dd></dt>
+</dl>
+<h3>Return Value:</h3>
+<p>ZFPE_SUCCESS on success, otherwise an error code</p>
+<br>
+</div>
+
+<script language="JavaScript">mf_text("SetDepartment", "SetDepartment");</script>
+&nbsp;-&nbsp;Setup department
+<br>
+<div id="SetDepartment" class="msgbody">
+<pre>
+int SetDepartment(WORD number, const char* name, char taxgrp);
+</pre>
+<h3>Parameters:</h3>
+<dl>
+	<dt>
+	number
+	<dd>
+		Department number.
+	</dd></dt>
+	<dt>
+	name
+	<dd>
+		Zero terminated buffer containing the department name. This buffer is cut to 
+		the first 20 characters.
+	</dd></dt>
+	<dt>
+	taxgrp
+	<dd>
+		Specify the tax group. Can be some of these values: 0x80, 0x81, 0x82, 0, 1, 2, '0', '1', '2'
+	</dd></dt>
+</dl>
+<h3>Return Value:</h3>
+<p>ZFPE_SUCCESS on success, otherwise an error code</p>
+<br>
+</div>
+
+<script language="JavaScript">mf_text("SetEJMode", "SetEJMode");</script>
+&nbsp;-&nbsp;Set electronic journal (EJ) mode
+<br>
+<div id="SetEJMode" class="msgbody">
+<pre>
+int SetEJMode(BOOL bShort);
+</pre>
+<h3>Parameters:</h3>
+<dl>
+	<dt>
+	bShort
+	<dd>
+		Not zero (true) means short EJ, zero (false) means extended (EJ)
+	</dd></dt>
+</dl>
+<h3>Return Value:</h3>
+<p>ZFPE_SUCCESS on success, otherwise an error code</p>
+<br>
+</div>
+
+<p><b>Reports</b></p>
+
+<script language="JavaScript">mf_text("ReportSpecialFiscal", "ReportSpecialFiscal");</script>
+&nbsp;-&nbsp;Special report
+<br>
+<div id="ReportSpecialFiscal" class="msgbody">
+<pre>
+int ReportSpecialFiscal();
+</pre>
+<h3>Return Value:</h3>
+<p>ZFPE_SUCCESS on success, otherwise an error code</p>
+<br>
+</div>
+
+<script language="JavaScript">mf_text("ReportFiscalByBlock", "ReportFiscalByBlock");</script>
+&nbsp;-&nbsp;Fiscal report by block number
+<br>
+<div id="ReportFiscalByBlock" class="msgbody">
+<pre>
+int ReportFiscalByBlock(BOOL detailed, WORD startNumber, WORD endNumber);
+</pre>
+<h3>Parameters:</h3>
+<dl>
+	<dt>
+	detailed
+	<dd>
+		Specify is the report detailed.
+	</dd></dt>
+	<dt>
+	startNumber
+	<dd>
+		Report start number
+	</dd></dt>
+	<dt>
+	endNumber
+	<dd>
+		Report end number
+	</dd></dt>
+</dl>
+<h3>Return Value:</h3>
+<p>ZFPE_SUCCESS on success, otherwise an error code</p>
+<br>
+</div>
+
+<script language="JavaScript">mf_text("ReportFiscalByDate", "ReportFiscalByDate");</script>
+&nbsp;-&nbsp;Fiscal report by date
+<br>
+<div id="ReportFiscalByDate" class="msgbody">
+<pre>
+int ReportFiscalByDate(BOOL detailed, WORD sdd, WORD smm, WORD syy, WORD edd, WORD emm, WORD eyy);
+</pre>
+<h3>Parameters:</h3>
+<dl>
+	<dt>
+	detailed
+	<dd>
+		Specify is the report detailed.
+	</dd></dt>
+	<dt>
+	sdd, smm, syy
+	<dd>
+		Start day, month and year
+	</dd></dt>
+	<dt>
+	edd, emm, eyy
+	<dd>
+		End day, month and year
+	</dd></dt>
+</dl>
+<h3>Return Value:</h3>
+<p>ZFPE_SUCCESS on success, otherwise an error code</p>
+<br>
+</div>
+
+<script language="JavaScript">mf_text("ReportDaily", "ReportDaily");</script>
+&nbsp;-&nbsp;Daily report
+<br>
+<div id="ReportDaily" class="msgbody">
+<pre>
+int ReportDaily(BOOL zero, BOOL extended);
+</pre>
+<h3>Parameters:</h3>
+<dl>
+	<dt>
+	zero
+	<dd>
+		Specify will the report zero the daily sums.
+	</dd></dt>
+	<dt>
+	extended
+	<dd>
+		Specify is the report extended.
+	</dd></dt>
+</dl>
+<h3>Return Value:</h3>
+<p>ZFPE_SUCCESS on success, otherwise an error code</p>
+<br>
+</div>
+
+<script language="JavaScript">mf_text("ReportEJ", "ReportEJ");</script>
+&nbsp;-&nbsp;Electronic Journal (EJ) report
+<br>
+<div id="ReportEJ" class="msgbody">
+<pre>
+int ReportEJ(WORD num = 0);
+</pre>
+<h3>Parameters:</h3>
+<dl>
+	<dt>
+	num 
+	<dd>
+		Receipt number (not used in Bulgarian Zeka FP)
+	</dd></dt>
+</dl>
+<h3>Return Value:</h3>
+<p>ZFPE_SUCCESS on success, otherwise an error code</p>
+<br>
+</div>
+
+<script language="JavaScript">mf_text("ReportOperator", "ReportOperator");</script>
+&nbsp;-&nbsp;Operator report
+<br>
+<div id="ReportOperator" class="msgbody">
+<pre>
+int ReportOperator(BOOL zero, BYTE oper);
+</pre>
+<h3>Parameters:</h3>
+<dl>
+	<dt>
+	zero
+	<dd>
+		Specify will the report zero the daily sums.
+	</dd></dt>
+	<dt>
+	oper
+	<dd>
+		Specify the operator number from 0 to 9 (0 = all).
+	</dd></dt>
+</dl>
+<h3>Return Value:</h3>
+<p>ZFPE_SUCCESS on success, otherwise an error code</p>
+<br>
+</div>
+
+<script language="JavaScript">mf_text("ReportArticles", "ReportArticles");</script>
+&nbsp;-&nbsp;Report by articles
+<br>
+<div id="ReportArticles" class="msgbody">
+<pre>
+int ReportArticles(BOOL zero);
+</pre>
+<h3>Parameters:</h3>
+<dl>
+	<dt>
+	zero
+	<dd>
+		Specify will the report zero the daily sums.
+	</dd></dt>
+</dl>
+<h3>Return Value:</h3>
+<p>ZFPE_SUCCESS on success, otherwise an error code</p>
+<br>
+</div>
+
+<script language="JavaScript">mf_text("ReadFiscalMemory", "ReadFiscalMemory");</script>
+&nbsp;-&nbsp;Read the fiscal memory into a file
+<br>
+<div id="ReadFiscalMemory" class="msgbody">
+<pre>
+int ReadFiscalMemory(const char* filename);
+</pre>
+<h3>Parameters:</h3>
+<dl>
+	<dt>
+	filename
+	<dd>
+		zero terminated file name. If the file doesn't exits it is created. If 
+		the file exists it will be overided. The file has the following format:<br/>
+		<pre>
+&lt;NBL&gt;&lt;CMD&gt;&lt;segment number&gt;;&lt;record code&gt;;&lt;record date&gt;;&lt;status&gt;;&lt;data&gt;
+….
+…..
+&lt;NBL&gt;&lt;CMD&gt;&lt;segment number&gt;;&lt;record code&gt;;&lt;record date&gt;;&lt;status&gt;;&lt;data&gt;
+…
+
+&lt;NBL&gt;&lt;CMD&gt;&lt;segment number&gt;;&lt;@&gt; - end of records
+
+
+record code / record type
+00 Factory record
+01 Fiscalization
+04 Daily report
+05 Zero RAM
+06 Tax percents
+07 Decimal point
+	</pre>
+	</dd></dt>
+</dl>
+<h3>Return Value:</h3>
+<p>ZFPE_SUCCESS on success, otherwise an error code</p>
+<br>
+</div>
+
+<p><b>New functions in Zeka FP-E and Zeka FP01-E</b></p>
+<p>
+The functions below are added in version 2.0 of ZFPlib to support the new functionality of Zeka FP-E and Zeka FP01-E devices.
+These functions can be used with the old Zeka FP и Zeka FP01 as well but the new parameters not supported by the old devices have 
+specific values by default.
+</p>
+
+<script language="JavaScript">mf_text("PaymentEU", "PaymentEU");</script>
+&nbsp;-&nbsp;Register a payment
+<br>
+<div id="Payment" class="msgbody">
+<pre>
+int PaymentEU(double sum, BYTE type, BOOL noChange, BYTE changeType);
+</pre>
+<h3>Parameters:</h3>
+<dl>
+	<dt>
+	sum
+	<dd>
+		Specify the sum to be paid
+	</dd></dt>
+	<dt>
+	type
+	<dd>
+		Specify the payment type number (0 to 4)
+	</dd></dt>
+	<dt>
+	noChange
+	<dd>
+		Specify that payment doesn't require a change (affective only with 
+		certain payment types)
+	</dd></dt>
+	<dt>
+	changeType
+	<dd>
+		Change type. 0 = cash (payment type 0), 1 = change in specified payment type (default when used with Zeka FP and Zeka FP01), 2 = change in currency (payment type 4)
+	</dd></dt>
+</dl>
+<h3>Return Value:</h3>
+<p>ZFPE_SUCCESS on success, otherwise an error code</p>
+<br>
+</div>
+
+<script language="JavaScript">mf_text("GetCurrentBonInfoEU", "GetCurrentBonInfoEU");</script>
+&nbsp;-&nbsp;Get information about the current open fiscal receipt
+<br>
+<div id="GetCurrentBonInfoEU" class="msgbody">
+<pre>
+int GetCurrentBonInfoEU(TZfpReceiptInfo&amp; info);
+</pre>
+<h3>Parameters:</h3>
+<dl>
+	<dt>
+	info
+	<dd>
+		<a href="structures_en.html">TZfpReceiptInfo</a> structure
+	</dd></dt>
+</dl>
+<h3>Return Value:</h3>
+<p>ZFPE_SUCCESS on success, otherwise an error code</p>
+<h3>Remarks:</h3>
+<p>On succesful call you need to check the value of the ZFPB_OPENBON flag first. 
+If this flag is 0 only change and changeType members are valid</p>
+<br>
+</div>
+
+<script language="JavaScript">mf_text("GetDailySumsEU", "GetDailySumsEU");</script>
+&nbsp;-&nbsp;Get daily sums for different tax groups
+<br>
+<div id="GetDailySumsEU" class="msgbody">
+<pre>
+int GetDailySumsEU(TZfpTaxGroups&amp; taxGroups);
+</pre>
+<h3>Parameters:</h3>
+<dl>
+	<dt>
+	taxGroups
+	<dd>
+		<a href="structures_en.html">TZfpTaxGroups</a> structure
+	</dd></dt>
+</dl>
+<h3>Return Value:</h3>
+<p>ZFPE_SUCCESS on success, otherwise an error code</p>
+<br>
+</div>
+
+<script language="JavaScript">mf_text("GetOperatorChangeEU", "GetOperatorChangeEU");</script>
+&nbsp;-&nbsp;Get daily change sums per operator for different pay types (new for Zeka FP-E and Zeka FP01-E)
+<br>
+<div id="GetOperatorChangeEU" class="msgbody">
+<pre>
+int GetOperatorChangeEU(BYTE oper, double* paytype0, double* paytype1, double* paytype2, double* paytype3, double* paytype4);
+</pre>
+<h3>Parameters:</h3>
+<dl>
+	<dt>
+	oper
+	<dd>
+		Specify the operator number from 1 to 9.
+	</dd></dt>
+	<dt>
+	paytype0 .. paytype4
+	<dd>
+		A pointer to receive daily change sum for pay type 0 to 4
+	</dd></dt>
+</dl>
+<h3>Return Value:</h3>
+<p>ZFPE_SUCCESS on success, otherwise an error code</p>
+<br>
+</div>
+
+<script language="JavaScript">mf_text("GetDailyChangeEU", "GetDailyChangeEU");</script>
+&nbsp;-&nbsp;Get daily sums returned as change for different tax groups (new for Zeka FP-E and Zeka FP01-E)
+<br>
+<div id="GetDailyChangeEU" class="msgbody">
+<pre>
+int GetDailyChangeEU(double* paytype0, double* paytype1, double* paytype2, double* paytype3, double* paytype4);
+</pre>
+<h3>Parameters:</h3>
+<dl>
+	<dt>
+	paytype0 .. paytype4
+	<dd>
+		A pointer to receive daily change sum for pay type 0 to 4
+	</dd></dt>
+</dl>
+<h3>Return Value:</h3>
+<p>ZFPE_SUCCESS on success, otherwise an error code</p>
+<br>
+</div>
+
+<script language="JavaScript">mf_text("GetInvoiceNextNumberEU", "GetInvoiceNextNumberEU");</script>
+&nbsp;-&nbsp;Get next and last invoice number according to the invoice number range setup (new for Zeka FP-E and Zeka FP01-E)
+<br>
+<div id="GetInvoiceNextNumberEU" class="msgbody">
+<pre>
+int GetInvoiceNextNumberEU(char* nextNum, char* lastNum);
+</pre>
+<h3>Parameters:</h3>
+<dl>
+	<dt>
+	nextNum
+	<dd>
+		A buffer to receive zero terminated string with the next invoice number. This 
+		buffer needs to be at least 11 bytes long
+	</dd></dt>
+	<dt>
+	lastNum
+	<dd>
+		A buffer to receive zero terminated string with the last invoice number. This 
+		buffer needs to be at least 11 bytes long
+	</dd></dt>
+</dl>
+<h3>Return Value:</h3>
+<p>ZFPE_SUCCESS on success, otherwise an error code</p>
+<br>
+</div>
+
+<script language="JavaScript">mf_text("SetInvoiceNumbersRangeEU", "SetInvoiceNumbersRangeEU");</script>
+&nbsp;-&nbsp;Specifies invoice number range (new for Zeka FP-E and Zeka FP01-E)
+<br>
+<div id="SetInvoiceNumbersRangeEU" class="msgbody">
+<pre>
+int SetInvoiceNumbersRangeEU(const char* startNum, const char* lastNum));
+</pre>
+<h3>Parameters:</h3>
+<dl>
+	<dt>
+	startNum
+	<dd>
+		Zero terminated buffer containing the start invoice number. This buffer is cut to 
+		the first 10 characters and is filled with starting zeroes if shorter.
+	</dd></dt>
+	<dt>
+	lastNum
+	<dd>
+		Zero terminated buffer containing the last invoice number. This buffer is cut to 
+		the first 10 characters and is filled with starting zeroes if shorter.
+	</dd></dt>
+</dl>
+<h3>Return Value:</h3>
+<p>ZFPE_SUCCESS on success, otherwise an error code</p>
+<br>
+</div>
+
+<script language="JavaScript">mf_text("GetDepartmentEU", "GetDepartmentEU");</script>
+&nbsp;-&nbsp;Get department information.
+<br>
+<div id="GetDepartmentEU" class="msgbody">
+<pre>
+int GetDepartmentEU(WORD number, char* name, char* taxgrp, double* turnover, double* quantity);
+</pre>
+<h3>Parameters:</h3>
+<dl>
+	<dt>
+	number
+	<dd>
+		Department number
+	</dd></dt>
+	<dt>
+	name
+	<dd>
+		A buffer to receive zero terminated string with the current pay type 
+		name. This buffer needs to be at least 22 bytes long
+	</dd></dt>
+	<dt>
+	taxgrp
+	<dd>
+		A pointer to receive the tax group
+	</dd></dt>
+	<dt>
+	turnover
+	<dd>
+		A pointer to receive the turnover
+	</dd></dt>
+	<dt>
+	quantity
+	<dd>
+		A pointer to receive the quantity sold (-1.0 for old devices)
+	</dd></dt>
+</dl>
+<h3>Return Value:</h3>
+<p>ZFPE_SUCCESS on success, otherwise an error code</p>
+<br>
+</div>
+
+<script language="JavaScript">mf_text("SetTaxPercentsEU", "SetTaxPercentsEU");</script>
+&nbsp;-&nbsp;Setup percents for different VAT classes
+<br>
+<div id="SetTaxPercentsEU" class="msgbody">
+<pre>
+int SetTaxPercentsEU(const char* password, const TZfpTaxGroups& taxGroups);
+</pre>
+<h3>Parameters:</h3>
+<dl>
+	<dt>
+	password
+	<dd>
+		A buffer containing zero terminated fiscal password. This buffer is cut 
+		to the first 6 characters
+	</dd></dt>
+	<dt>
+	taxGroups
+	<dd>
+		<a href="structures_en.html">TZfpTaxGroups</a> structure with different VAT classes percents
+	</dd></dt>
+</dl>
+<h3>Return Value:</h3>
+<p>ZFPE_SUCCESS on success, otherwise an error code</p>
+<h3>Remarks:</h3>
+<p>It is possible to suppress VAT classes E to H using -1.0 as VAT class percent</p>
+<br>
+</div>
+
+<script language="JavaScript">mf_text("GetTaxPercentsEU", "GetTaxPercentsEU");</script>
+&nbsp;-&nbsp;Get the Fiscal Printer VAT class percents
+<br>
+<div id="GetTaxPercentsEU" class="msgbody">
+<pre>
+int GetTaxPercentsEU(TZfpTaxGroups& taxGroups)
+</pre>
+<h3>Parameters:</h3>
+<dl>
+	<dt>
+	taxGroups
+	<dd>
+		<a href="structures_en.html">TZfpTaxGroups</a> structure.
+	</dd></dt>
+</dl>
+<h3>Return Value:</h3>
+<p>ZFPE_SUCCESS on success, otherwise an error code</p>
+<h3>Remarks:</h3>
+<p>Suppressed VAT classes has value of -1.0</p>
+<br>
+</div>
+
+<script language="JavaScript">mf_text("SetPayTypeEU", "SetPayTypeEU");</script>
+&nbsp;-&nbsp;Set pay type name and exchange rate
+<br>
+<div id="SetPayTypeEU" class="msgbody">
+<pre>
+int SetPayTypeEU(BYTE type, const char* line, double exchRate)
+</pre>
+<h3>Parameters:</h3>
+<dl>
+	<dt>
+	type
+	<dd>
+		Specify the payment type number (1 to 4)
+	</dd></dt>
+	<dt>
+	line
+	<dd>
+		A buffer containing zero terminated payment type name. This buffer is 
+		cut to the first 10 characters
+	</dd></dt>
+	<dt>
+	exchRate
+	<dd>
+		Specify exchange rate
+	</dd></dt>
+</dl>
+<h3>Return Value:</h3>
+<p>ZFPE_SUCCESS on success, otherwise an error code</p>
+<br>
+</div>
+
+<script language="JavaScript">mf_text("GetPayTypesEU", "GetPayTypesEU");</script>
+&nbsp;-&nbsp;Get pay type names as strings and exchange rate
+<br>
+<div id="GetPayTypesEU" class="msgbody">
+<pre>
+int GetPayTypesEU(TZfpPayTypes& payTypes)
+</pre>
+<h3>Parameters:</h3>
+<dl>
+	<dt>
+	taxGroups
+	<dd>
+		<a href="structures_en.html">TZfpPayTypes</a> structure
+	</dd></dt>
+</dl>
+<h3>Return Value:</h3>
+<p>ZFPE_SUCCESS on success, otherwise an error code</p>
+<h3>Remarks:</h3>
+<p>With devices without exchange rate support the exchRate has value of -1.0</p>
+<br>
+</div>
+
+<script language="JavaScript">mf_text("SetParametersEU", "SetParametersEU");</script>
+&nbsp;-&nbsp;Set different Fiscal Printer parameters
+<br>
+<div id="SetParametersEU" class="msgbody">
+<pre>
+int SetParametersEU(const TZfpParams& parameters);
+</pre>
+<h3>Parameters:</h3>
+<dl>
+	<dt>
+	taxGroups
+	<dd>
+		<a href="structures_en.html">TZfpParams</a> structure.
+	</dd></dt>
+</dl>
+<h3>Return Value:</h3>
+<p>ZFPE_SUCCESS on success, otherwise an error code</p>
+<br>
+</div>
+
+<script language="JavaScript">mf_text("GetParametersEU", "GetParametersEU");</script>
+&nbsp;-&nbsp;Get different Fiscal Printer parameters
+<br>
+<div id="GetParametersEU" class="msgbody">
+<pre>
+int GetParametersEU(TZfpParams& parameters);
+</pre>
+<h3>Parameters:</h3>
+<dl>
+	<dt>
+	taxGroups
+	<dd>
+		<a href="structures_en.html">TZfpParams</a> structure.
+	</dd></dt>
+</dl>
+<h3>Return Value:</h3>
+<p>ZFPE_SUCCESS on success, otherwise an error code</p>
+<br>
+</div>
+
+<p><b>New functions in version 2.5 of the library</b></p>
+
+<script language="JavaScript">mf_text("SetLogo", "SetLogo");</script>
+&nbsp;-&nbsp;Set Current Logo
+<br>
+<div id="SetLogo" class="msgbody">
+<pre>
+int SetLogo(BYTE logo)
+</pre>
+<h3>Parameters:</h3>
+<dl>
+	<dt>
+	logo
+	<dd>
+		Logo ID (0-9)
+	</dd></dt>
+</dl>
+<h3>Return Value:</h3>
+<p>ZFPE_SUCCESS on success, otherwise an error code</p>
+<br>
+</div>
+
+<script language="JavaScript">mf_text("GetLogoInfo", "GetLogoInfo");</script>
+&nbsp;-&nbsp;Reads information for available logos and current logo ID. The result is stored in logo_info buffer
+<br>
+<div id="GetLogoInfo" class="msgbody">
+<pre>
+int GetLogoInfo(char * logo_info)
+</pre>
+<h3>Parameters:</h3>
+<dl>
+	<dt>
+	logo_info
+	<dd>12 bytes long output buffer in the following format "N;LLLLLLLLLL". N is the index of current logo (0-9). L contains 0 or 1 for each possible logo ID and indicates whether the corresponding logo ID is used or empty.
+	</dd></dt>
+</dl>
+<h3>Return Value:</h3>
+<p>ZFPE_SUCCESS on success, otherwise an error code</p>
+<br>
+</div>
+
+<script language="JavaScript">mf_text("FindFirstFPCOMEx", "FindFirstFPCOMEx");</script>
+&nbsp;-&nbsp;Search for Zeka fiscal printer on all COM ports and return the first COM port 
+number with Zeka Fiscal Printer connected
+<br>
+<div id="FindFirstFPCOMEx" class="msgbody">
+<pre>
+DWORD FindFirstFPCOMEx();
+</pre>
+<h3>Return Value:</h3>
+<p>On success the lower 24 bits contain the baud rate (9600-115200), and the higher 8 bits are the COM port number.
+The result is zero if no fiscal printer is found</p>
+<br>
+</div>
+
+<script language="JavaScript">mf_text("SetLogoFileEx", "SetLogoFileEx");</script>
+&nbsp;-&nbsp;Setup logo from bitmap file
+<br>
+<div id="SetLogoFileEx" class="msgbody">
+<pre>
+int SetLogoFileEx(BYTE logo_id, const char* filename);
+</pre>
+<h3>Parameters:</h3>
+<dl>
+	<dt>
+	logo_id
+	<dd>
+		logo number (0-9).
+	</dd></dt>
+	<dt>
+	filename
+	<dd>
+		zero terminated file name.
+	</dd></dt>
+</dl>
+<h3>Return Value:</h3>
+<p>ZFPE_SUCCESS on success, otherwise an error code</p>
+<h3>Remarks:</h3>
+<p>The logo has to be monochrome bitmap (.BMP) file with 1 bpp and dimensions depending on the FP</p>
+<br>
+</div>
+
+<script language="JavaScript">mf_text("PrintLogoEx", "PrintLogoEx");</script>
+&nbsp;-&nbsp;Print logo (0-9)
+<br>
+<div id="PrintLogoEx" class="msgbody">
+<pre>
+int PrintLogoEx(BYTE logo);
+</pre>
+<h3>Parameters:</h3>
+<dl>
+	<dt>
+	logo
+	<dd>
+		logo number (0-9).
+	</dd></dt>
+</dl>
+<h3>Return Value:</h3>
+<p>ZFPE_SUCCESS on success, otherwise an error code</p>
+<br>
+</div>
+
+<script language="JavaScript">mf_text("CloseBonInCash", "CloseBonInCash");</script>
+&nbsp;-&nbsp;Direct receipt completion in cash
+<br>
+<div id="CloseBonInCash" class="msgbody">
+<pre>
+int CloseBonInCash();
+</pre>
+<h3>Return Value:</h3>
+<p>ZFPE_SUCCESS on success, otherwise an error code</p>
+<br>
+</div>
+
+<script language="JavaScript">mf_text("PaymentEx", "PaymentEx");</script>
+&nbsp;-&nbsp;Register a payment
+<br>
+<div id="PaymentEx" class="msgbody">
+<pre>
+int PaymentEx(double sum, BYTE type, BOOL noRest, BOOL fPaidExactSum);
+</pre>
+<h3>Parameters:</h3>
+<dl>
+	<dt>
+	sum
+	<dd>
+		Specify the sum to be paid
+	</dd></dt>
+	<dt>
+	type
+	<dd>
+		Specify the payment type number (0, 1, 2 or 3)
+	</dd></dt>
+	<dt>
+	noRest
+	<dd>
+		Specify that payment doesn't require a change (affective only with 
+		certain payment types)
+	</dd></dt>
+	<dt>
+	fPaidExactSum
+	<dd>
+		The exact amount has been paid (parameter sum is ignored) - FP will calculate the exact value
+	</dd></dt>
+</dl>
+<h3>Return Value:</h3>
+<p>ZFPE_SUCCESS on success, otherwise an error code</p>
+<br>
+</div>
+
+<script language="JavaScript">mf_text("SellDepartmentEx", "SellDepartmentEx");</script>
+&nbsp;-&nbsp;Sell from department
+<br>
+<div id="SellDepartmentEx" class="msgbody">
+<pre>
+int SellDepartmentEx(const char* name, WORD depNum, double price, double quantity, double discount, BYTE flag);
+</pre>
+<h3>Parameters:</h3>
+<dl>
+	<dt>
+	name
+	<dd>
+		A buffer containing zero terminated article name. This buffer is cut to 
+		the first 36 characters.
+	</dd></dt>
+	<dt>
+	depNum
+	<dd>
+		Department number.
+	</dd></dt>
+	<dt>
+	price
+	<dd>
+		Specify the price.
+	</dd></dt>
+	<dt>
+	quantity 
+	<dd>
+		Specify the quantity.
+	</dd></dt>
+	<dt>
+	discount
+	<dd>
+		Specify the discount/addition in percents or by value depending on parameter flag
+	</dd></dt>
+	<dt>
+	flag
+	<dd>
+	    Specifies whether the discount is in percents (0) or value (1). Values other than 0 and 1 are reserved for future versions
+	</dd></dt>
+</dl>
+<h3>Return Value:</h3>
+<p>ZFPE_SUCCESS on success, otherwise an error code</p>
+<br>
+</div>
+
+<script language="JavaScript">mf_text("SellFreeEx", "SellFreeEx");</script>
+&nbsp;-&nbsp;Sells an article
+<br>
+<div id="SellFreeEx" class="msgbody">
+<pre>
+int SellFreeEx(const char* name, char taxgrp, double price, double quantity, double discount, BYTE flag);
+</pre>
+<h3>Parameters:</h3>
+<dl>
+	<dt>
+	name
+	<dd>
+		A buffer containing zero terminated article name. This buffer is cut to 
+		the first 36 characters
+	</dd></dt>
+	<dt>
+	taxgrp
+	<dd>
+		Specify the tax group. Can be some of these values: 0x80, 0x81, 0x82, 0, 1, 2, '0', '1', '2'
+	</dd></dt>
+	<dt>
+	price
+	<dd>
+		Specify the price.
+	</dd></dt>
+	<dt>
+	quantity 
+	<dd>
+		Specify the quantity.
+	</dd></dt>
+	<dt>
+	discount
+	<dd>
+		Specify the discount/addition in percents or by value depending on parameter flag
+	</dd></dt>
+	<dt>
+	flag
+	<dd>
+	    Specifies whether the discount is in percents (0) or value (1). Values other than 0 and 1 are reserved for future versions
+	</dd></dt>
+</dl>
+<h3>Return Value:</h3>
+<p>ZFPE_SUCCESS on success, otherwise an error code</p>
+<br>
+</div>
+
+<script language="JavaScript">mf_text("SellDBEx", "SellDBEx");</script>
+&nbsp;-&nbsp;Sells an article from the Fiscal Printer internal database
+<br>
+<div id="SellDBEx" class="msgbody">
+<pre>
+int SellDBEx(BOOL isVoid, DWORD number, double quantity, double discount, BYTE flag);
+</pre>
+<h3>Parameters:</h3>
+<dl>
+	<dt>
+	isVoid
+	<dd>
+		flag specifying is this a void operation or a sell
+	</dd></dt>
+	<dt>
+	number
+	<dd>
+		Specify the article database number from 1 to 99999.
+	</dd></dt>
+	<dt>
+	quantity 
+	<dd>
+		Specify the quantity.
+	</dd></dt>
+	<dt>
+	discount
+	<dd>
+		Specify the discount/addition in percents or by value depending on parameter flag
+	</dd></dt>
+	<dt>
+	flag
+	<dd>
+	    Specifies whether the discount is in percents (0) or value (1). Values other than 0 and 1 are reserved for future versions
+	</dd></dt>
+</dl>
+<h3>Return Value:</h3>
+<p>ZFPE_SUCCESS on success, otherwise an error code</p>
+<br>
+</div>
+
+<script language="JavaScript">mf_text("GetArticleInfoEx", "GetArticleInfoEx");</script>
+&nbsp;-&nbsp;Receive information about selected article from the internal Fiscal Printer 
+database
+<br>
+<div id="GetArticleInfoEx" class="msgbody">
+<pre>
+int GetArticleInfoEx(DWORD number, char* name, double* price, char* taxgrp, double* turnover, double* sells,
+		WORD* counter, int* dd, int* mm, int* yy, int* hh, int* mmm, WORD* dep);
+</pre>
+<h3>Parameters:</h3>
+<dl>
+	<dt>
+	number
+	<dd>
+		Specify the article database number from 1 to 99999.
+	</dd></dt>
+	<dt>
+	name
+	<dd>
+		A buffer to receive zero terminated article name. This buffer should be 
+		at least 38 characters long
+	</dd></dt>
+	<dt>
+	price
+	<dd>
+		Receive the price.
+	</dd></dt>
+	<dt>
+	taxgrp
+	<dd>
+		Receive the tax group. Should be 0x80, 0x81, 0x82
+	</dd></dt>
+	<dt>
+	turnover
+	<dd>
+		Receive the turnover
+	</dd></dt>
+	<dt>
+	sells
+	<dd>
+		Receive the sells number.
+	</dd></dt>
+	<dt>
+	counter
+	<dd>
+		Receive the number of the last report.
+	</dd></dt>
+	<dt>
+	dd, mm, yy, hh, mmm
+	<dd>
+		Receive the day of the month, month, year, hour and minute respectively, 
+		of the last report.
+	</dd></dt>
+	<dt>
+	dep
+	<dd>
+		Receive department number.
+	</dd></dt>
+</dl>
+<h3>Return Value:</h3>
+<p>ZFPE_SUCCESS on success, otherwise an error code</p>
+<br>
+</div>
+
+<script language="JavaScript">mf_text("SetArticleInfoEx", "SetArticleInfoEx");</script>
+&nbsp;-&nbsp;Set information about selected article from the internal Fiscal Printer 
+database
+<br>
+<div id="SetArticleInfoEx" class="msgbody">
+<pre>
+int SetArticleInfoEx(DWORD number, const char* name, double price, char taxgrp, WORD depNum);
+</pre>
+<h3>Parameters:</h3>
+<dl>
+	<dt>
+	number
+	<dd>
+		Specify the article database number from 1 to 99999.
+	</dd></dt>
+	<dt>
+	name
+	<dd>
+		zero terminated article name. This buffer is cut to the first 20 
+		characters
+	</dd></dt>
+	<dt>
+	price
+	<dd>
+		price
+	</dd></dt>
+	<dt>
+	taxgrp
+	<dd>
+		Specify the tax group. Can be some of these values: 0x80, 0x81, 0x82, 0, 1, 2, '0', '1', '2'
+	</dd></dt>
+	<dt>
+	depNum 
+	<dd>
+		Department number
+	</dd></dt>
+</dl>
+<h3>Return Value:</h3>
+<p>ZFPE_SUCCESS on success, otherwise an error code</p>
+<br>
+</div>
+
+<script language="JavaScript">mf_text("ReportDepartments", "ReportDepartments");</script>
+&nbsp;-&nbsp;Report by departments
+<br>
+<div id="ReportDepartments" class="msgbody">
+<pre>
+int ReportDepartments(BOOL zero);
+</pre>
+<h3>Parameters:</h3>
+<dl>
+	<dt>
+	zero
+	<dd>
+		Specify will the report zero the daily sums.
+	</dd></dt>
+</dl>
+<h3>Return Value:</h3>
+<p>ZFPE_SUCCESS on success, otherwise an error code</p>
+<br>
+</div>
+
+<p><b>New GS functions</b></p>
+
+<script language="JavaScript">mf_text("GetVersionGS", "GetVersionGS");</script>
+&nbsp;-&nbsp;Get Fiscal Printer version information
+<br>
+<div id="GetVersionGS" class="msgbody">
+<pre>
+int GetVersionGS(char* version);
+</pre>
+<h3>Parameters:</h3>
+<dl>
+	<dt>
+	version
+	<dd>
+		A buffer to receive zero terminated string with the version info. This 
+		buffer has to be at least ZFP_MAXBUFLEN bytes long
+	</dd></dt>
+</dl>
+<h3>Return Value:</h3>
+<p>Always returns ZFPE_SUCCESS</p>
+<br>
+</div>
+
+<script language="JavaScript">mf_text("EnableCommGS", "EnableCommGS");</script>
+&nbsp;-&nbsp;Fiscal Printer communication
+<br>
+<div id="EnableCommGS" class="msgbody">
+<pre>
+int EnableCommGS(BYTE enable, WORD device_no);
+</pre>
+<h3>Parameters:</h3>
+<dl>
+	<dt>
+	enable
+	<dd>
+		Flag to enable (1) or disable (0) the communication of FP
+	</dd></dt>
+	<dt>
+	device_no
+	<dd>
+		Device number of the FP
+	</dd></dt>
+</dl>
+<h3>Return Value:</h3>
+<p>Always returns ZFPE_SUCCESS</p>
+<br>
+</div>
+
+<script language="JavaScript">mf_text("SetSpeedGS", "SetSpeedGS");</script>
+&nbsp;-&nbsp;Communication speed of the printer
+<br>
+<div id="SetSpeedGS" class="msgbody">
+<pre>
+int SetSpeedGS(BYTE speed);
+</pre>
+<h3>Parameters:</h3>
+<dl>
+	<dt>
+	speed
+	<dd>
+		speed code: 0-9600, 1-19200, 2-38400, 3-57600, 4-115200
+	</dd></dt>
+</dl>
+<h3>Return Value:</h3>
+<p>Always returns ZFPE_SUCCESS</p>
+<br>
+</div>
+
+<script language="JavaScript">mf_text("LoadScaleProtocolGS", "LoadScaleProtocolGS");</script>
+&nbsp;-&nbsp;Load Scale Protocol
+<br>
+<div id="LoadScaleProtocolGS" class="msgbody">
+<pre>
+int LoadScaleProtocolGS(char * protocol);
+</pre>
+<h3>Parameters:</h3>
+<dl>
+	<dt>
+	protocol
+	<dd>
+		Scale protocol information
+	</dd></dt>
+</dl>
+<h3>Return Value:</h3>
+<p>Always returns ZFPE_SUCCESS</p>
+<br>
+</div>
+
+<p><b>New functions in version 2.6 of the library</b></p>
+
+<script language="JavaScript">mf_text("EnableBarcode", "EnableBarcode");</script>
+&nbsp;-&nbsp;Enable/disable barcode printing after fiscal receipt
+<br>
+<div id="EnableBarcode" class="msgbody">
+<pre>
+int EnableBarcode(BYTE state);
+</pre>
+<h3>Parameters:</h3>
+<dl>
+	<dt>
+	state
+	<dd>
+		1-enable; 0-disable
+	</dd></dt>
+</dl>
+<h3>Return Value:</h3>
+<p>ZFPE_SUCCESS on success, otherwise an error code</p>
+<br>
+</div>
+
+<script language="JavaScript">mf_text("FormatBarcode", "FormatBarcode");</script>
+&nbsp;-&nbsp;Set barcode format
+<br>
+<div id="FormatBarcode" class="msgbody">
+<pre>
+int FormatBarcode(char * fmt);
+</pre>
+<h3>Parameters:</h3>
+<dl>
+	<dt>
+	fmt
+	<dd>
+		Barcode format like "ddmmyyhhNNNN". "ddmmyy" will be replaced with the current date, hh - hour, NNNN - receipt number
+	</dd></dt>
+</dl>
+<h3>Return Value:</h3>
+<p>ZFPE_SUCCESS on success, otherwise an error code</p>
+<br>
+</div>
+
+<script language="JavaScript">mf_text("PrintBarcode", "PrintBarcode");</script>
+&nbsp;-&nbsp;Print barcode directly
+<br>
+<div id="PrintBarcode" class="msgbody">
+<pre>
+int PrintBarcode(char * barcode, char type);
+</pre>
+<h3>Parameters:</h3>
+<dl>
+	<dt>
+	barcode
+	<dd>
+		Barcode for printing
+	</dd></dt>
+	<dt>
+	type
+	<dd>
+		Barcode type: 0 - UPC-A; 1 - UPC-E; 2 - EAN 13; 3 - EAN 8; 4 - Code 39; 5 - ITF 2; 6 - Codabar; H - Code 93; I - Code 128
+	</dd></dt>
+</dl>
+<h3>Return Value:</h3>
+<p>ZFPE_SUCCESS on success, otherwise an error code</p>
+<br>
+</div>
+
+<script language="JavaScript">mf_text("SetLineWidth", "SetLineWidth");</script>
+&nbsp;-&nbsp;Set line width in chars for the FP. The value is necessary for text alignment calculations
+<br>
+<div id="SetLineWidth" class="msgbody">
+<pre>
+int SetLineWidth(int num_chars);
+</pre>
+<h3>Parameters:</h3>
+<dl>
+	<dt>
+	num_chars
+	<dd>
+		Number of chars in one line. Value 0 will get automatically the line width from the FP
+	</dd></dt>
+</dl>
+<h3>Return Value:</h3>
+<p>ZFPE_SUCCESS on success, otherwise an error code</p>
+<br>
+</div>
+
+<script language="JavaScript">mf_text("SetPrintMode", "SetPrintMode");</script>
+&nbsp;-&nbsp;Set deferred print mode for fast printing
+<br>
+<div id="SetPrintMode" class="msgbody">
+<pre>
+int SetPrintMode(DWORD mode);
+</pre>
+<h3>Parameters:</h3>
+<dl>
+	<dt>
+	mode
+	<dd>
+		Combination of bits:<br><br>
+		- 0x40000000 - Save mode to Registry. If not set, the new value will be used only in the current session;<br>
+		- 0x00000001 - Print all sale lines when closing receipt (0=print immediately);<br>
+		- 0x00000002 - Keep open Com port until CloseBon() (0=open & close for each line);<br>
+		- 0x00000004 - Apply flag 1 and 2 for fiscal receipts;<br>
+		- 0x00000008 - Apply flag 1 and 2 for non-fiscal receipts;<br>
+		- 0x00000010 - Use flags for the next receipt only (0=permanent);<br>
+	</dd></dt>
+</dl>
+<h3>Return Value:</h3>
+<p>Previous print mode</p>
+<br>
+</div>
+
+<script language="JavaScript">mf_text("OpenTillEx", "OpenTillEx");</script>
+&nbsp;-&nbsp;Open cash drawer (supports 2 cash drawers)
+<br>
+<div id="OpenTillEx" class="msgbody">
+<pre>
+int OpenTillEx(char num);
+</pre>
+<h3>Parameters:</h3>
+<dl>
+	<dt>
+	num
+	<dd>
+		Cash drawer (1 or 2)
+	</dd></dt>
+</dl>
+<h3>Return Value:</h3>
+<p>ZFPE_SUCCESS on success, otherwise an error code</p>
+<br>
+</div>
+
+<script language="JavaScript">mf_text("OpenSerialPort", "OpenSerialPort");</script>
+&nbsp;-&nbsp;Keep open serial port until call to CloseSerialPort function. It is recommended to use SetPrintMode option
+<br>
+<div id="OpenSerialPort" class="msgbody">
+<pre>
+int OpenSerialPort();
+</pre>
+<h3>Return Value:</h3>
+<p>Always returns ZFPE_SUCCESS</p>
+<br>
+</div>
+
+<script language="JavaScript">mf_text("CloseSerialPort", "CloseSerialPort");</script>
+&nbsp;-&nbsp;Close the serial port
+<br>
+<div id="CloseSerialPort" class="msgbody">
+<pre>
+int CloseSerialPort();
+</pre>
+<h3>Return Value:</h3>
+<p>Always returns ZFPE_SUCCESS</p>
+<br>
+</div>
+
+<p><b>New functions in version 3.0 of the library</b></p>
+
+<script language="JavaScript">mf_text("TerminateBon", "TerminateBon");</script>
+&nbsp;-&nbsp;This is a compound function. If there is open fiscal or non-fiscal receipt it will be closed.
+The purpose of this function is to exit from unexpected errors while there is open receipt.
+<br>
+<div id="TerminateBon" class="msgbody">
+<pre>
+int TerminateBon(BOOL finish);
+</pre>
+<h3>Parameters:</h3>
+<dl>
+	<dt>
+	finish
+	<dd>
+		Pay current articles (TRUE) or void all (FALSE)
+	</dd></dt>
+</dl>
+<h3>Return Value:</h3>
+<p>ZFPE_SUCCESS on success, otherwise an error code</p>
+<br>
+</div>
+
+</p>
+<p><b>See Also</b>
+<br>
+<a href="index_en.html">Remarks</a> | <a href="structures_en.html">Structures</a>
+</p>
+</body>
+</html>

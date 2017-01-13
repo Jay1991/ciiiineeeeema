@@ -1,0 +1,335 @@
+//Microsoft Developer Studio generated resource script.
+//
+#include "resource.h"
+
+#define APSTUDIO_READONLY_SYMBOLS
+/////////////////////////////////////////////////////////////////////////////
+//
+// Generated from the TEXTINCLUDE 2 resource.
+//
+#include "afxres.h"
+#include "..\include\ZekaFPver.h"
+
+/////////////////////////////////////////////////////////////////////////////
+#undef APSTUDIO_READONLY_SYMBOLS
+
+/////////////////////////////////////////////////////////////////////////////
+// Bulgarian resources
+
+#if !defined(AFX_RESOURCE_DLL) || defined(AFX_TARG_BGR)
+#ifdef _WIN32
+LANGUAGE LANG_BULGARIAN, SUBLANG_DEFAULT
+#pragma code_page(1251)
+#endif //_WIN32
+
+#ifdef APSTUDIO_INVOKED
+/////////////////////////////////////////////////////////////////////////////
+//
+// TEXTINCLUDE
+//
+
+1 TEXTINCLUDE DISCARDABLE 
+BEGIN
+    "resource.h\0"
+END
+
+2 TEXTINCLUDE DISCARDABLE 
+BEGIN
+    "#include ""afxres.h""\r\n"
+    "\0"
+END
+
+3 TEXTINCLUDE DISCARDABLE 
+BEGIN
+    "#define _AFX_NO_SPLITTER_RESOURCES\r\n"
+    "#define _AFX_NO_OLE_RESOURCES\r\n"
+    "#define _AFX_NO_TRACKER_RESOURCES\r\n"
+    "#define _AFX_NO_PROPERTY_RESOURCES\r\n"
+    "\r\n"
+    "#if !defined(AFX_RESOURCE_DLL) || defined(AFX_TARG_ENU)\r\n"
+    "#ifdef _WIN32\r\n"
+    "LANGUAGE 9, 1\r\n"
+    "#pragma code_page(1252)\r\n"
+    "#endif //_WIN32\r\n"
+    "#include ""res\\zfpcash.rc2""  // non-Microsoft Visual C++ edited resources\r\n"
+    "#include ""afxres.rc""         // Standard components\r\n"
+    "#endif\r\n"
+    "\0"
+END
+
+#endif    // APSTUDIO_INVOKED
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Icon
+//
+
+// Icon with lowest ID value placed first to ensure application icon
+// remains consistent on all systems.
+IDR_MAINFRAME           ICON    DISCARDABLE     "res\\zfpcash.ico"
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Dialog
+//
+
+IDD_ABOUTBOX DIALOGEX 0, 0, 182, 70
+STYLE WS_POPUP | WS_BORDER
+EXSTYLE WS_EX_CLIENTEDGE
+FONT 8, "MS Sans Serif", 0, 0, 0x1
+BEGIN
+    ICON            IDR_MAINFRAME,IDC_STATIC,7,42,20,20
+    LTEXT           "ZFPCash работи с файловете на FPrint и CashFile",
+                    IDC_STATIC,7,7,168,8,SS_NOPREFIX
+    LTEXT           "Copyright (C) 2005,2008 Тремол ООД",IDC_STATIC,7,22,119,8
+    DEFPUSHBUTTON   "OK",IDOK,125,49,50,14,WS_GROUP
+END
+
+IDD_ZFPEXE_DIALOG DIALOGEX 0, 0, 320, 275
+STYLE DS_MODALFRAME | WS_MINIMIZEBOX | WS_POPUP | WS_VISIBLE | WS_CAPTION | 
+    WS_SYSMENU
+EXSTYLE WS_EX_APPWINDOW
+CAPTION "ZFPCash - setup"
+FONT 8, "MS Sans Serif", 0, 0, 0x1
+BEGIN
+    CONTROL         "&Стандартен",IDC_STANDARD,"Button",BS_AUTORADIOBUTTON | 
+                    WS_GROUP,7,19,55,10
+    CONTROL         "&Код на грешка",IDC_ERRORCODE,"Button",
+                    BS_AUTORADIOBUTTON,84,19,65,10
+    CONTROL         "&DOS",IDC_DOS,"Button",BS_AUTORADIOBUTTON | WS_GROUP,7,
+                    56,31,10
+    CONTROL         "&Windows",IDC_WINDOWS,"Button",BS_AUTORADIOBUTTON,84,56,
+                    45,10
+    EDITTEXT        IDC_INPUTFILE,123,87,170,14,ES_AUTOHSCROLL
+    PUSHBUTTON      "...",IDC_BROWSEINPUT,297,87,16,14
+    CONTROL         "&Различен изходящ файл:",IDC_USEOUTPUT,"Button",
+                    BS_AUTOCHECKBOX | WS_TABSTOP,7,107,101,10
+    EDITTEXT        IDC_OUTPUTFILE,123,105,170,14,ES_AUTOHSCROLL
+    PUSHBUTTON      "...",IDC_BROWSEOUTPUT,297,105,16,14
+    PUSHBUTTON      "Търсене на Zeka FP",IDC_SEARCH,7,185,133,14
+    LTEXT           "",IDC_SEARCHRES,145,180,168,37
+    CONTROL         "&Показване съобщения за грешка",IDC_ERRORMSG,"Button",
+                    BS_AUTOCHECKBOX | WS_TABSTOP,7,207,130,10
+    DEFPUSHBUTTON   "&Запиши",IDOK,7,254,50,14
+    PUSHBUTTON      "&Отказ",IDCANCEL,61,254,50,14
+    PUSHBUTTON      "&Помощ",IDC_HELPME,263,254,50,14
+    LTEXT           "Тип на отговора при грешка",IDC_STATIC,35,6,97,8
+    CONTROL         "",IDC_STATIC,"Static",SS_ETCHEDHORZ,7,10,23,1
+    CONTROL         "",IDC_STATIC,"Static",SS_ETCHEDHORZ,136,10,177,1
+    LTEXT           "Кодировка на данните във файла",IDC_STATIC,35,39,115,8
+    CONTROL         "",IDC_STATIC,"Static",SS_ETCHEDHORZ,7,43,22,1
+    CONTROL         "",IDC_STATIC,"Static",SS_ETCHEDHORZ,156,43,157,1
+    LTEXT           "Вход / Изход",IDC_STATIC,35,72,45,8
+    CONTROL         "",IDC_STATIC,"Static",SS_ETCHEDHORZ,7,77,21,1
+    CONTROL         "",IDC_STATIC,"Static",SS_ETCHEDHORZ,89,77,223,1
+    LTEXT           "Входящ файл (по подразбиране): ",IDC_STATIC,7,90,114,8
+    CONTROL         "",IDC_STATIC,"Static",SS_ETCHEDHORZ,7,240,303,1
+    LTEXT           "Други",IDC_STATIC,35,126,22,8
+    CONTROL         "",IDC_STATIC,"Static",SS_ETCHEDHORZ,7,131,20,1
+    CONTROL         "",IDC_STATIC,"Static",SS_ETCHEDHORZ,67,131,244,1
+    LTEXT           "COM порт:",IDC_STATIC,7,164,36,8
+    COMBOBOX        IDC_COM,47,162,70,59,CBS_DROPDOWNLIST | WS_VSCROLL | 
+                    WS_TABSTOP
+    LTEXT           "Скорост на комуникация:",IDC_STATIC,151,164,88,8
+    COMBOBOX        IDC_BAUD,243,162,70,64,CBS_DROPDOWNLIST | WS_VSCROLL | 
+                    WS_TABSTOP
+    CONTROL         "Показване на информационни съобщения",IDC_INFOMSG,
+                    "Button",BS_AUTOCHECKBOX | WS_TABSTOP,7,220,161,10
+    LTEXT           "Номер на оператор:",IDC_STATIC,7,142,71,8
+    COMBOBOX        IDC_OPER,81,140,36,146,CBS_DROPDOWNLIST | WS_VSCROLL | 
+                    WS_TABSTOP
+    LTEXT           "Парола:",IDC_STATIC,211,143,28,8
+    EDITTEXT        IDC_PASS,243,141,70,14,ES_AUTOHSCROLL
+END
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// DESIGNINFO
+//
+
+#ifdef APSTUDIO_INVOKED
+GUIDELINES DESIGNINFO DISCARDABLE 
+BEGIN
+    IDD_ABOUTBOX, DIALOG
+    BEGIN
+        LEFTMARGIN, 7
+        RIGHTMARGIN, 175
+        TOPMARGIN, 7
+        BOTTOMMARGIN, 63
+    END
+
+    IDD_ZFPEXE_DIALOG, DIALOG
+    BEGIN
+        LEFTMARGIN, 7
+        RIGHTMARGIN, 313
+        BOTTOMMARGIN, 268
+    END
+END
+#endif    // APSTUDIO_INVOKED
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Dialog Info
+//
+
+IDD_ZFPEXE_DIALOG DLGINIT
+BEGIN
+    IDC_COM, 0x403, 12, 0
+0xe2c0, 0xeef2, 0xe0ec, 0xe8f2, 0xedf7, 0x00ee, 
+    IDC_COM, 0x403, 5, 0
+0x4f43, 0x314d, "\000" 
+    IDC_COM, 0x403, 5, 0
+0x4f43, 0x324d, "\000" 
+    IDC_COM, 0x403, 5, 0
+0x4f43, 0x334d, "\000" 
+    IDC_COM, 0x403, 5, 0
+0x4f43, 0x344d, "\000" 
+    IDC_BAUD, 0x403, 12, 0
+0xe2c0, 0xeef2, 0xe0ec, 0xe8f2, 0xedf7, 0x00ee, 
+    IDC_BAUD, 0x403, 5, 0
+0x3639, 0x3030, "\000" 
+    IDC_BAUD, 0x403, 6, 0
+0x3931, 0x3032, 0x0030, 
+    IDC_BAUD, 0x403, 6, 0
+0x3833, 0x3034, 0x0030, 
+    IDC_BAUD, 0x403, 6, 0
+0x3735, 0x3036, 0x0030, 
+    IDC_BAUD, 0x403, 7, 0
+0x3131, 0x3235, 0x3030, "\000"
+
+    IDC_OPER, 0x403, 2, 0
+0x0031, 
+    IDC_OPER, 0x403, 2, 0
+0x0032, 
+    IDC_OPER, 0x403, 2, 0
+0x0033, 
+    IDC_OPER, 0x403, 2, 0
+0x0034, 
+    IDC_OPER, 0x403, 2, 0
+0x0035, 
+    IDC_OPER, 0x403, 2, 0
+0x0036, 
+    IDC_OPER, 0x403, 2, 0
+0x0037, 
+    IDC_OPER, 0x403, 2, 0
+0x0038, 
+    IDC_OPER, 0x403, 2, 0
+0x0039, 
+    0
+END
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// String Table
+//
+
+STRINGTABLE DISCARDABLE 
+BEGIN
+    IDS_ABOUTBOX            "&За програмата ..."
+    IDS_INPUTSELECT         "Изберете файл който да се ползва по подразбиране ..."
+    IDS_OUTPUTSELECT        "Изберете файл в който да се записва резултата ..."
+    IDS_NOZEKAFP            "Не може да бъде открит Zeka FP свързан към този компютър. Възможно в също така друга програма да ползва ресурсите и да пречи на откриването"
+    IDS_ZEKAVER             "Открит: Zeka FP\r\nCOM: %u, Скорост: %u\r\nВерсия: %s"
+    IDS_ZEKANOVER           "Открит: Zeka FP\r\nCOM: %u, Скорост: %u"
+    IDS_BADCOM              "Невалиден/неразпознат аргумент за COM порт '%s' и/или скорост"
+    IDS_BADINOUTFILE        "Невалиден входен и/или изходен файл!\r\nВход: %s\r\nИзход: %s"
+    IDS_BADINFILE           "Входния файл '%s' не може да бъде открит!"
+    IDS_BADOUTFILE          "Грешка при запис в изходен файл '%s' !"
+    IDS_SUCCESS             "Файлът бе изпратен успешно !\r\n\r\nОбработени записи: %d"
+END
+
+STRINGTABLE DISCARDABLE 
+BEGIN
+    IDS_SUCCESSERRORS       "Файлът бе изпратен успешно!\r\nПри изпълнение на операциите възникнаха грешки.\r\nМоля проверете изходния файл.\r\n\r\nОбработени записи: %d\r\nГрешки: %d"
+    IDS_SYNTAX              "Начин на полване:\r\nzfpcash [порт] [скорост] [файл] [сериен_номер]\r\n\r\nПример:\r\nzfpcash COM1 9600 C:\\file.txt\r\n\r\nСтартирайте програма без параметри за настойка\r\nСерийния номер се игнорита"
+END
+
+#endif    // Bulgarian resources
+/////////////////////////////////////////////////////////////////////////////
+
+
+/////////////////////////////////////////////////////////////////////////////
+// English (U.S.) resources
+
+#if !defined(AFX_RESOURCE_DLL) || defined(AFX_TARG_ENU)
+#ifdef _WIN32
+LANGUAGE LANG_ENGLISH, SUBLANG_ENGLISH_US
+#pragma code_page(1252)
+#endif //_WIN32
+
+#ifndef _MAC
+/////////////////////////////////////////////////////////////////////////////
+//
+// Version
+//
+
+VS_VERSION_INFO VERSIONINFO
+ FILEVERSION VER_MAJOR, VER_MINOR, VER_BUILD, 0
+ PRODUCTVERSION VER_MAJOR, VER_MINOR, VER_BUILD, 0
+ FILEFLAGSMASK 0x3fL
+#ifdef _DEBUG
+ FILEFLAGS 0x1L
+#else
+ FILEFLAGS 0x0L
+#endif
+ FILEOS 0x4L
+ FILETYPE 0x1L
+ FILESUBTYPE 0x0L
+BEGIN
+    BLOCK "StringFileInfo"
+    BEGIN
+        BLOCK "040904b0"
+        BEGIN
+            VALUE "Comments", "Syntax: zfpcash [com] [baud] [inputfile] [outputfile] - Run without paramerters for setup\0"
+            VALUE "CompanyName", "Tremol Ltd.\0"
+            VALUE "FileDescription", "zfpcash - FPrint, CashFile compatible program for Zeka FP\0"
+            VALUE "FileVersion", VER_FVI_STRING
+            VALUE "InternalName", "zfpcash\0"
+            VALUE "LegalCopyright", "Copyright (C) 2005-2011 Tremol Ltd.\0"
+            VALUE "LegalTrademarks", "\0"
+            VALUE "OriginalFilename", "zfpcash.exe\0"
+            VALUE "PrivateBuild", "\0"
+            VALUE "ProductName", "zfpcash application\0"
+            VALUE "ProductVersion", VER_FVI_STRING
+            VALUE "SpecialBuild", "\0"
+        END
+    END
+    BLOCK "VarFileInfo"
+    BEGIN
+        VALUE "Translation", 0x409, 1200
+    END
+END
+
+#endif    // !_MAC
+
+#endif    // English (U.S.) resources
+/////////////////////////////////////////////////////////////////////////////
+
+
+
+#ifndef APSTUDIO_INVOKED
+/////////////////////////////////////////////////////////////////////////////
+//
+// Generated from the TEXTINCLUDE 3 resource.
+//
+#define _AFX_NO_SPLITTER_RESOURCES
+#define _AFX_NO_OLE_RESOURCES
+#define _AFX_NO_TRACKER_RESOURCES
+#define _AFX_NO_PROPERTY_RESOURCES
+
+#if !defined(AFX_RESOURCE_DLL) || defined(AFX_TARG_ENU)
+#ifdef _WIN32
+LANGUAGE 9, 1
+#pragma code_page(1252)
+#endif //_WIN32
+#include "res\zfpcash.rc2"  // non-Microsoft Visual C++ edited resources
+#include "afxres.rc"         // Standard components
+#endif
+
+/////////////////////////////////////////////////////////////////////////////
+#endif    // not APSTUDIO_INVOKED
+

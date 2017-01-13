@@ -1,0 +1,72 @@
+<html>
+
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=windows-1251">
+<meta http-equiv="Content-Language" content="bg">
+<link rel="stylesheet" type="text/css" href="../main.css">
+<title>Zeka FP structures</title>
+</head>
+
+<body>
+
+<p><b>Списък на структурите</b>
+</p>
+
+<pre>
+typedef struct {
+	double taxGrp1;	// сума натрупана в данъчна група А
+	double taxGrp2;	// сума натрупана в данъчна група Б
+	double taxGrp3;	// сума натрупана в данъчна група В
+	double taxGrp4;	// сума натрупана в данъчна група Г
+	double taxGrp5;	// сума натрупана в данъчна група Д
+	double taxGrp6;	// сума натрупана в данъчна група Е
+	double taxGrp7;	// сума натрупана в данъчна група Ж
+	double taxGrp8;	// сума натрупана в данъчна група З
+} TZfpTaxGroups;
+
+typedef struct {
+	WORD fpnum;		// номер на фискалното място
+	BOOL logo;		// дали се печата логото (0 = не се печата)
+	BOOL till;		// информация дали има чекмедже (0 = няма)
+	BOOL autocut;		// информация дали има автоматичен резач (0 = няма)
+	BOOL transparent;	// информация дали външния дисплей е прозрачен (0 = не е прозрачен)
+	BOOL shortEJ;		// режим на ЕКЛ (0 = подробна)
+	BOOL currency;		// използване на валута в бона (0 = не се ползва)
+} TZfpParams;
+
+// GetCurrentBonInfo flags
+#define ZFPB_OPENBON	1	// има отворен бон
+#define ZFPB_NOVOID	2	// не са разрешени войдирания
+#define ZFPB_DDS	4	// печата се информация за ДДС
+#define ZFPB_PODRBON	8      	// печатат се детайли
+#define ZFPB_PAYSTART	16	// започнато е плащане
+#define ZFPB_PAYEND	32	// плащането е завършено
+
+typedef struct {
+	DWORD flags;		// флагове
+	int purchases;		// общ брой на покупките в бона
+	double change;		// ресто на последния издаден фискален бон
+	BYTE changeType;	// тип плащане на рестото
+	TZfpTaxGroups taxGroups; // суми по данъчни групи
+} TZfpReceiptInfo;
+
+typedef struct {
+	char type0[12];		// име на тип плащане 0
+	char type1[12];		// име на тип плащане 1
+	char type2[12];		// име на тип плащане 2
+	char type3[12];		// име на тип плащане 3
+	char type4[12];		// име на тип плащане 4
+	double exchRate;		// валутен курс
+} TZfpPayTypes;
+</pre>
+
+</p>
+<p><b>Виж също</b>
+
+<br>
+
+<a href="index_bg.html">Бележки</a> | <a href="members_bg.html">Членове на класа</a>
+
+</p>
+</body>
+</html>

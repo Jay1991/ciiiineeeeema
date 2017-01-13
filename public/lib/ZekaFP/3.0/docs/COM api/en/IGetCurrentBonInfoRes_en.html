@@ -1,0 +1,64 @@
+<html>
+
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=windows-1251">
+<meta http-equiv="Content-Language" content="bg">
+<link rel="stylesheet" type="text/css" href="../main.css">
+<title>IGetCurrentBonInfoRes Interface</title>
+</head>
+
+<body>
+
+<pre>
+interface IGetCurrentBonInfoRes
+</pre>
+
+<b><br>
+Remarks:
+</b>
+<p>The <b>IGetCurrentBonInfoRes</b> interface is the result of execution of the following IZekaFP methods: GetCurrentBonInfo()</p>
+
+<p><b>Properties:</b></p>
+
+<p><font color="#4169E1"><b>flags</b></font> - check this property. If the value 0 (zero) all other data is invalid. 
+The most common reason is there is no open fiscal receipt.</p>
+<p><font color="#4169E1"><b>purchases</b></font> - total number of purchases in the receipt</p>
+<p><font color="#4169E1"><b>taxgrp1</b></font> - sum for tax group 'A'</p>
+<p><font color="#4169E1"><b>taxgrp2</b></font> - sum for tax group 'B'</p>
+<p><font color="#4169E1"><b>taxgrp3</b></font> - sum for tax group 'C'</p>
+<p><font color="#4169E1"><b>taxgrp4</b></font> - sum / percents per tax group 'D' (for Romania only)</p>
+<p><font color="#4169E1"><b>taxgrp5</b></font> - sum / percents per tax group 'E' (for Romania only)</p>
+<p><font color="#4169E1"><b>novoid</b></font> - true if void is forbidden, otherwise false.</p>
+<p><font color="#4169E1"><b>dds</b></font> - true if the VAT is printed, otherwise false</p>
+<p><font color="#4169E1"><b>detailed</b> </font>- true if details are printed,otherwise false</p>
+<p><font color="#4169E1"><b>paystarted</b></font> - true if there is a payment started, otherwise false</p>
+<p><font color="#4169E1"><b>paid</b></font> - true if the payment is finished, otherwise false</p>
+
+<p><b>Remarks:</b>
+<p>The values of the taxgrp4 and taxgrp5 properties are filled only then you work with Romanian fiscal printer. 
+To choose the Romanian fiscal printer type you need to set the property zfpType = 1 of IZekaFP interface 
+(Bulgarian fiscal printer is setup by default)</p>
+
+<p><b>See Also</b>
+
+<br><br>
+
+<a href="IZekaFP_en.html">Methods of IZekaFP interface</a><br><br>
+Interfaces which are returned as IZekaFP method result<br>
+<a href="IGetCurrentBonInfoRes_en.html">Methods of IGetCurrentBonInfoRes interface</a><br>
+<a href="ITaxNumbers_en.html">Methods of ITaxNumbers interface</a><br>
+<a href="IPayTypes_en.html">Methods of IPayTypes interface</a><br>
+<a href="IZFPParameters_en.html">Methods of IZFPParameters interface</a><br>
+<a href="IOperatorInfo_en.html">Methods of IOperatorInfo interface</a><br>
+<a href="IArticleInfo_en.html">Methods of IArticleInfo interface</a><br>
+<a href="IDailySums_en.html">Methods of IDailySums interface</a><br>
+<a href="IFiscalReportData_en.html">Methods of IFiscalReportData interface</a><br>
+<a href="IDailyReport_en.html">Methods of IDailyReport interface</a><br>
+<a href="IZFPStatus_en.html">Methods of IZFPStatus interface</a><br>
+<a href="IInvoiceNumbers_en.html">Methods of IInvoiceNumbers interface</a><br>
+
+</p>
+
+</body>
+
+</html>

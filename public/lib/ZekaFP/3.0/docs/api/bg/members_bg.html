@@ -1,0 +1,3470 @@
+<html>
+
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=windows-1251">
+<meta http-equiv="Content-Language" content="bg">
+<link rel="stylesheet" type="text/css" href="../main.css">
+<script language="JavaScript" src="../main.js"></script>
+<title>Class CZekaFP members</title>
+</head>
+
+<body>
+
+<p class="msghead">
+<b>Конструктор / Настойка / Грешки</b></p>
+
+<script language="JavaScript">mf_text("CZekaFP", "CZekaFP");</script>
+&nbsp;-&nbsp;Контруктор на класа
+<br>
+<div id="CZekaFP" class="msgbody">
+<pre>
+CZekaFP(WORD wCom, DWORD baud = ZBR_9600, WORD retries = 3, DWORD retryWait = 1000);
+</pre>
+<h3>Параметри:</h3>
+<dl>
+	<dt>
+	wCom
+	<dd>
+		Задава номера на COM порта (1 = COM1)
+	</dd></dt>
+	<dt>
+	baud
+	<dd>
+		Задава скорост на връзката. Възможни скорости 9600, 19200 bps
+	</dd></dt>
+	<dt>
+	retries 
+	<dd>
+		Колко опита да се правят от членовете на класа преди да се върне грешка 
+		&quot;ЗАЕТ ФИСКАЛЕН ПРИНТЕР&quot;
+	</dd></dt>
+	<dt>
+	retryWait 
+	<dd>
+		Колко дълго да се изчаква между отделните опити (в милисекунди)
+	</dd></dt>
+</dl>
+<br>
+</div>
+
+<script language="JavaScript">mf_text("Setup", "Setup");</script>&nbsp;-&nbsp; 
+Задава настойки на класа
+<br>
+<div id="Setup" class="msgbody">
+<pre>
+void Setup(WORD wCom, DWORD baud = ZBR_9600, WORD retries = 3, DWORD retryWait = 1000);
+</pre>
+<h3>Параметри:</h3>
+<dl>
+	<dt>
+	wCom
+	<dd>
+		Задава номера на COM порта (1 = COM1)
+	</dd></dt>
+	<dt>
+	baud
+	<dd>
+		Задава скорост на връзката. Възможни скорости: 9600 и 19200 bps
+	</dd></dt>
+	<dt>
+	retries 
+	<dd>
+		Колко опита да се правят от членовете на класа преди да се върне грешка 
+		&quot;ЗАЕТ ФИСКАЛЕН ПРИНТЕР&quot;
+	</dd></dt>
+	<dt>
+	retryWait 
+	<dd>
+		Колко дълго да се изчаква между отделните опити (в милисекунди)
+	</dd></dt>
+</dl>
+<br>
+</div>
+
+<script language="JavaScript">mf_text("SetZFPType", "SetZFPType");</script>&nbsp;-&nbsp; 
+Задава тип на фискалния принтер
+<br>
+<div id="SetZFPType" class="msgbody">
+<pre>
+int SetZFPType(int type);
+</pre>
+<h3>Параметри:</h3>
+<dl>
+	<dt>
+	type
+	<dd>
+		Тип на фискалния принтер (ZFPT_BG за България или ZFPT_RO за Румъния)
+	</dd></dt>
+</dl>
+<h3>Върната стойност (резултат):</h3>
+<p>ZFPE_SUCCESS при успех, код на грешка при неуспех</p>
+<h3>Бележки:</h3>
+<p>От този параметър зависят командите, които вземат информация за сумите по данъчни групи. 
+Различните държави работят с различен брой данъчни групи. Ако не извикате тази функция 
+по-подразбиране се ползва ZFPT_BG</p>
+<br>
+</div>
+
+<script language="JavaScript">mf_text("GetZFPType", "GetZFPType");</script>&nbsp;-&nbsp; 
+Взема тип на Фискалния принтер с който се работи в момента
+<br>
+<div id="GetZFPType" class="msgbody">
+<pre>
+int GetZFPType();
+</pre>
+<h3>Върната стойност (резултат):</h3>
+<p>ZFPT_BG за България или ZFPT_RO за Румъния</p>
+<h3>Бележки:</h3>
+<p>Типа се задава с функцията <b>int SetZFPType(int type);</b> и по подразбиране е ZFPT_BG</p>
+<br>
+</div>
+
+<script language="JavaScript">mf_text("BusyWait", "BusyWait");</script>&nbsp;-&nbsp; 
+Изчаква фискалния принтер да се освободи след команда за отчет
+<br>
+<div id="BusyWait" class="msgbody">
+<pre>
+int BusyWait(DWORD timeout);
+</pre>
+<h3>Параметри:</h3>
+<dl>
+	<dt>
+	timeout
+	<dd>
+		Максимално време за чакане в милисекунди или ZFP_INFINITE (0xFFFFFFFF) при което се чака безкрайно
+	</dd></dt>
+</dl>
+<h3>Върната стойност (резултат):</h3>
+<p>ZFPE_NOFPRINTER ако не може да бъде открит фискален принтер<br>
+ZFPE_FPBUSYTIMEOUT ако е изтекло времето зададено в timeout
+ZFPE_SUCCESS принтера в готов да обработва команди
+</p>
+<h3>Бележки:</h3>
+<p>Тази команда може да се използва след командите за отчет с цел изчакване на фискалния принтер да 
+приключи текущата си задача. Ако желаете след всяка команда за отчет автоматично да се чака използвайте 
+SetAutoBusyWait със параметър различен от ZFP_NOBUSYWAIT. Командата може да се приключи преди 
+изтичането на timeout ако междувременно принтера спре да отговаря на запитванията. По този начин ако 
+желаете да изчакате &quot;безкрайно&quot; за освобождаването на принтера но междувременно принтера бъде изключен
+или разкачен, това няма да предизвика &quot;увисване&quot; на вашата програма. Бъдете внимателни при ползването на
+тази функция тъй като тя блокирва текущата нишка до освобождаването на фискалния принтер</p>
+<br>
+</div>
+
+<script language="JavaScript">mf_text("SetAutoBusyWait", "SetAutoBusyWait");</script>&nbsp;-&nbsp; 
+Задава / спира автоматичното изчакване да се освободи фискалния принтер след команда за отчет.
+<br>
+<div id="SetAutoBusyWait" class="msgbody">
+<pre>
+void SetAutoBusyWait(DWORD timeout);
+</pre>
+<h3>Параметри:</h3>
+<dl>
+	<dt>
+	timeout
+	<dd>
+		Максимално време за чакане в милисекунди или ZFP_INFINITE (0xFFFFFFFF) при което се чака безкрайно, 
+		ZFP_NOBUSYWAIT (0) за да няма изчакване.
+	</dd></dt>
+</dl>
+<h3>Бележки:</h3>
+<p>Тази команда задава дали да се прави автоматично извикване на BusyWait(timeout) след всяка команда за отчет,
+но само ако въпросната команда за отчет е приключила успешно. В такъв случай резултата от изпълнението на
+функцията за отчет съвпада с резултата от изпълнението на BusyWait(timeout). По подразбиране няма изчакване за 
+освобождаване на фискалния принтер.<br>
+<br>
+Защо е нужно такова изчакване?<br>
+Когато се подаде коректна команда за отчет, фискалния принтер отговаря позитивно и започва отчета. Продължителността
+на отчета не е известна предварително, тъй като е зависима от различните видове натрупвания на суми във фискалната памет.
+По тази причина е възможно ако се опитате да подадете следваща команда през това време да получите грешка ZFPE_FPRINTERBUSY
+(Фискалния принтер е зает). Ако използвате SetAutoBusyWait(ZFP_INFINITE) при настройката този клас, фунциите за
+отчет ще Ви връщат управлението едва когато фискалния принтер се освободи за следваща команда.</p>
+<br>
+</div>
+
+<script language="JavaScript">mf_text("FindFirstFPCOM", "FindFirstFPCOM");</script>
+&nbsp;-&nbsp;Търси Зека Фискален Принтер на всички COM портове и връща първия COM порт към който има свързан Зека Фискален Принтер.
+<br>
+<div id="FindFirstFPCOM" class="msgbody">
+<pre>
+DWORD FindFirstFPCOM();
+</pre>
+<h3>Върната стойност:</h3>
+<p>При успех младшите 16 бита съдържат номер на COM порт а старшите скоростта на връзка (9600 или 19200), резултата е нула при неуспех</p>
+<h3>Бележки:</h3>
+<p>Функцията е налична за съвместимост - препоръчва се използването на FindFirstFPCOMEx()</p>
+<br>
+</div>
+
+<script language="JavaScript">mf_text("GetLibraryVersion", "GetLibraryVersion");</script>&nbsp;-&nbsp; 
+Връща версията на библиотеката.
+<br>
+<div id="GetLibraryVersion" class="msgbody">
+<pre>
+int GetLibraryVersion();
+</pre>
+<h3>Върната стойност (резултат):</h3>
+<p>Връща версията на библиотеката. Младшите 3 байта са определящи. 
+При резултат 0x010203, версията се чете като 1 (0x01) . 2 (0x02) . 3 (0x03) т.е. версия 1.2.3
+</p>
+<br>
+</div>
+
+<script language="JavaScript">mf_text("GetErrorString", "GetErrorString");</script>&nbsp;-&nbsp; 
+Връща текстово описание на грешката
+<br>
+<div id="GetErrorString" class="msgbody">
+<pre>
+static void GetErrorString(int error, int lang, char* buf);
+</pre>
+<h3>Параметри:</h3>
+<dl>
+	<dt>
+	error
+	<dd>
+		Задава номер на грешка
+	</dd></dt>
+	<dt>
+	lang
+	<dd>
+		Идентификатор на език на на който да бъде описана грешката (0 = Английски, 1 = Български)
+	</dd></dt>
+	<dt>
+	buf
+	<dd>
+		Буфер в който се получава описание на грешката. Трябва да бъде поне ZFP_MAXERRORBUFLEN байта!
+	</dd></dt>
+</dl>
+<br>
+</div>
+
+<p><b>Работа с буфери</b></p>
+
+<script language="JavaScript">mf_text("GetInputBuffer", "GetInputBuffer");</script>
+&nbsp;-&nbsp;Връща входящия буфер и дължината му
+<br>
+<div id="GetInputBuffer" class="msgbody">
+<pre>
+int GetInputBuffer(BYTE* buf)
+</pre>
+<h3>Парамертри:</h3>
+<dl>
+	<dt>
+	buf
+	<dd>
+		Буфер в който да се копира входящия буфер. Трябва да бъде поне ZFP_MAXBUFLEN байта!
+	</dd></dt>
+</dl>
+<h3>Върната стойност:</h3>
+<p>Дължината на входния буфер или 0 - което означава че не е изпращана команда към фискалния принтер преди да бъде извикана тази функция</p>
+<h3>Бележки:</h3>
+<p>Буфера съдържа командата изпратена до фискалния принтер от последно извиканата командна функция. 
+Буфера може да се използва за по-добро разбиране на протокола и за дебъг. 
+Не е необходимо да викате тази фунцкия за нормална работа с фискалния принтер. 
+Функцията връща масив от байтове който НЕ завършва с нула. Нужна Ви е върнатата стойност на функцията за да 
+знаете колко дълъг е буфера.</p>
+<br>
+</div>
+
+<script language="JavaScript">mf_text("GetResponseBuffer", "GetResponseBuffer");</script>
+&nbsp;-&nbsp;Връща изходящия буфер и дължината му
+<br>
+<div id="GetResponseBuffer" class="msgbody">
+<pre>
+int GetResponseBuffer(BYTE* buf)
+</pre>
+<h3>Параметри:</h3>
+<dl>
+	<dt>
+	buf
+	<dd>
+		Буфер в който да се копира изходящия буфер. Трябва да бъде поне ZFP_MAXBUFLEN байта!
+	</dd></dt>
+</dl>
+<h3>Върната стойност:</h3>
+<p>Дължината на изходния буфер или 0 - което означава че не е изпращана команда към фискалния принтер 
+или няма върнати никакви данни преди да бъде извикана тази функция</p>
+<h3>Бележки:</h3>
+<p>Буфера съдържа отговора на фискалния принтер от последно извиканата командна функция. 
+Буфера може да се използва за по-добро разбиране на протокола и за дебъг. 
+Не е необходимо да викате тази фунцкия за нормална работа с фискалния принтер. 
+Функцията връща масив от байтове който НЕ завършва с нула. Нужна Ви е върнатата стойност на функцията за да 
+знаете колко дълъг е буфера.</p>
+<br>
+</div>
+
+<script language="JavaScript">mf_text("GetInputHexFormated", "GetInputHexFormated");</script>
+&nbsp;-&nbsp;Връща входящия буфер под формата на стринг завършващ с нула и съдържащ шестнадесетични стойности
+<br>
+<div id="GetInputHexFormated" class="msgbody">
+<pre>
+void GetInputHexFormated(char* buf)
+</pre>
+<h3>Параметри:</h3>
+<dl>
+	<dt>
+	buf
+	<dd>
+		Буфер в който да се копира входящия буфер. Трябва да бъде поне ZFP_MAXHEXBUFLEN байта!
+	</dd></dt>
+</dl>
+<h3>Бележки:</h3>
+<p>Буфера съдържа командата изпратена до фискалния принтер от последно извиканата командна функция. 
+Буфера може да се използва за по-добро разбиране на протокола и за дебъг. 
+Не е необходимо да викате тази фунцкия за нормална работа с фискалния принтер. 
+</p>
+<br>
+</div>
+
+<script language="JavaScript">mf_text("GetResponseHexFormated", "GetResponseHexFormated");</script>
+&nbsp;-&nbsp;Връща изходящия буфер под формата на стринг завършващ с нула и съдържащ шестнадесетични стойности
+<br>
+<div id="GetResponseHexFormated" class="msgbody">
+<pre>
+void GetResponseHexFormated(char* buf)
+</pre>
+<h3>Параметри:</h3>
+<dl>
+	<dt>
+	buf
+	<dd>
+		Буфер в който да се копира изходящия буфер. Трябва да бъде поне ZFP_MAXHEXBUFLEN байта!
+	</dd></dt>
+</dl>
+<h3>Бележки:</h3>
+<p>Буфера съдържа отговора на фискалния принтер от последно извиканата командна функция. 
+Буфера може да се използва за по-добро разбиране на протокола и за дебъг. 
+Не е необходимо да викате тази фунцкия за нормална работа с фискалния принтер. 
+</p>
+<br>
+</div>
+
+<p><b>Команди</b></p>
+
+<script language="JavaScript">mf_text("GetStatus", "GetStatus");</script>
+&nbsp;-&nbsp;Взема статуса на фискалния принтер
+<br>
+<div id="GetStatus" class="msgbody">
+<pre>
+int GetStatus(BYTE* status);
+</pre>
+<h3>Параметри:</h3>
+<dl>
+	<dt>
+	status
+	<dd>
+		Буфер в който да се копират статус байтовете. Буфера трябва да е дълъг поне 5 байта!
+	</dd></dt>
+</dl>
+<h3>Върната стойност (резултат):</h3>
+<p>ZFPE_SUCCESS при успех, код на грешка при неуспех</p>
+<br>
+</div>
+
+<script language="JavaScript">mf_text("GetVersion", "GetVersion");</script>
+&nbsp;-&nbsp;Връща информация за версията на фискалния принтер
+<br>
+<div id="GetVersion" class="msgbody">
+<pre>
+int GetVersion(char* version);
+</pre>
+<h3>Параметри:</h3>
+<dl>
+	<dt>
+	version
+	<dd>
+		Буфер в който да се копира версията (стринг завършващ с нула). Буфера трябва да е дълъг поне 40 байта!
+	</dd></dt>
+</dl>
+<h3>Върната стойност (резултат):</h3>
+<p>ZFPE_SUCCESS при успех, код на грешка при неуспех</p>
+<br>
+</div>
+
+<script language="JavaScript">mf_text("Diagnostic", "Diagnostic");</script>
+&nbsp;-&nbsp;Печат на диагностична информация
+<br>
+<div id="Diagnostic" class="msgbody">
+<pre>
+int Diagnostic();
+</pre>
+<h3>Върната стойност (резултат):</h3>
+<p>ZFPE_SUCCESS при успех, код на грешка при неуспех</p>
+<br>
+</div>
+
+<script language="JavaScript">mf_text("DisplayClear", "DisplayClear");</script>
+&nbsp;-&nbsp;Изчистване на външния дисплей
+<br>
+<div id="DisplayClear" class="msgbody">
+<pre>
+int DisplayClear();
+</pre>
+<h3>Върната стойност (резултат):</h3>
+<p>ZFPE_SUCCESS при успех, код на грешка при неуспех</p>
+<br>
+</div>
+
+<script language="JavaScript">mf_text("DisplayLine1", "DisplayLine1");</script>
+&nbsp;-&nbsp;Показва текст на първия ред на дисплея
+<br>
+<div id="DisplayLine1" class="msgbody">
+<pre>
+int DisplayLine1(const char* line);
+</pre>
+<h3>Параметри:</h3>
+<dl>
+	<dt>
+	line
+	<dd>
+		Стринг завъшващ с нула който съдържа текста за показване. 
+		Ако текста е по-дълъг от 20 байта той се отрязва.
+	</dd></dt>
+</dl>
+<h3>Върната стойност (резултат):</h3>
+<p>ZFPE_SUCCESS при успех, код на грешка при неуспех</p>
+<br>
+</div>
+
+<script language="JavaScript">mf_text("DisplayLine2", "DisplayLine2");</script>
+&nbsp;-&nbsp;Показва текст на втория ред на дисплея
+<br>
+<div id="DisplayLine2" class="msgbody">
+<pre>
+int DisplayLine2(const char* line);
+</pre>
+<h3>Параметри:</h3>
+<dl>
+	<dt>
+	line
+	<dd>
+		Стринг завъшващ с нула който съдържа текста за показване. 
+		Ако текста е по-дълъг от 20 байта той се отрязва.
+	</dd></dt>
+</dl>
+<h3>Върната стойност (резултат):</h3>
+<p>ZFPE_SUCCESS при успех, код на грешка при неуспех</p>
+<br>
+</div>
+
+<script language="JavaScript">mf_text("Display", "Display");</script>
+&nbsp;-&nbsp;Показва текст на двата реда на дисплея
+<br>
+<div id="Display" class="msgbody">
+<pre>
+int Display(const char* line);
+</pre>
+<h3>Параметри:</h3>
+<dl>
+	<dt>
+	line
+	<dd>
+		Стринг завъшващ с нула който съдържа текста за показване. 
+		Ако текста е по-дълъг от 40 байта той се отрязва.
+	</dd></dt>
+</dl>
+<h3>Върната стойност (резултат):</h3>
+<p>ZFPE_SUCCESS при успех, код на грешка при неуспех</p>
+<br>
+</div>
+
+<script language="JavaScript">mf_text("DisplayDateTime", "DisplayDateTime");</script>
+&nbsp;-&nbsp;Показва текущите дата и час на външния дисплей
+<br>
+<div id="DisplayDateTime" class="msgbody">
+<pre>
+int DisplayDateTime();
+</pre>
+<h3>Върната стойност (резултат):</h3>
+<p>ZFPE_SUCCESS при успех, код на грешка при неуспех</p>
+<br>
+</div>
+
+<script language="JavaScript">mf_text("OpenTill", "OpenTill");</script>
+&nbsp;-&nbsp;Отваря чекмеджето
+<br>
+<div id="OpenTill" class="msgbody">
+<pre>
+int OpenTill();
+</pre>
+<h3>Върната стойност (резултат):</h3>
+<p>ZFPE_SUCCESS при успех, код на грешка при неуспех</p>
+<br>
+</div>
+
+<script language="JavaScript">mf_text("PaperCut", "PaperCut");</script>
+&nbsp;-&nbsp;Срязва хартията
+<br>
+<div id="PaperCut" class="msgbody">
+<pre>
+int PaperCut();
+</pre>
+<h3>Върната стойност (резултат):</h3>
+<p>ZFPE_SUCCESS при успех, код на грешка при неуспех</p>
+<br>
+</div>
+
+<script language="JavaScript">mf_text("LineFeed", "LineFeed");</script>
+&nbsp;-&nbsp;Печата празен ред (изтиква хартията)
+<br>
+<div id="LineFeed" class="msgbody">
+<pre>
+int LineFeed();
+</pre>
+<h3>Върната стойност (резултат):</h3>
+<p>ZFPE_SUCCESS при успех, код на грешка при неуспех</p>
+<br>
+</div>
+
+<br>
+
+<script language="JavaScript">mf_text("GetFactFiscNums", "GetFactFiscNums");</script>
+&nbsp;-&nbsp;Връща фабричния номер и фискалния номер
+<br>
+<div id="GetFactFiscNums" class="msgbody">
+<pre>
+int GetFactFiscNums(char* factory, char* fiscal);
+</pre>
+<h3>Параметри:</h3>
+<dl>
+	<dt>
+	factory
+	<dd>
+		Буфер в който се получава стринг завършващ с нула съдържащ фабричния номер. Буфера трябва да е поне 14 байта дълъг.
+	</dd></dt>
+	<dt>
+	fiscal
+	<dd>
+		Буфер в който се получава стринг завършващ с нула съдържащ фискалния номер. Буфера трябва да е поне 14 байта дълъг.
+	</dd></dt>
+</dl>
+<h3>Върната стойност (резултат):</h3>
+<p>ZFPE_SUCCESS при успех, код на грешка при неуспех</p>
+<br>
+</div>
+
+<script language="JavaScript">mf_text("GetTaxNumber", "GetTaxNumber");</script>
+&nbsp;-&nbsp;Връща данъчния номер на фискалния принтер
+<br>
+<div id="GetTaxNumber" class="msgbody">
+<pre>
+int GetTaxNumber(char* taxnumber);
+</pre>
+<h3>Параметри:</h3>
+<dl>
+	<dt>
+	taxnumber
+	<dd>
+		Буфер в който се получава стринг завършващ с нула съдържащ данъчния номер. Буфера трябва да е поне 14 байта дълъг.
+	</dd></dt>
+</dl>
+<h3>Върната стойност (резултат):</h3>
+<p>ZFPE_SUCCESS при успех, код на грешка при неуспех</p>
+<br>
+</div>
+
+<script language="JavaScript">mf_text("GetTaxPercents", "GetTaxPercents");</script>
+&nbsp;-&nbsp;Връща данъчните проценти за различните данъчни групи
+<br>
+<div id="GetTaxPercents" class="msgbody">
+<pre>
+int GetTaxPercents(double* tgr1, double* tgr2, double* tgr3, double* tgr4 = NULL);
+</pre>
+<h3>Параметри:</h3>
+<dl>
+	<dt>
+	tgr1
+	<dd>
+		Указател за получаване на стойността на данъчна група А (A)
+	</dd></dt>
+	<dt>
+	tgr2
+	<dd>
+		Указател за получаване на стойността на данъчна група Б (B)
+	</dd></dt>
+	<dt>
+	tgr3
+	<dd>
+		Указател за получаване на стойността на данъчна група В (C)
+	</dd></dt>
+	<dt>
+	tgr4
+	<dd>
+		Указател за получаване на стойността на данъчна група D (само за Румъния)
+	</dd></dt>
+</dl>
+<h3>Върната стойност (резултат):</h3>
+<p>ZFPE_SUCCESS при успех, код на грешка при неуспех</p>
+<h3>Бележки:</h3>
+<p>Стойността на tgr4 се попълва само когато се работи с Румънски вариант на фискалния принтер. 
+За да изберете вариант ползвайте функцията int SetZFPType(int type); (по подразбиране е български вариант)</p>
+<br>
+</div>
+
+<script language="JavaScript">mf_text("GetDecimalPoint", "GetDecimalPoint");</script>
+&nbsp;-&nbsp;Връща позицията на десетичната точка
+<br>
+<div id="GetDecimalPoint" class="msgbody">
+<pre>
+int GetDecimalPoint(int* point);
+</pre>
+<h3>Параметри:</h3>
+<dl>
+	<dt>
+	point
+	<dd>
+		Указател за получаване позицията на десетичната точка
+	</dd></dt>
+</dl>
+<h3>Върната стойност (резултат):</h3>
+<p>ZFPE_SUCCESS при успех, код на грешка при неуспех</p>
+<br>
+</div>
+
+<script language="JavaScript">mf_text("GetPayTypes", "GetPayTypes");</script>
+&nbsp;-&nbsp;Връща имената на различните типове плащане
+<br>
+<div id="GetPayTypes" class="msgbody">
+<pre>
+int GetPayTypes(char* type1, char* type2, char* type3, char* type4, char* type5);
+</pre>
+<h3>Параметри:</h3>
+<dl>
+	<dt>
+	type1 до type5
+	<dd>
+		Буфер за получаване името на съответното плащане като стринг завършващ с нула.
+		Всеки буфер трябва да е поне 12 байта дълъг.
+	</dd></dt>
+</dl>
+<h3>Върната стойност (резултат):</h3>
+<p>ZFPE_SUCCESS при успех, код на грешка при неуспех</p>
+<br>
+</div>
+
+<script language="JavaScript">mf_text("GetParameters", "GetParameters");</script>
+&nbsp;-&nbsp;Връща различни параметри на фискалния принтер
+<br>
+<div id="GetParameters" class="msgbody">
+<pre>
+int GetParameters(int* fpNum, int* logo, int* till, int* autocut, int* transparent);
+</pre>
+<h3>Параметри:</h3>
+<dl>
+	<dt>
+	fpNum
+	<dd>
+		Указател за получаване номера на касово място
+	</dd></dt>
+	<dt>
+	logo
+	<dd>
+		Указател за получаване дали се печата логото (0 = не се печата)
+	</dd></dt>
+	<dt>
+	till
+	<dd>
+		Указател за получаване информация дали има чекмедже (0 = няма)
+	</dd></dt>
+	<dt>
+	autocut
+	<dd>
+		Указател за получаване информация дали има автоматичен резач (0 = няма)
+	</dd></dt>
+	<dt>
+	transparent
+	<dd>
+		Указател за получаване информация дали външния дисплей е прозрачен (0 = не е прозрачен)
+	</dd></dt>
+</dl>
+<h3>Върната стойност (резултат):</h3>
+<p>ZFPE_SUCCESS при успех, код на грешка при неуспех</p>
+<br>
+</div>
+
+<script language="JavaScript">mf_text("GetEJMode", "GetEJMode");</script>
+&nbsp;-&nbsp;Връща режима на печат на електронната контролна лента (ЕКЛ)
+<br>
+<div id="GetEJMode" class="msgbody">
+<pre>
+int GetEJMode(int* isShort);
+</pre>
+<h3>Параметри:</h3>
+<dl>
+	<dt>
+	isShort
+	<dd>
+		Указател за получаване режима на печат на електронната контролна лента (0 = разширен)
+	</dd></dt>
+</dl>
+<h3>Върната стойност (резултат):</h3>
+<p>ZFPE_SUCCESS при успех, код на грешка при неуспех</p>
+<br>
+</div>
+
+<script language="JavaScript">mf_text("GetFreeFiscalSpace", "GetFreeFiscalSpace");</script>
+&nbsp;-&nbsp;Връща броя на оставащите свободни записи във ФП
+<br>
+<div id="GetFreeFiscalSpace" class="msgbody">
+<pre>
+int GetFreeFiscalSpace(int* records);
+</pre>
+<h3>Параметри:</h3>
+<dl>
+	<dt>
+	records
+	<dd>
+		Указател за получаване броя на оставащите свободни записи във ФП
+	</dd></dt>
+</dl>
+<h3>Върната стойност (резултат):</h3>
+<p>ZFPE_SUCCESS при успех, код на грешка при неуспех</p>
+<br>
+</div>
+
+<script language="JavaScript">mf_text("GetDateTime", "GetDateTime");</script>
+&nbsp;-&nbsp;Връща текущите дата и час
+<br>
+<div id="GetDateTime" class="msgbody">
+<pre>
+int GetDateTime(int* dd, int* mm, int* yy, int* hh, int* mmm);
+</pre>
+<h3>Параметри:</h3>
+<dl>
+	<dt>
+	dd
+	<dd>
+		Указател за получаване текущия ден от месеца
+	</dd></dt>
+	<dt>
+	mm
+	<dd>
+		Указател за получаване текущия месец
+	</dd></dt>
+	<dt>
+	yy
+	<dd>
+		Указател за получаване текущата година
+	</dd></dt>
+	<dt>
+	hh
+	<dd>
+		Указател за получаване текущия час
+	</dd></dt>
+	<dt>
+	mmm
+	<dd>
+		Указател за получаване текущата минута
+	</dd></dt>
+</dl>
+<h3>Върната стойност (резултат):</h3>
+<p>ZFPE_SUCCESS при успех, код на грешка при неуспех</p>
+<br>
+</div>
+
+<script language="JavaScript">mf_text("GetClicheLine", "GetClicheLine");</script>
+&nbsp;-&nbsp;Връща текста на клишето по зададен номер на ред
+<br>
+<div id="GetClicheLine" class="msgbody">
+<pre>
+int GetClicheLine(BYTE lineNum, char* text);
+</pre>
+<h3>Параметри:</h3>
+<dl>
+	<dt>
+	lineNum
+	<dd>
+		Задава номер на ред. Валидни стойности от 1 до 8
+	</dd></dt>
+	<dt>
+	text
+	<dd>
+		Буфер за получаване текста на съответния ред като стринг завършващ с нула.
+		Буфера трябва да е поне 40 байта дълъг.
+	</dd></dt>
+</dl>
+<h3>Върната стойност (резултат):</h3>
+<p>ZFPE_SUCCESS при успех, код на грешка при неуспех</p>
+<br>
+</div>
+
+<script language="JavaScript">mf_text("GetDepartment", "GetDepartment");</script>
+&nbsp;-&nbsp;Връща информация за департамент
+<br>
+<div id="GetDepartment" class="msgbody">
+<pre>
+int GetDepartment(WORD number, char* name, char* taxgrp, double* turnover);
+</pre>
+<h3>Параметри:</h3>
+<dl>
+	<dt>
+	number
+	<dd>
+		Задава номер на департамент
+	</dd></dt>
+	<dt>
+	name
+	<dd>
+		Буфер за получаване името на департамента завършващо с нула.
+		Буфера трябва да е поне 22 байта дълъг.
+	</dd></dt>
+	<dt>
+	taxgrp
+	<dd>
+		Указател за получаване данъчната група
+	</dd></dt>
+	<dt>
+	turnover
+	<dd>
+		Указател за получаване на оборота
+	</dd></dt>
+</dl>
+<h3>Върната стойност (резултат):</h3>
+<p>ZFPE_SUCCESS при успех, код на грешка при неуспех</p>
+<br>
+</div>
+
+<script language="JavaScript">mf_text("GetOperatorUserPass", "GetOperatorUserPass");</script>
+&nbsp;-&nbsp;Връща името и паролата на оператор по зададен номер
+<br>
+<div id="GetOperatorUserPass" class="msgbody">
+<pre>
+int GetOperatorUserPass(BYTE oper, char* name, char* passwd);
+</pre>
+<h3>Параметри:</h3>
+<dl>
+	<dt>
+	oper
+	<dd>
+		Задава номер на оператора от 1 до 9.
+	</dd></dt>
+	<dt>
+	name
+	<dd>
+		Буфер за получаване името на съответния оператор като стринг завършващ с нула.
+		Буфера трябва да е поне 22 байта дълъг.
+	</dd></dt>
+	<dt>
+	passwd
+	<dd>
+		Буфер за получаване паролата на съответния оператор като стринг завършващ с нула.
+		Буфера трябва да е поне 5 байта дълъг.
+	</dd></dt>
+</dl>
+<h3>Върната стойност (резултат):</h3>
+<p>ZFPE_SUCCESS при успех, код на грешка при неуспех</p>
+<br>
+</div>
+
+<script language="JavaScript">mf_text("PrintLogo", "PrintLogo");</script>
+&nbsp;-&nbsp;Печата логото
+<br>
+<div id="PrintLogo" class="msgbody">
+<pre>
+int PrintLogo();
+</pre>
+<h3>Върната стойност (резултат):</h3>
+<p>ZFPE_SUCCESS при успех, код на грешка при неуспех</p>
+<br>
+</div>
+
+<br>
+
+<script language="JavaScript">mf_text("OpenBon", "OpenBon");</script>
+&nbsp;-&nbsp;Отваря служебен бон
+<br>
+<div id="OpenBon" class="msgbody">
+<pre>
+int OpenBon(BYTE oper, const char* passwd);
+</pre>
+<h3>Параметри:</h3>
+<dl>
+	<dt>
+	oper
+	<dd>
+		Задава номер на оператор от 1 до 9.
+	</dd></dt>
+	<dt>
+	passwd
+	<dd>
+		Буфер завършващ с нула който съдържа паролата на оператора. Този буфер се отрязва до първите 4 символа ако е по-дълъг.
+	</dd></dt>
+</dl>
+<h3>Върната стойност (резултат):</h3>
+<p>ZFPE_SUCCESS при успех, код на грешка при неуспех</p>
+<br>
+</div>
+
+<script language="JavaScript">mf_text("OpenBonWithEJ", "OpenBonWithEJ");</script>
+&nbsp;-&nbsp;Отваря служебен бон с параметър за запис в ЕКЛ
+<br>
+<div id="OpenBonWithEJ" class="msgbody">
+<pre>
+int OpenBonWithEJ(BYTE oper, const char* passwd, BOOL hasEJ);
+</pre>
+<h3>Параметри:</h3>
+<dl>
+	<dt>
+	oper
+	<dd>
+		Задава номер на оператор от 1 до 9.
+	</dd></dt>
+	<dt>
+	passwd
+	<dd>
+		Буфер завършващ с нула който съдържа паролата на оператора. Този буфер се отрязва до първите 4 символа ако е по-дълъг.
+	</dd></dt>
+	<dt>
+	hasEJ
+	<dd>
+		определя дали този бон да се запише в ЕКЛ (само в Zeka FP03 и по-нови, за останалите се игнорира).
+	</dd></dt>
+</dl>
+<h3>Върната стойност (резултат):</h3>
+<p>ZFPE_SUCCESS при успех, код на грешка при неуспех</p>
+<br>
+</div>
+
+<script language="JavaScript">mf_text("CloseBon", "CloseBon");</script>
+&nbsp;-&nbsp;Затваря служебен бон
+<br>
+<div id="CloseBon" class="msgbody">
+<pre>
+int CloseBon();
+</pre>
+<h3>Върната стойност (резултат):</h3>
+<p>ZFPE_SUCCESS при успех, код на грешка при неуспех</p>
+<br>
+</div>
+
+<script language="JavaScript">mf_text("OpenFiscalBon", "OpenFiscalBon");</script>
+&nbsp;-&nbsp;Отваря фискален бон
+<br>
+<div id="OpenFiscalBon" class="msgbody">
+<pre>
+int OpenFiscalBon(BYTE oper, const char* passwd, BYTE detailed, BYTE dds);
+</pre>
+<h3>Параметри:</h3>
+<dl>
+	<dt>
+	oper
+	<dd>
+		Задава номер на оператор от 1 до 9.
+	</dd></dt>
+	<dt>
+	passwd
+	<dd>
+		Буфер завършващ с нула който съдържа паролата на оператора. Този буфер се отрязва до първите 4 символа ако е по-дълъг.
+	</dd></dt>
+	<dt>
+	detailed
+	<dd>
+		флаг определящ дали да се печата детайлен формат на бона (0 = не се печата, 1 = печата се)
+	</dd></dt>
+	<dt>
+	dds
+	<dd>
+		Флаг определящ дали да се печата сумата по ДДС сметка (0 = не се печата, 1 = печата се)
+	</dd></dt>
+</dl>
+<h3>Върната стойност (резултат):</h3>
+<p>ZFPE_SUCCESS при успех, код на грешка при неуспех</p>
+<br>
+</div>
+
+<script language="JavaScript">mf_text("OpenInvoice", "OpenInvoice");</script>
+&nbsp;-&nbsp;Отваря фискален бон - фактура
+<br>
+<div id="OpenInvoice" class="msgbody">
+<pre>
+int OpenInvoice(BYTE oper, const char* passwd, const char* client, const char* receiver, const char* vatNum, const char* identNum, const char* address);
+</pre>
+<h3>Параметри:</h3>
+<dl>
+	<dt>
+	oper
+	<dd>
+		Задава номер на оператор от 1 до 9.
+	</dd></dt>
+	<dt>
+	passwd
+	<dd>
+		Буфер завършващ с нула който съдържа паролата на оператора. Този буфер се отрязва до първите 4 символа ако е по-дълъг.
+	</dd></dt>
+	<dt>
+	client
+	<dd>
+		Буфер завършващ с нула който съдържа името на клиента. Този буфер се отрязва до първите 26 символа ако е по-дълъг.
+	</dd></dt>
+	<dt>
+	receiver
+	<dd>
+		Буфер завършващ с нула който съдържа името на получаващия фактурата. Този буфер се отрязва до първите 16 символа ако е по-дълъг.
+	</dd></dt>
+	<dt>
+	vatNum
+	<dd>
+		Буфер завършващ с нула който съдържа номерa по ЗДДС на клиента. Този буфер се отрязва до първите 13 символа ако е по-дълъг.
+	</dd></dt>
+	<dt>
+	identNum
+	<dd>
+		Буфер завършващ с нула който съдържа Идентификационния номер на клиента. Този буфер се отрязва до първите 13 символа ако е по-дълъг.
+	</dd></dt>
+	<dt>
+	address
+	<dd>
+		Буфер завършващ с нула който съдържа адреса на клиента. Този буфер се отрязва до първите 30 символа ако е по-дълъг.
+	</dd></dt>
+</dl>
+<h3>Върната стойност (резултат):</h3>
+<p>ZFPE_SUCCESS при успех, код на грешка при неуспех</p>
+<br>
+</div>
+
+<script language="JavaScript">mf_text("SellFree", "SellFree");</script>
+&nbsp;-&nbsp;Свободна продажба на артикул
+<br>
+<div id="SellFree" class="msgbody">
+<pre>
+int SellFree(const char* name, char taxgrp, double price, double quantity = 1.0, double discount = 0.0);
+</pre>
+<h3>Параметри:</h3>
+<dl>
+	<dt>
+	name
+	<dd>
+		Буфер завършващ с нула който съдържа името на артикула. Този буфер се отрязва до първите 36 символа ако е по-дълъг.
+	</dd></dt>
+	<dt>
+	taxgrp
+	<dd>
+		Задава данъчната група. Валидни стойности 'А', 'Б','В, 0, 1, 2, '0', '1', '2'
+	</dd></dt>
+	<dt>
+	price
+	<dd>
+		Задава цена.
+	</dd></dt>
+	<dt>
+	quantity 
+	<dd>
+		Задава количество
+	</dd></dt>
+	<dt>
+	discount
+	<dd>
+		Задава отстъпка/надбавка в проценти.
+	</dd></dt>
+</dl>
+<h3>Върната стойност (резултат):</h3>
+<p>ZFPE_SUCCESS при успех, код на грешка при неуспех</p>
+<br>
+</div>
+
+<script language="JavaScript">mf_text("SellDB", "SellDB");</script>
+&nbsp;-&nbsp;Продажба на артикул от вътрешната база на Фискалния принтер
+<br>
+<div id="SellDB" class="msgbody">
+<pre>
+int SellDB(BOOL isVoid, WORD number, double quantity = 1.0, double discount = 0.0);
+</pre>
+<h3>Параметри:</h3>
+<dl>
+	<dt>
+	isVoid
+	<dd>
+		флаг който определя дали тази операция е продажба или войдиране (0 = продажба, 1 = войдиране)
+	</dd></dt>
+	<dt>
+	number
+	<dd>
+		Задава номер от базата данни от 1 до 1000.
+	</dd></dt>
+	<dt>
+	quantity 
+	<dd>
+		Задава количество
+	</dd></dt>
+	<dt>
+	discount
+	<dd>
+		Задава отстъпка/надбавка в проценти.
+	</dd></dt>
+</dl>
+<h3>Върната стойност (резултат):</h3>
+<p>ZFPE_SUCCESS при успех, код на грешка при неуспех</p>
+<h3>Бележки:</h3>
+<p>Препоръчва се използването на обновената функция SellDBEx()</p>
+<br>
+</div>
+
+<script language="JavaScript">mf_text("SellDepartment", "SellDepartment");</script>
+&nbsp;-&nbsp;Продажба от департамент
+<br>
+<div id="SellDepartment" class="msgbody">
+<pre>
+int SellDepartment(const char* name, WORD depNum, double price, double quantity, double discount);
+</pre>
+<h3>Параметри:</h3>
+<dl>
+	<dt>
+	name
+	<dd>
+		Буфер завършващ с нула който съдържа името на артикула. Този буфер се отрязва до първите 36 символа ако е по-дълъг.
+	</dd></dt>
+	<dt>
+	depNum
+	<dd>
+		Номер на департамент
+	</dd></dt>
+	<dt>
+	price
+	<dd>
+		Задава цена.
+	</dd></dt>
+	<dt>
+	quantity 
+	<dd>
+		Задава количество
+	</dd></dt>
+	<dt>
+	discount
+	<dd>
+		Задава отстъпка/надбавка в проценти.
+	</dd></dt>
+</dl>
+<h3>Върната стойност (резултат):</h3>
+<p>ZFPE_SUCCESS при успех, код на грешка при неуспех</p>
+<br>
+</div>
+
+<script language="JavaScript">mf_text("CalcIntermediateSum", "CalcIntermediateSum");</script>
+&nbsp;-&nbsp;Изчислява междинна сума
+<br>
+<div id="CalcIntermediateSum" class="msgbody">
+<pre>
+// flags CalcIntermediateSum
+#define ZFP_ISPRINT					1		// печат на междинната сума
+#define ZFP_ISSHOW					2		// показва междинната сума на дисплея
+#define ZFP_ISPERCENT				4       // отстъпката/надбавката е в проценти
+
+int CalcIntermediateSum(double* sum, DWORD flags = 0, double discount = 0.0);
+</pre>
+<h3>Параметри:</h3>
+<dl>
+	<dt>
+	flags
+	<dd>
+		флагове за настойка на функционалността
+	</dd></dt>
+	<dt>
+	sum
+	<dd>
+		Указател за получаване на междинната сума
+	</dd></dt>
+	<dt>
+	discount
+	<dd>
+		Задава отстъпка/надбавка (като сума или в проценти зависи от флага ZFP_ISPERCENT).
+	</dd></dt>
+</dl>
+<h3>Върната стойност (резултат):</h3>
+<p>ZFPE_SUCCESS при успех, код на грешка при неуспех</p>
+<br>
+</div>
+
+<script language="JavaScript">mf_text("Payment", "Payment");</script>
+&nbsp;-&nbsp;Регистриране на плащане
+<br>
+<div id="Payment" class="msgbody">
+<pre>
+int Payment(double sum, BYTE type = 0, BOOL noRest = FALSE);
+</pre>
+<h3>Параметри:</h3>
+<dl>
+	<dt>
+	sum
+	<dd>
+		Платена сума
+	</dd></dt>
+	<dt>
+	type
+	<dd>
+		Тип на плащането (0, 1, 2 или 3)
+	</dd></dt>
+	<dt>
+	noRest
+	<dd>
+		Плащането не изисква ресто (взема се под внимание само за някои типове плащания - примерно с купон)
+	</dd></dt>
+</dl>
+<h3>Върната стойност (резултат):</h3>
+<p>ZFPE_SUCCESS при успех, код на грешка при неуспех</p>
+<h3>Бележки:</h3>
+<p>Вижте също функция PaymentEx()</p>
+<br>
+</div>
+
+<script language="JavaScript">mf_text("PrintText", "PrintText");</script>
+&nbsp;-&nbsp;Печата свободен текст
+<br>
+<div id="PrintText" class="msgbody">
+<pre>
+// режими на подравняване
+#define ZFP_TEXTALIGNLEFT			0		// ляво подравняване
+#define ZFP_TEXTALIGNRIGHT			1		// дясно подравняване
+#define ZFP_TEXTALIGNCENTER			2		// центриране
+
+int PrintText(const char *text, int align = ZFP_TEXTALIGNLEFT);
+</pre>
+<h3>Параметри:</h3>
+<dl>
+	<dt>
+	text
+	<dd>
+		Буфер завършващ с нула който съдържа текста за печат. Този буфер се отрязва до първите 34 символа ако е по-дълъг.
+	</dd></dt>
+	<dt>
+	align
+	<dd>
+		режим на подравняване
+	</dd></dt>
+</dl>
+<h3>Върната стойност (резултат):</h3>
+<p>ZFPE_SUCCESS при успех, код на грешка при неуспех</p>
+<h3>Бележки:</h3>
+<p>Свободен текст може да се печата навсякъде, не само вътре в бон</p>
+<br>
+</div>
+
+<script language="JavaScript">mf_text("GetCurrentBonInfo", "GetCurrentBonInfo");</script>
+&nbsp;-&nbsp;Връща информация за текущо отворения фискален бон
+<br>
+<div id="GetCurrentBonInfo" class="msgbody">
+<pre>
+// GetCurrentBonInfo flags
+#define ZFPB_OPENBON				1		// има отворен бон
+#define ZFPB_NOVOID				2		// не са разрешени войдирания
+#define ZFPB_DDS					4		// печата се информация за ДДС
+#define ZFPB_PODRBON				8       		// печатат се детайли
+#define ZFPB_PAYSTART				16		// започнато е плащане
+#define ZFPB_PAYEND				32		// плащането е завършено
+
+int GetCurrentBonInfo(DWORD* flags, int* purchases, double* taxgrp1, double* taxgrp2, double* taxgrp3, double* taxgrp4 = NULL, double* taxgrp5 = NULL);
+</pre>
+<h3>Параметри:</h3>
+<dl>
+	<dt>
+	flags
+	<dd>
+		Указател за получаване на флаговете за бона (вижте дефинициите и коментарите по-нагоре)
+	</dd></dt>
+	<dt>
+	purchases
+	<dd>
+		Общ брой на покупките в бона (указател)
+	</dd></dt>
+	<dt>
+	taxgrp1
+	<dd>
+		Указател за получаване сумата за данъчна група А (A)
+	</dd></dt>
+	<dt>
+	taxgrp2
+	<dd>
+		Указател за получаване сумата за данъчна група Б (B)
+	</dd></dt>
+	<dt>
+	taxgrp3
+	<dd>
+		Указател за получаване сумата за данъчна група В (C)
+	</dd></dt>
+	<dt>
+	taxgrp4
+	<dd>
+		Указател за получаване сумата за данъчна група D (само за Румъния)
+	</dd></dt>
+	<dt>
+	taxgrp5
+	<dd>
+		Указател за получаване сумата за данъчна група E (само за Румъния)
+	</dd></dt>
+</dl>
+<h3>Върната стойност (резултат):</h3>
+<p>ZFPE_SUCCESS при успех, код на грешка при неуспех</p>
+<h3>Бележки:</h3>
+<p>При успешно завършване на функцията трябва първо да проверите стойността на флага ZFPB_OPENBON. 
+Ако този флаг е нула останалата информация не е валидна тъй като нямаме отворен фискален бон</p>
+<p>Стойностите на taxgrp4 и taxgrp5 се попълват само когато се работи с Румънски вариант на фискалния принтер. 
+За да изберете вариант ползвайте функцията int SetZFPType(int type); (по подразбиране е български вариант)</p>
+<br>
+</div>
+
+<script language="JavaScript">mf_text("CloseFiscalBon", "CloseFiscalBon");</script>
+&nbsp;-&nbsp;Затваря фискален бон
+<br>
+<div id="CloseFiscalBon" class="msgbody">
+<pre>
+int CloseFiscalBon();
+</pre>
+<h3>Върната стойност (резултат):</h3>
+<p>ZFPE_SUCCESS при успех, код на грешка при неуспех</p>
+<br>
+</div>
+
+<script language="JavaScript">mf_text("PrintDuplicate", "PrintDuplicate");</script>
+&nbsp;-&nbsp;Печата дупликат на последния фискален бон
+<br>
+<div id="PrintDuplicate" class="msgbody">
+<pre>
+int PrintDuplicate();
+</pre>
+<h3>Върната стойност (резултат):</h3>
+<p>ZFPE_SUCCESS при успех, код на грешка при неуспех</p>
+<br>
+</div>
+
+<script language="JavaScript">mf_text("GetBonNumber", "GetBonNumber");</script>
+&nbsp;-&nbsp;Взема номер на последния отпечатан бон
+<br>
+<div id="GetBonNumber" class="msgbody">
+<pre>
+int GetBonNumber(int* number);
+</pre>
+<h3>Параметри:</h3>
+<dl>
+	<dt>
+	number
+	<dd>
+		Указател за получаване на номера
+	</dd></dt>
+</dl>
+<h3>Върната стойност (резултат):</h3>
+<p>ZFPE_SUCCESS при успех, код на грешка при неуспех</p>
+<br>
+</div>
+
+<br>
+
+<script language="JavaScript">mf_text("OfficialSums", "OfficialSums");</script>
+&nbsp;-&nbsp;Регистрира въвеждане/извеждане на служебни суми
+<br>
+<div id="OfficialSums" class="msgbody">
+<pre>
+int OfficialSums(BYTE oper, const char* passwd, BYTE type, double sum, const char* note = NULL);
+</pre>
+<h3>Параметри:</h3>
+<dl>
+	<dt>
+	oper
+	<dd>
+		Задава номер на оператор от 1 до 9.
+	</dd></dt>
+	<dt>
+	passwd
+	<dd>
+		Буфер завършващ с нула който съдържа паролата на оператора. Този буфер се отрязва до първите 4 символа ако е по-дълъг.
+	</dd></dt>
+	<dt>
+	type
+	<dd>
+		Тип на плащането (0, 1, 2 или 3)
+	</dd></dt>
+	<dt>
+	sum
+	<dd>
+		Сума (въведена или изведена - зависи от знака на числото)
+	</dd></dt>
+	<dt>
+	note
+	<dd>
+		Незадължителен параметър - забележка в свободен текст към сумата.
+	</dd></dt>
+</dl>
+<h3>Върната стойност (резултат):</h3>
+<p>ZFPE_SUCCESS при успех, код на грешка при неуспех</p>
+<br>
+</div>
+
+<script language="JavaScript">mf_text("GetArticleInfo", "GetArticleInfo");</script>
+&nbsp;-&nbsp;Връща информация за избран артикул от вътрешната база данни на фискалния принтер
+<br>
+<div id="GetArticleInfo" class="msgbody">
+<pre>
+int GetArticleInfo(WORD number, char* name, double* price, char* taxgrp, double* turnover, double* sells,
+		WORD* counter, int* dd, int* mm, int* yy, int* hh, int* mmm);
+</pre>
+<h3>Параметри:</h3>
+<dl>
+	<dt>
+	number
+	<dd>
+		Задава номер на артикула от 1 до 1000.
+	</dd></dt>
+	<dt>
+	name
+	<dd>
+		Буфер за получаване името на артикула завършващо с нула. Този буфер трябва да е поне 22 символа
+	</dd></dt>
+	<dt>
+	price
+	<dd>
+		Получава цената
+	</dd></dt>
+	<dt>
+	taxgrp
+	<dd>
+		Получава данъчната група. Трябва да е 'А', 'Б' или 'В'.
+	</dd></dt>
+	<dt>
+	turnover
+	<dd>
+		Получава оборота
+	</dd></dt>
+	<dt>
+	sells
+	<dd>
+		Получава продаденото количество
+	</dd></dt>
+	<dt>
+	counter
+	<dd>
+		Получава брояч на последния отчет.
+	</dd></dt>
+	<dt>
+	dd, mm, yy, hh, mmm
+	<dd>
+		Получава ден, месец, година, час и минута на последния отчет
+	</dd></dt>
+</dl>
+<h3>Върната стойност (резултат):</h3>
+<p>ZFPE_SUCCESS при успех, код на грешка при неуспех</p>
+<br>
+</div>
+
+<script language="JavaScript">mf_text("GetDailySums", "GetDailySums");</script>
+&nbsp;-&nbsp;Връща информация за натрупаните до този момент суми в различните данъчни групи
+<br>
+<div id="GetDailySums" class="msgbody">
+<pre>
+int GetDailySums(double* taxgrp1, double* taxgrp2, double* taxgrp3, double* taxgrp4 = NULL, double* taxgrp5 = NULL);
+</pre>
+<h3>Параметри:</h3>
+<dl>
+	<dt>
+	taxgrp1
+	<dd>
+		Указател за получаване сумата за данъчна група А (A)
+	</dd></dt>
+	<dt>
+	taxgrp2
+	<dd>
+		Указател за получаване сумата за данъчна група Б (B)
+	</dd></dt>
+	<dt>
+	taxgrp3
+	<dd>
+		Указател за получаване сумата за данъчна група В (C)
+	</dd></dt>
+	<dt>
+	taxgrp4
+	<dd>
+		Указател за получаване сумата за данъчна група D (само за Румъния)
+	</dd></dt>
+	<dt>
+	taxgrp5
+	<dd>
+		Указател за получаване сумата за данъчна група E (само за Румъния)
+	</dd></dt>
+</dl>
+<h3>Върната стойност (резултат):</h3>
+<p>ZFPE_SUCCESS при успех, код на грешка при неуспех</p>
+<h3>Бележки:</h3>
+<p>Стойностите на taxgrp4 и taxgrp5 се попълват само когато се работи с Румънски вариант на фискалния принтер. 
+За да изберете вариант ползвайте функцията int SetZFPType(int type); (по подразбиране е български вариант)</p>
+<br>
+</div>
+
+<script language="JavaScript">mf_text("GetDailyInfo", "GetDailyInfo");</script>
+&nbsp;-&nbsp;Четене на информация за деня
+<br>
+<div id="GetDailyInfo" class="msgbody">
+<pre>
+int GetDailyInfo(int* clients, int* discounts, double* sumdiscount, int* adding, double* sumadding, int* voids, double* sumvoids);
+</pre>
+<h3>Параметри:</h3>
+<dl>
+	<dt>
+	clients
+	<dd>
+		Указател за получаване брой клиенти
+	</dd></dt>
+	<dt>
+	discounts
+	<dd>
+		Указател за получаване брой отстъпки
+	</dd></dt>
+	<dt>
+	sumdiscount
+	<dd>
+		Указател за получаване обща сума за всички отстъпки
+	</dd></dt>
+	<dt>
+	adding
+	<dd>
+		Указател за получаване брой надбавки
+	</dd></dt>
+	<dt>
+	sumadding
+	<dd>
+		Указател за получаване обща сума за всички надбавки
+	</dd></dt>
+	<dt>
+	voids
+	<dd>
+		Указател за получаване брой войдирания
+	</dd></dt>
+	<dt>
+	sumvoids
+	<dd>
+		Указател за получаване обща сума за всички войдирания
+	</dd></dt>
+</dl>
+<h3>Върната стойност (резултат):</h3>
+<p>ZFPE_SUCCESS при успех, код на грешка при неуспех</p>
+<br>
+</div>
+
+<script language="JavaScript">mf_text("GetDailyPayments", "GetDailyPayments");</script>
+&nbsp;-&nbsp;Връща наличните суми в касата по различните видове плащания
+<br>
+<div id="GetDailyPayments" class="msgbody">
+<pre>
+int GetDailyPayments(double* paytype0, double* paytype1, double* paytype2, double* paytype3, double* paytype4);
+</pre>
+<h3>Параметри:</h3>
+<dl>
+	<dt>
+	paytype0 .. paytype4
+	<dd>
+		Указател за получаване сумата за съответния вид плащане
+	</dd></dt>
+</dl>
+<h3>Върната стойност (резултат):</h3>
+<p>ZFPE_SUCCESS при успех, код на грешка при неуспех</p>
+<br>
+</div>
+
+<script language="JavaScript">mf_text("GetDailyIncomes", "GetDailyIncomes");</script>
+&nbsp;-&nbsp;Връща получените суми за различните видове плащания
+<br>
+<div id="GetDailyIncomes" class="msgbody">
+<pre>
+int GetDailyIncomes(double* paytype0, double* paytype1, double* paytype2, double* paytype3, double* paytype4);
+</pre>
+<h3>Параметри:</h3>
+<dl>
+	<dt>
+	paytype0 .. paytype4
+	<dd>
+		Указател за получаване сумата за съответния вид плащане
+	</dd></dt>
+</dl>
+<h3>Върната стойност (резултат):</h3>
+<p>ZFPE_SUCCESS при успех, код на грешка при неуспех</p>
+<br>
+</div>
+
+<script language="JavaScript">mf_text("GetDailyOfficialIncomes", "GetDailyOfficialIncomes");</script>
+&nbsp;-&nbsp;Връща служебно въведените в касата суми по различните видове плащания и броя им<br>
+<div id="GetDailyOfficialIncomes" class="msgbody">
+<pre>
+int GetDailyOfficialIncomes(double* paytype0, double* paytype1, double* paytype2, double* paytype3, double* paytype4, DWORD* operations);
+</pre>
+<h3>Параметри:</h3>
+<dl>
+	<dt>
+	paytype0 .. paytype4
+	<dd>
+		Указател за получаване сумата за съответния вид плащане
+	</dd></dt>
+	<dt>
+	operations
+	<dd>
+		Указател за получаване броя на служебно въведените в касата суми
+	</dd></dt>
+</dl>
+<h3>Върната стойност (резултат):</h3>
+<p>ZFPE_SUCCESS при успех, код на грешка при неуспех</p>
+<br>
+</div>
+
+<script language="JavaScript">mf_text("GetDailyOfficialExpenses", "GetDailyOfficialExpenses");</script>
+&nbsp;-&nbsp;Връща служебно изведените от касата суми по различните видове плащания и броя им<br>
+<div id="GetDailyOfficialExpenses" class="msgbody">
+<pre>
+int GetDailyOfficialExpenses(double* paytype0, double* paytype1, double* paytype2, double* paytype3, double* paytype4, DWORD* operations);
+</pre>
+<h3>Параметри:</h3>
+<dl>
+	<dt>
+	paytype0 .. paytype4
+	<dd>
+		Указател за получаване сумата за съответния вид плащане
+	</dd></dt>
+	<dt>
+	operations
+	<dd>
+		Указател за получаване броя на служебно изведените от касата суми
+	</dd></dt>
+</dl>
+<h3>Върната стойност (резултат):</h3>
+<p>ZFPE_SUCCESS при успех, код на грешка при неуспех</p>
+<br>
+</div>
+
+<script language="JavaScript">mf_text("GetDailyReport", "GetDailyReport");</script>
+&nbsp;-&nbsp;Връща информация за брояч на отчетите, номер последен отчет във ФП номер ЕКЛ (ако има) и дата на последен отчет
+<br>
+<div id="GetDailyReport" class="msgbody">
+<pre>
+int GetDailyReport(DWORD* counter, DWORD* lastreport, DWORD* ecl, int* dd, int* mm, int* yy, int* hh, int* mmm);
+</pre>
+<h3>Параметри:</h3>
+<dl>
+	<dt>
+	counter
+	<dd>
+		Указател за получаване брояч на отчета
+	</dd></dt>
+	<dt>
+	lastreport
+	<dd>
+		Указател за получаване номер на последния отчет във ФП
+	</dd></dt>
+	<dt>
+	ecl
+	<dd>
+		Указател за получаване номер на електронна контролна лента (ако има такава)
+	</dd></dt>
+	<dt>
+	dd, mm, yy, hh, mmm
+	<dd>
+		Указатели за получаване дата на последния отчет
+	</dd></dt>
+</dl>
+<h3>Върната стойност (резултат):</h3>
+<p>ZFPE_SUCCESS при успех, код на грешка при неуспех</p>
+<br>
+</div>
+
+<script language="JavaScript">mf_text("GetLastFiscalReportData", "GetLastFiscalReportData");</script>
+&nbsp;-&nbsp;Връща датата и номера на последния дневен отчет и номера на последното нулиране на РАМ.
+<br>
+<div id="GetLastFiscalReportData" class="msgbody">
+<pre>
+int GetLastFiscalReportData(int* dd, int* mm, int* yy, int* lastReport, int* lastZeroRam);
+</pre>
+<h3>Параметри:</h3>
+<dl>
+	<dt>
+	dd, mm, yy, hh, mmm
+	<dd>
+		Указатели за получаване дата на последния отчет
+	</dd></dt>
+	<dt>
+	lastReport
+	<dd>
+		Указател за получаване номера на последния дневен отчет.
+	</dd></dt>
+	<dt>
+	lastZeroRam
+	<dd>
+		Указател за получаване номера на последното нулиране на РАМ
+	</dd></dt>
+</dl>
+<h3>Върната стойност (резултат):</h3>
+<p>ZFPE_SUCCESS при успех, код на грешка при неуспех</p>
+<br>
+</div>
+
+<br>
+
+<script language="JavaScript">mf_text("GetOperatorInfo", "GetOperatorInfo");</script>
+&nbsp;-&nbsp;Връща натрупаните общ брой клиенти, брой отстъпки/надбавки/войдирания и натрупаните суми по тях за съответния оператор<br>
+<div id="GetOperatorInfo" class="msgbody">
+<pre>
+int GetOperatorInfo(BYTE oper, int* clients, int* discounts, double* sumdiscount, int* adding, double* sumadding, int* voids, double* sumvoids);
+</pre>
+<h3>Параметри:</h3>
+<dl>
+	<dt>
+	oper
+	<dd>
+		Задава номер на оператор от 1 до 9.
+	</dd></dt>
+	<dt>
+	clients
+	<dd>
+		Указател за получаване брой клиенти
+	</dd></dt>
+	<dt>
+	discounts
+	<dd>
+		Указател за получаване брой отстъпки
+	</dd></dt>
+	<dt>
+	sumdiscount
+	<dd>
+		Указател за получаване обща сума за всички отстъпки
+	</dd></dt>
+	<dt>
+	adding
+	<dd>
+		Указател за получаване брой надбавки
+	</dd></dt>
+	<dt>
+	sumadding
+	<dd>
+		Указател за получаване обща сума за всички надбавки
+	</dd></dt>
+	<dt>
+	voids
+	<dd>
+		Указател за получаване брой войдирания
+	</dd></dt>
+	<dt>
+	sumvoids
+	<dd>
+		Указател за получаване обща сума за всички войдирания
+	</dd></dt>
+</dl>
+<h3>Върната стойност (резултат):</h3>
+<p>ZFPE_SUCCESS при успех, код на грешка при неуспех</p>
+<br>
+</div>
+
+<script language="JavaScript">mf_text("GetOperatorIncomes", "GetOperatorIncomes");</script>
+&nbsp;-&nbsp;Връща служебно въведените в касата суми по различните видове плащания и броя им за съответния оператор
+<br>
+<div id="GetOperatorIncomes" class="msgbody">
+<pre>
+int GetOperatorIncomes(BYTE oper, double* paytype0, double* paytype1, double* paytype2, double* paytype3, double* paytype4, DWORD* operations);
+</pre>
+<h3>Параметри:</h3>
+<dl>
+	<dt>
+	oper
+	<dd>
+		Задава номер на оператор от 1 до 9.
+	</dd></dt>
+	<dt>
+	paytype0 .. paytype4
+	<dd>
+		Указател за получаване сумата за съответния вид плащане
+	</dd></dt>
+	<dt>
+	operations
+	<dd>
+		Указател за получаване броя на служебно въведените в касата суми
+	</dd></dt>
+</dl>
+<h3>Върната стойност (резултат):</h3>
+<p>ZFPE_SUCCESS при успех, код на грешка при неуспех</p>
+<br>
+</div>
+
+<script language="JavaScript">mf_text("GetOperatorExpenses", "GetOperatorExpenses");</script>
+&nbsp;-&nbsp;Връща служебно изведените от касата суми по различните видове плащания и броя им за съответния оператор
+<br>
+<div id="GetOperatorExpenses" class="msgbody">
+<pre>
+int GetOperatorExpenses(BYTE oper, double* paytype0, double* paytype1, double* paytype2, double* paytype3, double* paytype4, DWORD* operations);
+</pre>
+<h3>Параметри:</h3>
+<dl>
+	<dt>
+	oper
+	<dd>
+		Задава номер на оператор от 1 до 9.
+	</dd></dt>
+	<dt>
+	paytype0 .. paytype4
+	<dd>
+		Указател за получаване сумата за съответния вид плащане
+	</dd></dt>
+	<dt>
+	operations
+	<dd>
+		Указател за получаване броя на служебно изведените от касата суми
+	</dd></dt>
+</dl>
+<h3>Върната стойност (резултат):</h3>
+<p>ZFPE_SUCCESS при успех, код на грешка при неуспех</p>
+<br>
+</div>
+
+<script language="JavaScript">mf_text("GetOperatorReceives", "GetOperatorReceives");</script>
+&nbsp;-&nbsp;Връща получените суми за съответния оператор по различните видове плащания
+<br>
+<div id="GetOperatorReceives" class="msgbody">
+<pre>
+int GetOperatorReceives(BYTE oper, double* paytype0, double* paytype1, double* paytype2, double* paytype3, double* paytype4);
+</pre>
+<h3>Параметри:</h3>
+<dl>
+	<dt>
+	oper
+	<dd>
+		Задава номер на оператор от 1 до 9.
+	</dd></dt>
+	<dt>
+	paytype0 .. paytype4
+	<dd>
+		Указател за получаване сумата за съответния вид плащане
+	</dd></dt>
+</dl>
+<h3>Върната стойност (резултат):</h3>
+<p>ZFPE_SUCCESS при успех, код на грешка при неуспех</p>
+<br>
+</div>
+
+<script language="JavaScript">mf_text("GetOperatorCounter", "GetOperatorCounter");</script>
+&nbsp;-&nbsp;Връща номер и дата на последния операторски отчет
+<br>
+<div id="GetOperatorCounter" class="msgbody">
+<pre>
+int GetOperatorCounter(BYTE oper, double* count, int* dd, int* mm, int* yy, int* hh, int* mmm);
+</pre>
+<h3>Параметри:</h3>
+<dl>
+	<dt>
+	oper
+	<dd>
+		Задава номер на оператор от 1 до 9.
+	</dd></dt>
+	<dt>
+	count
+	<dd>
+		Указател за получаване номера на последния операторски отчет
+	</dd></dt>
+	<dt>
+	dd, mm, yy, hh, mmm
+	<dd>
+		Указатели за получаване дата на последния операторски отчет (ден,месец, година, час, минути)
+	</dd></dt>
+</dl>
+<h3>Върната стойност (резултат):</h3>
+<p>ZFPE_SUCCESS при успех, код на грешка при неуспех</p>
+<br>
+</div>
+
+<p><b>Помощни команди и команди за настройка</b></p>
+
+<script language="JavaScript">mf_text("SetPayType", "SetPayType");</script>
+&nbsp;-&nbsp;Програмиране имената на видовете плащания
+<br>
+<div id="SetPayType" class="msgbody">
+<pre>
+int SetPayType(BYTE type, const char* line);
+</pre>
+<h3>Параметри:</h3>
+<dl>
+	<dt>
+	type
+	<dd>
+		Задава номер на вид плащане (1, 2 или 3)
+	</dd></dt>
+	<dt>
+	line
+	<dd>
+		Буфер завършващ с нула който съдържа името на вида плащане. Този буфер се отрязва до първите 10 символа ако е по-дълъг.
+	</dd></dt>
+</dl>
+<h3>Върната стойност (резултат):</h3>
+<p>ZFPE_SUCCESS при успех, код на грешка при неуспех</p>
+<br>
+</div>
+
+<script language="JavaScript">mf_text("SetParameters", "SetParameters");</script>
+&nbsp;-&nbsp;Програмиране на номер на касово място, параметър за печатане на лого, 
+параметър за чекмедже, за прозрачен дисплей и автоматичен резач.<br>
+<div id="SetParameters" class="msgbody">
+<pre>
+int SetParameters(WORD fpnum, BOOL logo, BOOL till, BOOL autocut, BOOL transparent);
+</pre>
+<h3>Параметри:</h3>
+<dl>
+	<dt>
+	fpNum
+	<dd>
+		Задава номер на касово място
+	</dd></dt>
+	<dt>
+	logo
+	<dd>
+		Задава параметър за печатане на лого (0 = не се печата)
+	</dd></dt>
+	<dt>
+	till
+	<dd>
+		Задава параметър за чекмедже (0 = няма чекмедже)
+	</dd></dt>
+	<dt>
+	autocut
+	<dd>
+		Задава параметър за автоматичен резач (0 = няма автоматичен резач)
+	</dd></dt>
+	<dt>
+	transparent
+	<dd>
+		Задава параметър за прозрачен дисплей (0 = няма прозрачен дисплей)
+	</dd></dt>
+</dl>
+<h3>Върната стойност (резултат):</h3>
+<p>ZFPE_SUCCESS при успех, код на грешка при неуспех</p>
+<br>
+</div>
+
+<script language="JavaScript">mf_text("SetDateTime", "SetDateTime");</script>
+&nbsp;-&nbsp;Сверява дата и час и връща разпечатка
+<br>
+<div id="SetDateTime" class="msgbody">
+<pre>
+int SetDateTime(WORD dd, WORD mm, WORD yy, WORD hh, WORD mmm, WORD ss);
+</pre>
+<h3>Параметри:</h3>
+<dl>
+	<dt>
+	dd
+	<dd>
+		Задава ден от месеца
+	</dd></dt>
+	<dt>
+	mm
+	<dd>
+		Задава месец
+	</dd></dt>
+	<dt>
+	yy
+	<dd>
+		Задава година
+	</dd></dt>
+	<dt>
+	hh
+	<dd>
+		Задава час
+	</dd></dt>
+	<dt>
+	mmm
+	<dd>
+		Задава минута
+	</dd></dt>
+</dl>
+<h3>Върната стойност (резултат):</h3>
+<p>ZFPE_SUCCESS при успех, код на грешка при неуспех</p>
+<br>
+</div>
+
+<script language="JavaScript">mf_text("SetClicheLine", "SetClicheLine");</script>
+&nbsp;-&nbsp;Програмиране на ред от клишето
+<br>
+<div id="SetClicheLine" class="msgbody">
+<pre>
+int SetClicheLine(BYTE lineNum, const char* text);
+</pre>
+<h3>Параметри:</h3>
+<dl>
+	<dt>
+	lineNum
+	<dd>
+		Задава номер на ред от 1 до 8
+	</dd></dt>
+	<dt>
+	text
+	<dd>
+		Буфер завършващ с нула който съдържа реда от клишето. Този буфер се отрязва до първите 38 символа ако е по-дълъг.
+	</dd></dt>
+</dl>
+<h3>Върната стойност (резултат):</h3>
+<p>ZFPE_SUCCESS при успех, код на грешка при неуспех</p>
+<br>
+</div>
+
+<script language="JavaScript">mf_text("SetOperatorUserPass", "SetOperatorUserPass");</script>
+&nbsp;-&nbsp;Програмиране на име и парола на оператор
+<br>
+<div id="SetOperatorUserPass" class="msgbody">
+<pre>
+int SetOperatorUserPass(BYTE oper, const char* name, const char* password);
+</pre>
+<h3>Параметри:</h3>
+<dl>
+	<dt>
+	oper
+	<dd>
+		Задава номер на оператор от 1 до 9.
+	</dd></dt>
+	<dt>
+	name
+	<dd>
+		Буфер завършващ с нула който съдържа името на оператора. Този буфер се отрязва до първите 20 символа ако е по-дълъг.
+	</dd></dt>
+	<dt>
+	password
+	<dd>
+		Буфер завършващ с нула който съдържа паролата на оператора. Този буфер се отрязва до първите 4 символа ако е по-дълъг.
+	</dd></dt>
+</dl>
+<h3>Върната стойност (резултат):</h3>
+<p>ZFPE_SUCCESS при успех, код на грешка при неуспех</p>
+<br>
+</div>
+
+<script language="JavaScript">mf_text("SetArticleInfo", "SetArticleInfo");</script>
+&nbsp;-&nbsp;Програмиране на артикул от вътрешната база данни на фискалния принтер
+<br>
+<div id="SetArticleInfo" class="msgbody">
+<pre>
+int SetArticleInfo(WORD number, const char* name, double price, char taxgrp, WORD depNum = 0);
+</pre>
+<h3>Параметри:</h3>
+<dl>
+	<dt>
+	number
+	<dd>
+		Номер на артикул от 1 до 1000.
+	</dd></dt>
+	<dt>
+	name
+	<dd>
+		Буфер завършващ с нула който съдържа името на артикула. Този буфер се отрязва до първите 20 символа ако е по-дълъг.
+	</dd></dt>
+	<dt>
+	price
+	<dd>
+		цена
+	</dd></dt>
+	<dt>
+	taxgrp
+	<dd>
+		Задава данъчната група. Валидни стойности 'А', 'Б','В', 0, 1, 2, '0', '1', '2'
+	</dd></dt>
+	<dt>
+	depNum 
+	<dd>
+		Задава номер на департамент
+	</dd></dt>
+</dl>
+<h3>Върната стойност (резултат):</h3>
+<p>ZFPE_SUCCESS при успех, код на грешка при неуспех</p>
+<br>
+</div>
+
+<script language="JavaScript">mf_text("SetLogoFile", "SetLogoFile");</script>
+&nbsp;-&nbsp;Програмиране на лого
+<br>
+<div id="SetLogoFile" class="msgbody">
+<pre>
+int SetLogoFile(const char* filename);
+</pre>
+<h3>Параметри:</h3>
+<dl>
+	<dt>
+	filename
+	<dd>
+		Буфер завършващ с нула който съдържа името на файла
+	</dd></dt>
+</dl>
+<h3>Върната стойност (резултат):</h3>
+<p>ZFPE_SUCCESS при успех, код на грешка при неуспех</p>
+<h3>Бележки:</h3>
+<p>Логото трябва да е битмап  (.BMP) файл с 1 bpp и размери 384 x 80. 
+Резултата е файл с размер 3902 байта</p>
+<br>
+</div>
+
+<script language="JavaScript">mf_text("SetLocalDateTime", "SetLocalDateTime");</script>
+&nbsp;-&nbsp;Задава часа и датата на фискалния принтер да е този на компютъра
+<br>
+<div id="SetLocalDateTime" class="msgbody">
+<pre>
+int SetLocalDateTime();
+</pre>
+<h3>Върната стойност (резултат):</h3>
+<p>ZFPE_SUCCESS при успех, код на грешка при неуспех</p>
+<br>
+</div>
+
+<script language="JavaScript">mf_text("SetExternalDisplayFile", "SetExternalDisplayFile");</script>
+&nbsp;-&nbsp;Програмиране на външен дисплей
+<br>
+<div id="SetExternalDisplayFile" class="msgbody">
+<pre>
+int SetExternalDisplayFile(const char* password, const char* filename);
+</pre>
+<h3>Параметри:</h3>
+<dl>
+	<dt>
+	password
+	<dd>
+		Буфер завършващ с нула който съдържа парола за достъп до дисплея. Този буфер се отрязва до първите 6 символа ако е по-дълъг.
+	</dd></dt>
+	<dt>
+	filename
+	<dd>
+		Буфер завършващ с нула който съдържа името на файла. Формата на файла е следния:<br>
+		<pre>
+		Поле			размер в байта
+		----------------------------------------
+		Бр.БайтаКом1ред		1
+		Ком1ред			8
+		Бр.БайтаКом2ред		1
+		Ком2ред			8
+		Бр.БайтаClrDis		1
+		КомClrDis			8
+		Бр.БайтаXtrКом		1
+		Ком БайтаXtrКом		8
+		ФлагПрекод		1
+		ПреКодТабл		64
+		</pre>
+		<h3>Пояснения:</h3>
+		Програмира се външния дисплей, като за брой байта команда се задават N 
+		броя управляващи командни символи. След което се задават 8 байта 
+		управляващи символи, като 1вите N са командата, а останалите не се 
+		взимат под внимание, но трябва да са общо 8, за да се запази формата на 
+		командата. Ако дисплея има екстра (за скрийн сейвър) се процедира по 
+		същия начин, а ако няма &lt;Бр.БайтаXtrКом&gt; се записва със стойност 0. 
+		&lt;ФлагПрекод&gt; е 0 или 1 в зависимост от това дали трябва да се извършва 
+		прекодиране на кирилицата или не. След което се изпраща и кодовата 
+		таблица.
+		
+	</dd></dt>
+</dl>
+<h3>Върната стойност (резултат):</h3>
+<p>ZFPE_SUCCESS при успех, код на грешка при неуспех</p>
+<br>
+</div>
+
+<script language="JavaScript">mf_text("SetExternalDisplayData", "SetExternalDisplayData");</script>
+&nbsp;-&nbsp;Програмиране на външен дисплей
+<br>
+<div id="SetExternalDisplayData" class="msgbody">
+<pre>
+int SetExternalDisplayData(const char* password, const BYTE* data, int datalen);
+</pre>
+<h3>Параметри:</h3>
+<dl>
+	<dt>
+	password
+	<dd>
+		Буфер завършващ с нула който съдържа парола за достъп до дисплея. Този буфер се отрязва до първите 6 символа ако е по-дълъг.
+	</dd></dt>
+	<dt>
+	data
+	<dd>
+		Буфер съдържащ данните за препрограмиране на дисплея. 
+		Формата на данните е същия като съдържанието на файла описано в SetExternalDisplayFile()
+	</dd></dt>
+	<dt>
+	datalen
+	<dd>
+		Дължина на данните. Към фискалния принтер се изпращат не повече от 101 байта.
+	</dd></dt>
+</dl>
+<h3>Върната стойност (резултат):</h3>
+<p>ZFPE_SUCCESS при успех, код на грешка при неуспех</p>
+<br>
+</div>
+
+<script language="JavaScript">mf_text("SetDepartment", "SetDepartment");</script>
+&nbsp;-&nbsp;Програмиране на информация за департамент
+<br>
+<div id="SetDepartment" class="msgbody">
+<pre>
+int SetDepartment(WORD number, const char* name, char taxgrp);
+</pre>
+<h3>Параметри:</h3>
+<dl>
+	<dt>
+	number
+	<dd>
+		Номер на департамент.
+	</dd></dt>
+	<dt>
+	name
+	<dd>
+		Буфер завършващ с нула който съдържа името на департамента. Този буфер се отрязва до първите 20 символа ако е по-дълъг.
+	</dd></dt>
+	<dt>
+	taxgrp
+	<dd>
+		Задава данъчната група. Валидни стойности 'А', 'Б','В, 0, 1, 2, '0', '1', '2'
+	</dd></dt>
+</dl>
+<h3>Върната стойност (резултат):</h3>
+<p>ZFPE_SUCCESS при успех, код на грешка при неуспех</p>
+<br>
+</div>
+
+<script language="JavaScript">mf_text("SetEJMode", "SetEJMode");</script>
+&nbsp;-&nbsp;Задаване режим на електронна контролна лента (ЕКЛ)
+<br>
+<div id="SetEJMode" class="msgbody">
+<pre>
+int SetEJMode(BOOL bShort);
+</pre>
+<h3>Параметри:</h3>
+<dl>
+	<dt>
+	bShort
+	<dd>
+		Когато е различно от 0 (т.е. TRUE) - използва се съкратена ЕКЛ, в противен случай ЕКЛ е разширена
+	</dd></dt>
+</dl>
+<h3>Върната стойност (резултат):</h3>
+<p>ZFPE_SUCCESS при успех, код на грешка при неуспех</p>
+<br>
+</div>
+
+<p><b>Отчети</b></p>
+
+<script language="JavaScript">mf_text("ReportSpecialFiscal", "ReportSpecialFiscal");</script>
+&nbsp;-&nbsp;Специален фискален отчет
+<br>
+<div id="ReportSpecialFiscal" class="msgbody">
+<pre>
+int ReportSpecialFiscal();
+</pre>
+<h3>Върната стойност (резултат):</h3>
+<p>ZFPE_SUCCESS при успех, код на грешка при неуспех</p>
+<h3>Бележки:</h3>
+<p>Фискалния принтер разпечатва всички специални събития записани във ФП.</p>
+<br>
+</div>
+
+<script language="JavaScript">mf_text("ReportFiscalByBlock", "ReportFiscalByBlock");</script>
+&nbsp;-&nbsp;Подробен Фискален отчет по номера на блок във ФП
+<br>
+<div id="ReportFiscalByBlock" class="msgbody">
+<pre>
+int ReportFiscalByBlock(BOOL detailed, WORD startNumber, WORD endNumber);
+</pre>
+<h3>Параметри:</h3>
+<dl>
+	<dt>
+	detailed
+	<dd>
+		Дали отчета да е подробен (0 = съкратен)
+	</dd></dt>
+	<dt>
+	startNumber
+	<dd>
+		Начален номер
+	</dd></dt>
+	<dt>
+	endNumber
+	<dd>
+		Краен номер
+	</dd></dt>
+</dl>
+<h3>Върната стойност (резултат):</h3>
+<p>ZFPE_SUCCESS при успех, код на грешка при неуспех</p>
+<br>
+</div>
+
+<script language="JavaScript">mf_text("ReportFiscalByDate", "ReportFiscalByDate");</script>
+&nbsp;-&nbsp;Фискален отчет по дати
+<br>
+<div id="ReportFiscalByDate" class="msgbody">
+<pre>
+int ReportFiscalByDate(BOOL detailed, WORD sdd, WORD smm, WORD syy, WORD edd, WORD emm, WORD eyy);
+</pre>
+<h3>Параметри:</h3>
+<dl>
+	<dt>
+	detailed
+	<dd>
+		Дали отчета да е подробен (0 = съкратен)
+	</dd></dt>
+	<dt>
+	sdd, smm, syy
+	<dd>
+		Начални ден, месец и година
+	</dd></dt>
+	<dt>
+	edd, emm, eyy
+	<dd>
+		Крайни ден, месец и година
+	</dd></dt>
+</dl>
+<h3>Върната стойност (резултат):</h3>
+<p>ZFPE_SUCCESS при успех, код на грешка при неуспех</p>
+<br>
+</div>
+
+<script language="JavaScript">mf_text("ReportDaily", "ReportDaily");</script>
+&nbsp;-&nbsp;Дневен финансов отчет
+<br>
+<div id="ReportDaily" class="msgbody">
+<pre>
+int ReportDaily(BOOL zero, BOOL extended);
+</pre>
+<h3>Параметри:</h3>
+<dl>
+	<dt>
+	zero
+	<dd>
+		Параметър за нулиране (0 = без нулиране)
+	</dd></dt>
+	<dt>
+	extended
+	<dd>
+		Дали отчета да е разширен - т.е. първо артикулен и после дневен (0 = нормален)
+	</dd></dt>
+</dl>
+<h3>Върната стойност (резултат):</h3>
+<p>ZFPE_SUCCESS при успех, код на грешка при неуспех</p>
+<br>
+</div>
+
+<script language="JavaScript">mf_text("ReportEJ", "ReportEJ");</script>
+&nbsp;-&nbsp;Отчет на елекронната контролна лента (ЕКЛ)
+<br>
+<div id="ReportEJ" class="msgbody">
+<pre>
+int ReportEJ(WORD num = 0);
+</pre>
+<h3>Параметри:</h3>
+<dl>
+	<dt>
+	num 
+	<dd>
+		Параметър за отпечатване номер на бон. Този параметър се игнорирва за българския вариант на Zeka FP
+	</dd></dt>
+</dl>
+<h3>Върната стойност (резултат):</h3>
+<p>ZFPE_SUCCESS при успех, код на грешка при неуспех</p>
+<br>
+</div>
+
+<script language="JavaScript">mf_text("ReportOperator", "ReportOperator");</script>
+&nbsp;-&nbsp;Операторски отчет
+<br>
+<div id="ReportOperator" class="msgbody">
+<pre>
+int ReportOperator(BOOL zero, BYTE oper);
+</pre>
+<h3>Параметри:</h3>
+<dl>
+	<dt>
+	zero
+	<dd>
+		Параметър за нулиране (0 = без нулиране)
+	</dd></dt>
+	<dt>
+	oper
+	<dd>
+		Задава номер на оператор от 0 до 9 (0 = всички).
+	</dd></dt>
+</dl>
+<h3>Върната стойност (резултат):</h3>
+<p>ZFPE_SUCCESS при успех, код на грешка при неуспех</p>
+<br>
+</div>
+
+<script language="JavaScript">mf_text("ReportArticles", "ReportArticles");</script>
+&nbsp;-&nbsp;Отчет по артикули
+<br>
+<div id="ReportArticles" class="msgbody">
+<pre>
+int ReportArticles(BOOL zero);
+</pre>
+<h3>Параметри:</h3>
+<dl>
+	<dt>
+	zero
+	<dd>
+		Параметър за нулиране (0 = без нулиране)
+	</dd></dt>
+</dl>
+<h3>Върната стойност (резултат):</h3>
+<p>ZFPE_SUCCESS при успех, код на грешка при неуспех</p>
+<br>
+</div>
+
+<script language="JavaScript">mf_text("ReadFiscalMemory", "ReadFiscalMemory");</script>
+&nbsp;-&nbsp;Четене на фискалната памет във файл
+<br>
+<div id="ReadFiscalMemory" class="msgbody">
+<pre>
+int ReadFiscalMemory(const char* filename);
+</pre>
+<h3>Параметри:</h3>
+<dl>
+	<dt>
+	filename
+	<dd>
+		Буфер завършващ с нула който съдържа името на файла във който ще се прочете фискалната памет. 
+		Ако файла не съществува той се създава. Ако съществува, съдържанието му се презаписва. Формата на файла е следния:<br>
+		<pre>
+&lt;NBL&gt;&lt;CMD&gt;&lt;номер сегмент&gt;;&lt;код на запис&gt;;&lt;дата на запис&gt;;&lt;статус&gt;;&lt;данни&gt;
+….
+…..
+&lt;NBL&gt;&lt;CMD&gt;&lt;номер сегмент&gt;;&lt;код на запис&gt;;&lt;дата на запис&gt;;&lt;статус&gt;;&lt;данни&gt;
+…
+
+&lt;NBL&gt;&lt;CMD&gt;&lt;номер сегмент&gt;;&lt;@&gt; - край на записите
+
+код на запис / тип запис
+00 фабричен запис
+01 фискализация 
+04 дневен отчет
+05 нулиран рам
+06 дан. проценти
+07 десетична точка
+	</pre>
+	</dd></dt>
+</dl>
+<h3>Върната стойност (резултат):</h3>
+<p>ZFPE_SUCCESS при успех, код на грешка при неуспех</p>
+<br>
+</div>
+
+<p><b>Нови фукции в Zeka FP-E и Zeka FP01-E</b></p>
+<p>
+Следните функции са добавени във версия 2.0 на библиотеката и поддържат добавената във Zeka FP-E и Zeka FP01-E функционалност.
+Тези функции може свободно да се ползват и със старите версии на Zeka FP и Zeka FP01, като новата функционалност
+работи със стойности по подразбиране във старите устройства.
+</p>
+
+<script language="JavaScript">mf_text("PaymentEU", "PaymentEU");</script>
+&nbsp;-&nbsp;Регистриране на плащане
+<br>
+<div id="PaymentEU" class="msgbody">
+<pre>
+int PaymentEU(double sum, BYTE type, BOOL noChange, BYTE changeType)
+</pre>
+<h3>Параметри:</h3>
+<dl>
+	<dt>
+	sum
+	<dd>
+		Платена сума
+	</dd></dt>
+	<dt>
+	type
+	<dd>
+		Тип на плащането (0 до 4)
+	</dd></dt>
+	<dt>
+	noChange
+	<dd>
+		Плащането не изисква ресто (взема се под внимание само за някои типове плащания - примерно с купон)
+	</dd></dt>
+	<dt>
+	changeType
+	<dd>
+		Тип на рестото. 0 = в брой (т.е. тип плащане 0), 1 = рестото е от зададения тип плащане (по подразбиране за Zeka FP и Zeka FP01), 2 = ресто във валута (т.е. тип плащане 4)
+	</dd></dt>
+</dl>
+<h3>Върната стойност (резултат):</h3>
+<p>ZFPE_SUCCESS при успех, код на грешка при неуспех</p>
+<br>
+</div>
+
+<script language="JavaScript">mf_text("GetCurrentBonInfoEU", "GetCurrentBonInfoEU");</script>
+&nbsp;-&nbsp;Връща информация за текущо отворения фискален бон
+<br>
+<div id="GetCurrentBonInfoEU" class="msgbody">
+<pre>
+int GetCurrentBonInfoEU(TZfpReceiptInfo&amp; info);
+</pre>
+<h3>Параметри:</h3>
+<dl>
+	<dt>
+	info
+	<dd>
+		Структура <a href="structures_bg.html">TZfpReceiptInfo</a>
+	</dd></dt>
+</dl>
+<h3>Върната стойност (резултат):</h3>
+<p>ZFPE_SUCCESS при успех, код на грешка при неуспех</p>
+<h3>Бележки:</h3>
+<p>При успешно завършване на функцията трябва първо да проверите стойността на флага ZFPB_OPENBON. 
+Ако този флаг е нула валидни са само полетата change и changeType</p>
+<br>
+</div>
+
+<script language="JavaScript">mf_text("GetDailySumsEU", "GetDailySumsEU");</script>
+&nbsp;-&nbsp;Връща информация за натрупаните до този момент суми в различните данъчни групи
+<br>
+<div id="GetDailySumsEU" class="msgbody">
+<pre>
+int GetDailySumsEU(TZfpTaxGroups&amp; taxGroups);
+</pre>
+<h3>Параметри:</h3>
+<dl>
+	<dt>
+	taxGroups
+	<dd>
+		Структура <a href="structures_bg.html">TZfpTaxGroups</a>
+	</dd></dt>
+</dl>
+<h3>Върната стойност (резултат):</h3>
+<p>ZFPE_SUCCESS при успех, код на грешка при неуспех</p>
+<br>
+</div>
+
+<script language="JavaScript">mf_text("GetOperatorChangeEU", "GetOperatorChangeEU");</script>
+&nbsp;-&nbsp;Връща върнатите като ресто суми от опрератора за различните видове плащания (нова функция за Zeka FP-E и Zeka FP01-E)
+<br>
+<div id="GetOperatorChangeEU" class="msgbody">
+<pre>
+int GetOperatorChangeEU(BYTE oper, double* paytype0, double* paytype1, double* paytype2, double* paytype3, double* paytype4);
+</pre>
+<h3>Параметри:</h3>
+<dl>
+	<dt>
+	oper
+	<dd>
+		Задава номер на оператор от 1 до 9.
+	</dd></dt>
+	<dt>
+	paytype0 .. paytype4
+	<dd>
+		Указател за получаване сумата за съответния вид плащане
+	</dd></dt>
+</dl>
+<h3>Върната стойност (резултат):</h3>
+<p>ZFPE_SUCCESS при успех, код на грешка при неуспех</p>
+<br>
+</div>
+
+<script language="JavaScript">mf_text("GetDailyChangeEU", "GetDailyChangeEU");</script>
+&nbsp;-&nbsp;Връща върнатите като ресто суми за деня за различните видове плащания (нова функция за Zeka FP-E и Zeka FP01-E)
+<br>
+<div id="GetDailyChangeEU" class="msgbody">
+<pre>
+int GetDailyChangeEU(double* paytype0, double* paytype1, double* paytype2, double* paytype3, double* paytype4);
+</pre>
+<h3>Параметри:</h3>
+<dl>
+	<dt>
+	paytype0 .. paytype4
+	<dd>
+		Указател за получаване сумата за съответния вид плащане
+	</dd></dt>
+</dl>
+<h3>Върната стойност (резултат):</h3>
+<p>ZFPE_SUCCESS при успех, код на грешка при неуспех</p>
+<br>
+</div>
+
+<script language="JavaScript">mf_text("GetInvoiceNextNumberEU", "GetInvoiceNextNumberEU");</script>
+&nbsp;-&nbsp;Връща следващия номер на фактура и последния номер на фактура в зададения интервал (нова функция за Zeka FP-E и Zeka FP01-E)
+<br>
+<div id="GetInvoiceNextNumberEU" class="msgbody">
+<pre>
+int GetInvoiceNextNumberEU(char* nextNum, char* lastNum);
+</pre>
+<h3>Параметри:</h3>
+<dl>
+	<dt>
+	nextNum
+	<dd>
+		Буфер за получаване следващия номер на фактура като стринг завършващ с нула.
+		Буфера трябва да е поне 11 байта дълъг.
+	</dd></dt>
+	<dt>
+	lastNum
+	<dd>
+		Буфер за получаване последния номер на фактура като стринг завършващ с нула.
+		Буфера трябва да е поне 11 байта дълъг.
+	</dd></dt>
+</dl>
+<h3>Върната стойност (резултат):</h3>
+<p>ZFPE_SUCCESS при успех, код на грешка при неуспех</p>
+<br>
+</div>
+
+<script language="JavaScript">mf_text("SetInvoiceNumbersRangeEU", "SetInvoiceNumbersRangeEU");</script>
+&nbsp;-&nbsp;Задава обхват номера на фактури който да издава фискалния принтер (нова функция за Zeka FP-E и Zeka FP01-E)
+<br>
+<div id="SetInvoiceNumbersRangeEU" class="msgbody">
+<pre>
+int SetInvoiceNumbersRangeEU(const char* startNum, const char* lastNum));
+</pre>
+<h3>Параметри:</h3>
+<dl>
+	<dt>
+	startNum
+	<dd>
+		Буфер завършващ с нула който съдържа началния номер на фактура издавана от фискалния принтер. Този буфер се отрязва до първите 10 символа ако е по-дълъг и се допълва с водещи нули ако е по-къс.
+	</dd></dt>
+	<dt>
+	lastNum
+	<dd>
+		Буфер завършващ с нула който съдържа последния номер на фактура издавана от фискалния принтер. Този буфер се отрязва до първите 10 символа ако е по-дълъг и се допълва с водещи нули ако е по-къс.
+	</dd></dt>
+</dl>
+<h3>Върната стойност (резултат):</h3>
+<p>ZFPE_SUCCESS при успех, код на грешка при неуспех</p>
+<br>
+</div>
+
+<script language="JavaScript">mf_text("GetDepartmentEU", "GetDepartmentEU");</script>
+&nbsp;-&nbsp;Връща информация за департамент
+<br>
+<div id="GetDepartmentEU" class="msgbody">
+<pre>
+int GetDepartmentEU(WORD number, char* name, char* taxgrp, double* turnover, double* quantity);
+</pre>
+<h3>Параметри:</h3>
+<dl>
+	<dt>
+	number
+	<dd>
+		Задава номер на департамент
+	</dd></dt>
+	<dt>
+	name
+	<dd>
+		Буфер за получаване името на департамента завършващо с нула.
+		Буфера трябва да е поне 22 байта дълъг.
+	</dd></dt>
+	<dt>
+	taxgrp
+	<dd>
+		Указател за получаване данъчната група
+	</dd></dt>
+	<dt>
+	turnover
+	<dd>
+		Указател за получаване на оборота
+	</dd></dt>
+	<dt>
+	quantity
+	<dd>
+		Указател за получаване на продаденото количество (-1.0 ако се ползва със стари устройства)
+	</dd></dt>
+</dl>
+<h3>Върната стойност (резултат):</h3>
+<p>ZFPE_SUCCESS при успех, код на грешка при неуспех</p>
+<br>
+</div>
+
+<script language="JavaScript">mf_text("SetTaxPercentsEU", "SetTaxPercentsEU");</script>
+&nbsp;-&nbsp;Задава данъчните проценти за различните данъчни групи.
+<br>
+<div id="SetTaxPercentsEU" class="msgbody">
+<pre>
+int SetTaxPercentsEU(const char* password, const TZfpTaxGroups& taxGroups);
+</pre>
+<h3>Параметри:</h3>
+<dl>
+	<dt>
+	password
+	<dd>
+		Буфер завършващ с нула който фискалната парола за достъп. Този буфер се отрязва до първите 6 символа ако е по-дълъг.
+	</dd></dt>
+	<dt>
+	taxGroups
+	<dd>
+		Структура <a href="structures_bg.html">TZfpTaxGroups</a> съдържаща процентите за различните данъчни групи.
+	</dd></dt>
+</dl>
+<h3>Върната стойност (резултат):</h3>
+<p>ZFPE_SUCCESS при успех, код на грешка при неуспех</p>
+<h3>Бележки:</h3>
+<p>Възможно е да забраните данъчни групи Д,Е,Ж или З. За целта като процент задайте -1.0</p>
+<br>
+</div>
+
+<script language="JavaScript">mf_text("GetTaxPercentsEU", "GetTaxPercentsEU");</script>
+&nbsp;-&nbsp;Връща информация за данъчните проценти в различните данъчни групи
+<br>
+<div id="GetTaxPercentsEU" class="msgbody">
+<pre>
+int GetTaxPercentsEU(TZfpTaxGroups& taxGroups)
+</pre>
+<h3>Параметри:</h3>
+<dl>
+	<dt>
+	taxGroups
+	<dd>
+		Структура <a href="structures_bg.html">TZfpTaxGroups</a> за получаване информация за данъчните проценти в различните данъчни групи.
+	</dd></dt>
+</dl>
+<h3>Върната стойност (резултат):</h3>
+<p>ZFPE_SUCCESS при успех, код на грешка при неуспех</p>
+<h3>Бележки:</h3>
+<p>Забранените данъчни групи имат стойност -1.0</p>
+<br>
+</div>
+
+<script language="JavaScript">mf_text("SetPayTypeEU", "SetPayTypeEU");</script>
+&nbsp;-&nbsp;Програмиране имената на видовете плащания и валутен курс
+<br>
+<div id="SetPayTypeEU" class="msgbody">
+<pre>
+int SetPayTypeEU(BYTE type, const char* line, double exchRate)
+</pre>
+<h3>Параметри:</h3>
+<dl>
+	<dt>
+	type
+	<dd>
+		Задава номер на вид плащане (1, 2, 3 или 4)
+	</dd></dt>
+	<dt>
+	line
+	<dd>
+		Буфер завършващ с нула който съдържа името на вида плащане. Този буфер се отрязва до първите 10 символа ако е по-дълъг.
+	</dd></dt>
+	<dt>
+	exchRate
+	<dd>
+		Валутен курс.
+	</dd></dt>
+</dl>
+<h3>Върната стойност (резултат):</h3>
+<p>ZFPE_SUCCESS при успех, код на грешка при неуспех</p>
+<br>
+</div>
+
+<script language="JavaScript">mf_text("SetParametersEU", "SetParametersEU");</script>
+&nbsp;-&nbsp;Задава параметрите на фискалния принтер.
+<br>
+<div id="SetParametersEU" class="msgbody">
+<pre>
+int SetParametersEU(const TZfpParams& parameters);
+</pre>
+<h3>Параметри:</h3>
+<dl>
+	<dt>
+	taxGroups
+	<dd>
+		Структура <a href="structures_bg.html">TZfpParams</a> съдържаща параметрите на фискалния принтер.
+	</dd></dt>
+</dl>
+<h3>Върната стойност (резултат):</h3>
+<p>ZFPE_SUCCESS при успех, код на грешка при неуспех</p>
+<br>
+</div>
+
+<script language="JavaScript">mf_text("GetParametersEU", "GetParametersEU");</script>
+&nbsp;-&nbsp;Връща информация за параметрите на фискалния принтер
+<br>
+<div id="GetParametersEU" class="msgbody">
+<pre>
+int GetParametersEU(TZfpParams& parameters);
+</pre>
+<h3>Параметри:</h3>
+<dl>
+	<dt>
+	taxGroups
+	<dd>
+		Структура <a href="structures_bg.html">TZfpParams</a> за получаване информация за параметрите на фискалния принтер.
+	</dd></dt>
+</dl>
+<h3>Върната стойност (резултат):</h3>
+<p>ZFPE_SUCCESS при успех, код на грешка при неуспех</p>
+<br>
+</div>
+
+<script language="JavaScript">mf_text("GetPayTypesEU", "GetPayTypesEU");</script>
+&nbsp;-&nbsp;Връща информация за имената на различните видове плащания и валутния курс
+<br>
+<div id="GetPayTypesEU" class="msgbody">
+<pre>
+int GetPayTypesEU(TZfpPayTypes& payTypes)
+</pre>
+<h3>Параметри:</h3>
+<dl>
+	<dt>
+	taxGroups
+	<dd>
+		Структура <a href="structures_bg.html">TZfpPayTypes</a> за получаване информация за имената на различните видове плащания и валутния курс.
+	</dd></dt>
+</dl>
+<h3>Върната стойност (резултат):</h3>
+<p>ZFPE_SUCCESS при успех, код на грешка при неуспех</p>
+<h3>Бележки:</h3>
+<p>При устройства който не поддържат валутен курс върнатата стойност е -1.0</p>
+<br>
+</div>
+
+<p><b>Нови фукции във версия 2.5</b></p>
+
+<script language="JavaScript">mf_text("SetLogo", "SetLogo");</script>
+&nbsp;-&nbsp;Избор на текущо лого
+<br>
+<div id="SetLogo" class="msgbody">
+<pre>
+int SetLogo(BYTE logo)
+</pre>
+<h3>Параметри:</h3>
+<dl>
+	<dt>
+	logo
+	<dd>
+		Номер на лого 0-9
+	</dd></dt>
+</dl>
+<h3>Върната стойност (резултат):</h3>
+<p>ZFPE_SUCCESS при успех, код на грешка при неуспех</p>
+<br>
+</div>
+
+<script language="JavaScript">mf_text("GetLogoInfo", "GetLogoInfo");</script>
+&nbsp;-&nbsp;Четене на информация за заредени лога и текущо активно. Резултатът от операцията се записва в посочения буфер
+<br>
+<div id="GetLogoInfo" class="msgbody">
+<pre>
+int GetLogoInfo(char * logo_info)
+</pre>
+<h3>Параметри:</h3>
+<dl>
+	<dt>
+	logo_info
+	<dd>
+		Буфер за получаване на върнатата информация с размер 12 байта с формат "N;LLLLLLLLLL", където N е индект на текущо активното лого (0-9), а L съдържа 0 или 1 и указва дали логото със съответен индекс е заредено или свободно.
+	</dd></dt>
+</dl>
+<h3>Върната стойност (резултат):</h3>
+<p>ZFPE_SUCCESS при успех, код на грешка при неуспех</p>
+<br>
+</div>
+
+<script language="JavaScript">mf_text("FindFirstFPCOMEx", "FindFirstFPCOMEx");</script>
+&nbsp;-&nbsp;Търси Зека Фискален Принтер на всички COM портове и връща първия COM порт към който има свързан Зека фискален принтер
+<br>
+<div id="FindFirstFPCOMEx" class="msgbody">
+<pre>
+DWORD FindFirstFPCOMEx();
+</pre>
+<h3>Върната стойност:</h3>
+<p>При успех младшите 24 бита съдържат скоростта на връзка (9600-115200), а старшите 8 - номер на COM порт. Резултатът е нула при неуспех</p>
+<br>
+</div>
+
+<script language="JavaScript">mf_text("SetLogoFileEx", "SetLogoFileEx");</script>
+&nbsp;-&nbsp;Програмиране на лого
+<br>
+<div id="SetLogoFileEx" class="msgbody">
+<pre>
+int SetLogoFileEx(BYTE logo_id, const char* filename);
+</pre>
+<h3>Параметри:</h3>
+<dl>
+	<dt>
+	logo_id
+	<dd>
+		Номер на лого, което ще се зарежда (0-9)
+	</dd></dt>
+	<dt>
+	filename
+	<dd>
+		Буфер завършващ с нула, който съдържа името на файла
+	</dd></dt>
+</dl>
+<h3>Върната стойност (резултат):</h3>
+<p>ZFPE_SUCCESS при успех, код на грешка при неуспех</p>
+<h3>Бележки:</h3>
+<p>Логото трябва да е монохромен битмап  (.BMP) файл с 1 bpp и размери зависещи от ФП</p>
+<br>
+</div>
+
+<script language="JavaScript">mf_text("PrintLogoEx", "PrintLogoEx");</script>
+&nbsp;-&nbsp;Печата лого (0-9)
+<br>
+<div id="PrintLogoEx" class="msgbody">
+<pre>
+int PrintLogoEx(BYTE logo);
+</pre>
+<h3>Параметри:</h3>
+<dl>
+	<dt>
+	logo
+	<dd>
+		Номер на лого, което ще се печата (0-9)
+	</dd></dt>
+</dl>
+<h3>Върната стойност (резултат):</h3>
+<p>ZFPE_SUCCESS при успех, код на грешка при неуспех</p>
+<br>
+</div>
+
+<script language="JavaScript">mf_text("CloseBonInCash", "CloseBonInCash");</script>
+&nbsp;-&nbsp;Директно приключване на фискален бон в брой
+<br>
+<div id="CloseBonInCash" class="msgbody">
+<pre>
+int CloseBonInCash()
+</pre>
+<h3>Върната стойност (резултат):</h3>
+<p>ZFPE_SUCCESS при успех, код на грешка при неуспех</p>
+<br>
+</div>
+
+<script language="JavaScript">mf_text("PaymentEx", "PaymentEx");</script>
+&nbsp;-&nbsp;Регистриране на плащане
+<br>
+<div id="PaymentEx" class="msgbody">
+<pre>
+int PaymentEx(double sum, BYTE type, BOOL noRest, BOOL fPaidExactSum);
+</pre>
+<h3>Параметри:</h3>
+<dl>
+	<dt>
+	sum
+	<dd>
+		Платена сума
+	</dd></dt>
+	<dt>
+	type
+	<dd>
+		Тип на плащането (0, 1, 2 или 3)
+	</dd></dt>
+	<dt>
+	noRest
+	<dd>
+		Плащането не изисква ресто (взема се под внимание само за някои типове плащания - примерно с купон)
+	</dd></dt>
+	<dt>
+	fPaidExactSum
+	<dd>
+		Платена е точната сума (параметър sum се игнорира) - ФП изчислява конкретната стойност
+	</dd></dt>
+</dl>
+<h3>Върната стойност (резултат):</h3>
+<p>ZFPE_SUCCESS при успех, код на грешка при неуспех</p>
+<br>
+</div>
+
+<script language="JavaScript">mf_text("SellDepartmentEx", "SellDepartmentEx");</script>
+&nbsp;-&nbsp;Продажба от департамент
+<br>
+<div id="SellDepartmentEx" class="msgbody">
+<pre>
+int SellDepartmentEx(const char* name, WORD depNum, double price, double quantity, double discount, BYTE flag);
+</pre>
+<h3>Параметри:</h3>
+<dl>
+	<dt>
+	name
+	<dd>
+		Буфер завършващ с нула който съдържа името на артикула. Този буфер се отрязва до първите 36 символа ако е по-дълъг.
+	</dd></dt>
+	<dt>
+	depNum
+	<dd>
+		Номер на департамент
+	</dd></dt>
+	<dt>
+	price
+	<dd>
+		Задава цена.
+	</dd></dt>
+	<dt>
+	quantity 
+	<dd>
+		Задава количество
+	</dd></dt>
+	<dt>
+	discount
+	<dd>
+		Задава отстъпка/надбавка в проценти или като стойност в зависимост от параметър flag
+	</dd></dt>
+	<dt>
+	flag
+	<dd>
+		Определя вида на отстъпката 0-в проценти или 1-стойност. Стойностите различни от 0 и 1 са запазени за бъдещи разширения
+	</dd></dt>
+</dl>
+<h3>Върната стойност (резултат):</h3>
+<p>ZFPE_SUCCESS при успех, код на грешка при неуспех</p>
+<br>
+</div>
+
+<script language="JavaScript">mf_text("SellFreeEx", "SellFreeEx");</script>
+&nbsp;-&nbsp;Свободна продажба на артикул
+<br>
+<div id="SellFreeEx" class="msgbody">
+<pre>
+int SellFreeEx(const char* name, char taxgrp, double price, double quantity, double discount, BYTE flag);
+</pre>
+<h3>Параметри:</h3>
+<dl>
+	<dt>
+	name
+	<dd>
+		Буфер завършващ с нула който съдържа името на артикула. Този буфер се отрязва до първите 36 символа ако е по-дълъг.
+	</dd></dt>
+	<dt>
+	taxgrp
+	<dd>
+		Задава данъчната група. Валидни стойности 'А', 'Б', 'В', 0, 1, 2, '0', '1', '2'
+	</dd></dt>
+	<dt>
+	price
+	<dd>
+		Задава цена.
+	</dd></dt>
+	<dt>
+	quantity 
+	<dd>
+		Задава количество
+	</dd></dt>
+	<dt>
+	discount
+	<dd>
+		Задава отстъпка/надбавка в проценти или като стойност в зависимост от параметър flag
+	</dd></dt>
+	<dt>
+	flag
+	<dd>
+		Определя вида на отстъпката 0-в проценти или 1-стойност. Стойностите различни от 0 и 1 са запазени за бъдещи разширения
+	</dd></dt>
+</dl>
+<h3>Върната стойност (резултат):</h3>
+<p>ZFPE_SUCCESS при успех, код на грешка при неуспех</p>
+<br>
+</div>
+
+<script language="JavaScript">mf_text("SellDBEx", "SellDBEx");</script>
+&nbsp;-&nbsp;Продажба на артикул от вътрешната база на Фискалния принтер
+<br>
+<div id="SellDBEx" class="msgbody">
+<pre>
+int SellDBEx(BOOL isVoid, DWORD number, double quantity, double discount, BYTE flag);
+</pre>
+<h3>Параметри:</h3>
+<dl>
+	<dt>
+	isVoid
+	<dd>
+		флаг който определя дали тази операция е продажба или войдиране (0 = продажба, 1 = войдиране)
+	</dd></dt>
+	<dt>
+	number
+	<dd>
+		Задава номер от базата данни от 1 до 99999.
+	</dd></dt>
+	<dt>
+	quantity 
+	<dd>
+		Задава количество
+	</dd></dt>
+	<dt>
+	discount
+	<dd>
+		Задава отстъпка/надбавка в проценти или като стойност в зависимост от параметър flag
+	</dd></dt>
+	<dt>
+	flag
+	<dd>
+		Определя вида на отстъпката 0-в проценти или 1-стойност. Стойностите различни от 0 и 1 са запазени за бъдещи разширения
+	</dd></dt>
+</dl>
+<h3>Върната стойност (резултат):</h3>
+<p>ZFPE_SUCCESS при успех, код на грешка при неуспех</p>
+<br>
+</div>
+
+<script language="JavaScript">mf_text("GetArticleInfoEx", "GetArticleInfoEx");</script>
+&nbsp;-&nbsp;Връща информация за избран артикул от вътрешната база данни на фискалния принтер
+<br>
+<div id="GetArticleInfoEx" class="msgbody">
+<pre>
+int GetArticleInfoEx(DWORD number, char* name, double* price, char* taxgrp, double* turnover, double* sells,
+		WORD* counter, int* dd, int* mm, int* yy, int* hh, int* mmm, WORD* dep);
+</pre>
+<h3>Параметри:</h3>
+<dl>
+	<dt>
+	number
+	<dd>
+		Задава номер на артикула от 1 до 99999.
+	</dd></dt>
+	<dt>
+	name
+	<dd>
+		Буфер за получаване името на артикула завършващо с нула. Този буфер трябва да е поне 38 символа
+	</dd></dt>
+	<dt>
+	price
+	<dd>
+		Получава цената
+	</dd></dt>
+	<dt>
+	taxgrp
+	<dd>
+		Получава данъчната група. Трябва да е 'А', 'Б' или 'В'.
+	</dd></dt>
+	<dt>
+	turnover
+	<dd>
+		Получава оборота
+	</dd></dt>
+	<dt>
+	sells
+	<dd>
+		Получава продаденото количество
+	</dd></dt>
+	<dt>
+	counter
+	<dd>
+		Получава брояч на последния отчет.
+	</dd></dt>
+	<dt>
+	dd, mm, yy, hh, mmm
+	<dd>
+		Получава ден, месец, година, час и минута на последния отчет
+	</dd></dt>
+	<dt>
+	dep
+	<dd>
+		Получава номер на департамент
+	</dd></dt>
+</dl>
+<h3>Върната стойност (резултат):</h3>
+<p>ZFPE_SUCCESS при успех, код на грешка при неуспех</p>
+<br>
+</div>
+
+<script language="JavaScript">mf_text("SetArticleInfoEx", "SetArticleInfoEx");</script>
+&nbsp;-&nbsp;Програмиране на артикул от вътрешната база данни на фискалния принтер
+<br>
+<div id="SetArticleInfoEx" class="msgbody">
+<pre>
+int SetArticleInfoEx(DWORD number, const char* name, double price, char taxgrp, WORD depNum);
+</pre>
+<h3>Параметри:</h3>
+<dl>
+	<dt>
+	number
+	<dd>
+		Номер на артикул от 1 до 99999.
+	</dd></dt>
+	<dt>
+	name
+	<dd>
+		Буфер завършващ с нула който съдържа името на артикула. Този буфер се отрязва до първите 20 символа ако е по-дълъг.
+	</dd></dt>
+	<dt>
+	price
+	<dd>
+		цена
+	</dd></dt>
+	<dt>
+	taxgrp
+	<dd>
+		Задава данъчната група. Валидни стойности 'А', 'Б', 'В', 0, 1, 2, '0', '1', '2'
+	</dd></dt>
+	<dt>
+	depNum 
+	<dd>
+		Задава номер на департамент
+	</dd></dt>
+</dl>
+<h3>Върната стойност (резултат):</h3>
+<p>ZFPE_SUCCESS при успех, код на грешка при неуспех</p>
+<br>
+</div>
+
+<script language="JavaScript">mf_text("ReportDepartments", "ReportDepartments");</script>
+&nbsp;-&nbsp;Отчет по департаменти
+<br>
+<div id="ReportDepartments" class="msgbody">
+<pre>
+int ReportDepartments(BOOL zero);
+</pre>
+<h3>Параметри:</h3>
+<dl>
+	<dt>
+	zero
+	<dd>
+		Параметър за нулиране (0 = без нулиране)
+	</dd></dt>
+</dl>
+<h3>Върната стойност (резултат):</h3>
+<p>ZFPE_SUCCESS при успех, код на грешка при неуспех</p>
+<br>
+</div>
+
+<p><b>Нови GS фукции</b></p>
+
+<script language="JavaScript">mf_text("GetVersionGS", "GetVersionGS");</script>
+&nbsp;-&nbsp;Връща информация за версията на фискалния принтер
+<br>
+<div id="GetVersionGS" class="msgbody">
+<pre>
+int GetVersionGS(char* version);
+</pre>
+<h3>Параметри:</h3>
+<dl>
+	<dt>
+	version
+	<dd>
+		Буфер в който да се копира версията (стринг завършващ с нула). Буферът трябва да е дълъг поне ZFP_MAXBUFLEN байта!
+	</dd></dt>
+</dl>
+<h3>Върната стойност (резултат):</h3>
+<p>Винаги връща ZFPE_SUCCESS</p>
+<br>
+</div>
+
+<script language="JavaScript">mf_text("EnableCommGS", "EnableCommGS");</script>
+&nbsp;-&nbsp;Комуникация на фискален принтер
+<br>
+<div id="EnableCommGS" class="msgbody">
+<pre>
+int EnableCommGS(BYTE enable, WORD device_no);
+</pre>
+<h3>Параметри:</h3>
+<dl>
+    <dt>
+	enable
+	<dd>
+		Разрешаване (1) или забраняване (0) на комуникацията
+	</dd></dt>
+	<dt>
+	device_no
+	<dd>
+		Номер на ФП
+	</dd></dt>
+</dl>
+<h3>Върната стойност (резултат):</h3>
+<p>Винаги връща ZFPE_SUCCESS</p>
+<br>
+</div>
+
+<script language="JavaScript">mf_text("SetSpeedGS", "SetSpeedGS");</script>
+&nbsp;-&nbsp;Установява скорост на комуникация на ФП
+<br>
+<div id="SetSpeedGS" class="msgbody">
+<pre>
+int SetSpeedGS(BYTE speed);
+</pre>
+<h3>Параметри:</h3>
+<dl>
+	<dt>
+	speed
+	<dd>
+		Код на новата скорост на комуникация: 0-9600, 1-19200, 2-38400, 3-57600, 4-115200
+	</dd></dt>
+</dl>
+<h3>Върната стойност (резултат):</h3>
+<p>Винаги връща ZFPE_SUCCESS</p>
+<br>
+</div>
+
+<script language="JavaScript">mf_text("LoadScaleProtocolGS", "LoadScaleProtocolGS");</script>
+&nbsp;-&nbsp;Зареждане на протокол на везна
+<br>
+<div id="LoadScaleProtocolGS" class="msgbody">
+<pre>
+int LoadScaleProtocolGS(char * protocol);
+</pre>
+<h3>Параметри:</h3>
+<dl>
+	<dt>
+	protocol
+	<dd>
+		Информация по протокола на везната
+	</dd></dt>
+</dl>
+<h3>Върната стойност (резултат):</h3>
+<p>Винаги връща ZFPE_SUCCESS</p>
+<br>
+</div>
+
+<p><b>Нови фукции във версия 2.6</b></p>
+
+<script language="JavaScript">mf_text("EnableBarcode", "EnableBarcode");</script>
+&nbsp;-&nbsp;Включва и изключва печатането на баркод под бележките
+<br>
+<div id="EnableBarcode" class="msgbody">
+<pre>
+int EnableBarcode(BYTE state);
+</pre>
+<h3>Параметри:</h3>
+<dl>
+	<dt>
+	state
+	<dd>
+		1-включване; 0-изключване
+	</dd></dt>
+</dl>
+<h3>Върната стойност (резултат):</h3>
+<p>ZFPE_SUCCESS при успех, код на грешка при неуспех</p>
+<br>
+</div>
+
+<script language="JavaScript">mf_text("FormatBarcode", "FormatBarcode");</script>
+&nbsp;-&nbsp;Задава формат на баркода, който ще се печата на всяка бележка
+<br>
+<div id="FormatBarcode" class="msgbody">
+<pre>
+int FormatBarcode(char * fmt);
+</pre>
+<h3>Параметри:</h3>
+<dl>
+	<dt>
+	fmt
+	<dd>
+		Формат от вида "ddmmyyhhNNNN", където ddmmyy се заместват от текущата дата, hh - час, NNNN - номер на бон
+	</dd></dt>
+</dl>
+<h3>Върната стойност (резултат):</h3>
+<p>ZFPE_SUCCESS при успех, код на грешка при неуспех</p>
+<br>
+</div>
+
+<script language="JavaScript">mf_text("PrintBarcode", "PrintBarcode");</script>
+&nbsp;-&nbsp;Отпечатва конкретен баркод
+<br>
+<div id="PrintBarcode" class="msgbody">
+<pre>
+int PrintBarcode(char * barcode, char type);
+</pre>
+<h3>Параметри:</h3>
+<dl>
+	<dt>
+	barcode
+	<dd>
+		Баркод, който ще се печата
+	</dd></dt>
+	<dt>
+	type
+	<dd>
+		Вид на баркода: 0 - UPC-A; 1 - UPC-E; 2 - EAN 13; 3 - EAN 8; 4 - Code 39; 5 - ITF 2; 6 - Codabar; H - Code 93; I - Code 128
+	</dd></dt>
+</dl>
+<h3>Върната стойност (резултат):</h3>
+<p>ZFPE_SUCCESS при успех, код на грешка при неуспех</p>
+<br>
+</div>
+
+<script language="JavaScript">mf_text("SetLineWidth", "SetLineWidth");</script>
+&nbsp;-&nbsp;Установява ширина на реда на ФП (брой символи). Стойността е необходима за правилно центриране и подравняване в дясно при печат на свободен текст
+<br>
+<div id="SetLineWidth" class="msgbody">
+<pre>
+int SetLineWidth(int num_chars);
+</pre>
+<h3>Параметри:</h3>
+<dl>
+	<dt>
+	num_chars
+	<dd>
+		Брой символи на ред. Ако се зададе 0, ширината на реда се взема автоматично от свързания в момента ФП
+	</dd></dt>
+</dl>
+<h3>Върната стойност (резултат):</h3>
+<p>ZFPE_SUCCESS при успех, код на грешка при неуспех</p>
+<br>
+</div>
+
+<script language="JavaScript">mf_text("SetPrintMode", "SetPrintMode");</script>
+&nbsp;-&nbsp;Задава режим на отложен печат и задържане на отворен сериен порт
+<br>
+<div id="SetPrintMode" class="msgbody">
+<pre>
+int SetPrintMode(DWORD mode);
+</pre>
+<h3>Параметри:</h3>
+<dl>
+	<dt>
+	mode
+	<dd>
+		Комбинация от битове със следното значение:<br><br>
+		- 0x40000000 - Запис на новите настройки в Registry. Ако не се укаже, стойността ще важи само за текущата сесия;<br>
+		- 0x00000001 - Отложен печат - всички редове с артикули в продажбата се отпечатват при затваряне на бона;<br>
+		- 0x00000002 - Задържане на серийния порт отворен (ако опцията не е зададена, серийният порт се отваря и затваря при всяка операция, което забавя печата);<br>
+		- 0x00000004 - Използване на горните 2 опции при работа с фискални бонове;<br>
+		- 0x00000008 - Използване на горните 2 опции при работа със служебни бонове;<br>
+		- 0x00000010 - Еднократно прилагане на избраните опции само за следващата бележка (не може да се комбинира с 0x40000000);<br>
+	</dd></dt>
+</dl>
+<h3>Върната стойност (резултат):</h3>
+<p>Предишния режим на печат</p>
+<br>
+</div>
+
+<script language="JavaScript">mf_text("OpenTillEx", "OpenTillEx");</script>
+&nbsp;-&nbsp;Отваря чекмедже - разширена функция, поддържаща второ чекмедже
+<br>
+<div id="OpenTillEx" class="msgbody">
+<pre>
+int OpenTillEx(char num);
+</pre>
+<h3>Параметри:</h3>
+<dl>
+	<dt>
+	num
+	<dd>
+		Номер на чекмедже (1 или 2)
+	</dd></dt>
+</dl>
+<h3>Върната стойност (резултат):</h3>
+<p>ZFPE_SUCCESS при успех, код на грешка при неуспех</p>
+<br>
+</div>
+
+<script language="JavaScript">mf_text("OpenSerialPort", "OpenSerialPort");</script>
+&nbsp;-&nbsp;Отваряне на серийния порт със задържане в отворено състояние до извикване на функция CloseSerialPort. С тази функция се управлява ръчно задържането на отворен сериен порт. Препоръчително е да се използва автоматичен режим, който се активира с SetPrintMode
+<br>
+<div id="OpenSerialPort" class="msgbody">
+<pre>
+int OpenSerialPort();
+</pre>
+<h3>Върната стойност (резултат):</h3>
+<p>Винаги връща ZFPE_SUCCESS</p>
+<br>
+</div>
+
+<script language="JavaScript">mf_text("CloseSerialPort", "CloseSerialPort");</script>
+&nbsp;-&nbsp;Освобождава серийния порт, задържан с OpenSerialPort
+<br>
+<div id="CloseSerialPort" class="msgbody">
+<pre>
+int CloseSerialPort();
+</pre>
+<h3>Върната стойност (резултат):</h3>
+<p>Винаги връща ZFPE_SUCCESS</p>
+<br>
+</div>
+
+<p><b>Нови фукции във версия 3.0</b></p>
+
+<script language="JavaScript">mf_text("TerminateBon", "TerminateBon");</script>
+&nbsp;-&nbsp;Затваря фискален или служебен бон, ако има отворен.
+Командата е съставна и изпраща няколко команди от протокола на ФП според случая.
+<br>
+<div id="TerminateBon" class="msgbody">
+<pre>
+int TerminateBon(BOOL finish);
+</pre>
+<h3>Параметри:</h3>
+<dl>
+	<dt>
+	finish
+	<dd>
+		Приключва бона с плащане (TRUE) или връща стоката (FALSE)
+	</dd></dt>
+</dl>
+<h3>Върната стойност (резултат):</h3>
+<p>ZFPE_SUCCESS при успех, код на грешка при неуспех</p>
+<br>
+</div>
+
+</p>
+<p><b>Виж също</b>
+<br>
+<a href="index_bg.html">Бележки</a> | <a href="structures_bg.html">Структури</a>
+</p>
+</body>
+</html>

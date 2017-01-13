@@ -1,0 +1,89 @@
+<html>
+
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=windows-1251">
+<meta http-equiv="Content-Language" content="bg">
+<link rel="stylesheet" type="text/css" href="main.css">
+<script language="JavaScript" src="main.js"></script>
+<title>Задаване на дата и час</title>
+<base target="_self">
+</head>
+
+<body>
+
+<script language="javascript">
+function work()
+{
+	result.innerText = "...";
+	var zfp = new ActiveXObject("Zfpcom.ZekaFP");
+	var res = zfp.Setup(parseInt(parent.frames.contents.comport.value, 10), parseInt(parent.frames.contents.baud.value, 10), 3, 1000);
+	
+	var dt = new Date(parseInt(yy.value, 10), parseInt(mm.value, 10) - 1, parseInt(dd.value, 10), 
+		parseInt(hh.value, 10), parseInt(mmm.value, 10), parseInt(ss.value, 10));
+	
+	res = zfp.SetDateTime(dt.getVarDate());
+
+	result_color(zfp);
+	result.innerText = zfp.GetErrorString(zfp.errorCode, 1);
+		
+	zfpinput.innerText = zfp.GetInputHexFormated();
+	zfpoutput.innerText = zfp.GetResponseHexFormated();
+}
+</script>
+
+<h1>Задаване на дата и час</h1>
+<p>
+Дата (дд/мм/гггг):
+<input type="text" name="dd" size="2" value="17"> / 
+<input type="text" name="mm" size="2" value="10"> / 
+<input type="text" name="yy" size="4" value="2004"></p>
+<p>
+Час (чч:мм:сс): 
+<input type="text" name="hh" size="2" value="17"> : 
+<input type="text" name="mmm" size="2" value="49"> : 
+<input type="text" name="ss" size="2" value="22"></p>
+<p>
+<input type="button" value="Старт" name="start" language="JavaScript" onclick="work();">
+</p>
+<p>
+Резултат: <span id="result">няма</span>
+</p>
+
+<p class="msghead">
+<script language="JavaScript">mf_text("api", "Детайли за програмния интерфейс (API)");</script>
+<br>
+<div id="api" class="msgbody">
+	Няма въведени
+	<br>
+</div>
+<script language="JavaScript">mf_text("protocol", "Детайли за протокола на комуникация");</script>
+<br>
+<div id="protocol" class="msgbody">
+	Няма въведени
+	<br>
+</div>
+<script language="JavaScript">mf_text("io", "Вход / Изход");</script>
+<br>
+<div id="io" class="msgbody">
+	<h2>Към фискалния принтер</h2>
+	<pre id="zfpinput">&nbsp;</pre>
+	<br>
+	<h2>От фискалния принтер</h2>
+	<pre id="zfpoutput">&nbsp;</pre>
+	<br>
+</div>
+</p>
+
+<script language="javascript">
+	dt = new Date();
+	dd.value = "" + dt.getDate();
+	mm.value = "" + (dt.getMonth() + 1);
+	yy.value = "" + dt.getYear();
+	hh.value = "" + dt.getHours();
+	mmm.value = "" + dt.getMinutes();
+	ss.value = "" + dt.getSeconds();
+</script>
+
+</body>
+
+</html>

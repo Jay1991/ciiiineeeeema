@@ -1,0 +1,26 @@
+HKCR
+{
+	Zfpcom.PayTypes.1 = s 'PayTypes Class'
+	{
+		CLSID = s '{5F26D9CE-4B61-43B6-900F-ABB48F5AA6A6}'
+	}
+	Zfpcom.PayTypes = s 'PayTypes Class'
+	{
+		CLSID = s '{5F26D9CE-4B61-43B6-900F-ABB48F5AA6A6}'
+		CurVer = s 'Zfpcom.PayTypes.1'
+	}
+	NoRemove CLSID
+	{
+		ForceRemove {5F26D9CE-4B61-43B6-900F-ABB48F5AA6A6} = s 'PayTypes Class'
+		{
+			ProgID = s 'Zfpcom.PayTypes.1'
+			VersionIndependentProgID = s 'Zfpcom.PayTypes'
+			ForceRemove 'Programmable'
+			InprocServer32 = s '%MODULE%'
+			{
+				val ThreadingModel = s 'Apartment'
+			}
+			'TypeLib' = s '{B1F547D6-DFAD-47C0-BDE6-407702E27360}'
+		}
+	}
+}

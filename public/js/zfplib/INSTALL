@@ -1,0 +1,12 @@
+
+This is the INSTALL file for POSIX (Linux,BSD,UNIX ...) users only
+Just do 
+
+cd zfplib
+make
+make install 
+
+(you need to install only if you plan to use the shared library)
+
+also you have a C++ sample in samples/cpp/sellfree
+

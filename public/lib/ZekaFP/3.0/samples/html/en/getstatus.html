@@ -1,0 +1,142 @@
+<html>
+
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=windows-1251">
+<meta http-equiv="Content-Language" content="bg">
+<link rel="stylesheet" type="text/css" href="main.css">
+<script language="JavaScript" src="main.js"></script>
+<title>Status</title>
+<base target="_self">
+</head>
+
+<body>
+
+<script language="javascript">
+function work()
+{
+	result.innerText = "...";
+	var zfp = new ActiveXObject("Zfpcom.ZekaFP");
+	var res = zfp.Setup(parseInt(parent.frames.contents.comport.value, 10), parseInt(parent.frames.contents.baud.value, 10), 3, 1000);
+	res = zfp.GetStatus();
+
+    result_color(zfp);
+	if (!zfp.errorCode)
+	{
+		readOnlyFM.innerText = res.readOnlyFM ? "yes" : "no";
+		powerDown.innerText = res.powerDown ? "yes" : "no";
+		printerOverheat.innerText = res.printerOverheat ? "yes" : "no";
+		wrongTimer.innerText = res.wrongTimer ? "yes" : "no";
+		wrongDate.innerText = res.wrongDate ? "yes" : "no";
+		wrongRAM.innerText = res.wrongRAM ? "yes" : "no";
+		clockHardwareError.innerText = res.clockHardwareError ? "yes" : "no";
+		paperOutPrinterError.innerText = res.paperOutPrinterError ? "yes" : "no";
+		reportSumOverflow.innerText = res.reportSumOverflow ? "yes" : "no";
+		Blocked24h.innerText = res.Blocked24HoursReport ? "yes" : "no";
+		nonzeroDailyReport.innerText = res.nonzeroDailyReport ? "yes" : "no";
+		nonzeroArticleReport.innerText = res.nonzeroArticleReport ? "yes" : "no";
+		nonzeroOperatorReport.innerText = res.nonzeroOperatorReport ? "yes" : "no";
+		duplicateNotPrinted.innerText = res.duplicateNotPrinted ? "yes" : "no";
+		openOfficialBon.innerText = res.openOfficialBon ? "yes" : "no";
+		openFiscalBon.innerText = res.openFiscalBon ? "yes" : "no";
+		detailedInfo.innerText = res.detailedInfo ? "yes" : "no";
+		VATinfo.innerText = res.VATinfo ? "yes" : "no";
+		EJLimitNear.innerText = res.EJLimitNear ? "yes" : "no";
+		fullEJ.innerText = res.fullEJ ? "yes" : "no";
+		shortEJMode.innerText = res.shortEJMode ? "short" : "normal";
+		missingFiscalMemory.innerText = res.missingFiscalMemory ? "yes" : "no";
+		wrongFiscalMemory.innerText = res.wrongFiscalMemory ? "yes" : "no";
+		fullFiscalMemory.innerText = res.fullFiscalMemory ? "yes" : "no";
+		fiscalMemoryLimitNear.innerText = res.fiscalMemoryLimitNear ? "yes" : "no";
+		hasDecimalPoint.innerText = res.hasDecimalPoint? "fractional" : "integer";
+		isFiscal.innerText = res.isFiscal ? "yes" : "no";
+		hasFiscalAndFactoryNum.innerText = res.hasFiscalAndFactoryNum ? "yes" : "no";
+		autoCutter.innerText = res.autoCutter ? "yes" : "no";
+		hasTransparentDisplay.innerText = res.hasTransparentDisplay ? "yes" : "no";
+		baud9600.innerText = res.baud9600 ? "9600" : "19200";
+		missingDisplay.innerText = res.missingDisplay ? "yes" : "no";
+		autoTillOpen.innerText = res.autoTillOpen ? "automatic" : "manual";
+		printLogo.innerText = res.printLogo ? "print" : "do not print";
+		ejmode.innerText = res.shortEJMode ? "short" : "detailed";
+		currency.innerText = res.printCurrency ? "printed" : "not printed";
+	}
+	
+	result.innerText = zfp.GetErrorString(zfp.errorCode, 0);
+		
+	zfpinput.innerText = zfp.GetInputHexFormated();
+	zfpoutput.innerText = zfp.GetResponseHexFormated();
+}
+</script>
+
+<h1>Status</h1>
+<p>
+<input type="button" value="Get" name="start" language="JavaScript" onclick="work();">
+</p>
+<p>
+Result: <span id="result">None</span><br><br>
+<b>Status</b><br>
+<i>Read only Fiscal Memory:</i> <span id="readOnlyFM"> </span><br>
+<i>Power down inside fiscal receipt:</i> <span id="powerDown"> </span><br>
+<i>Printer overheat:</i> <span id="printerOverheat"> </span><br>
+<i>Date and time is not set:</i> <span id="wrongTimer"> </span><br>
+<i>Wrong date:</i> <span id="wrongDate"> </span><br>
+<i>Wrong RAM:</i> <span id="wrongRAM"> </span><br>
+<i>Clock hardware error:</i> <span id="clockHardwareError"> </span><br>
+<i>Paper out:</i> <span id="paperOutPrinterError"> </span><br>
+<i>Report sum overflow:</i> <span id="reportSumOverflow"> </span><br>
+<i>Blocked 24 hours since the first sale without a report:</i> <span id="Blocked24h"> </span><br>
+<i>Non zero daily report:</i> <span id="nonzeroDailyReport"> </span><br>
+<i>Non zero article report:</i> <span id="nonzeroArticleReport"> </span><br>
+<i>Non zero operator report:</i> <span id="nonzeroOperatorReport"> </span><br>
+<i>Duplicate not printed:</i> <span id="duplicateNotPrinted"> </span><br>
+<i>Open official receipt:</i> <span id="openOfficialBon"> </span><br>
+<i>Open fiscal receipt:</i> <span id="openFiscalBon"> </span><br>
+<i>Detailed info in the receipt:</i> <span id="detailedInfo"> </span><br>
+<i>VAT info in the receipt:</i> <span id="VATinfo"> </span><br>
+<i>Electronic Journal (EJ) almost full:</i> <span id="EJLimitNear"> </span><br>
+<i>Electronic Journal (EJ) full:</i> <span id="fullEJ"> </span><br>
+<i>Electronic Journal (EJ) print mode:</i> <span id="shortEJMode"> </span><br>
+<i>Missing fiscal memory:</i> <span id="missingFiscalMemory"> </span><br>
+<i>Wrong fiscal memory:</i> <span id="wrongFiscalMemory"> </span><br>
+<i>Full fiscal memory:</i> <span id="fullFiscalMemory"> </span><br>
+<i>Fiscal memory nearly full:</i> <span id="fiscalMemoryLimitNear"> </span><br>
+<i>Using decimal point:</i> <span id="hasDecimalPoint"> </span><br>
+<i>Printer is fiscal:</i> <span id="isFiscal"> </span><br>
+<i>Fiscal and factory numbers are set:</i> <span id="hasFiscalAndFactoryNum"> </span><br>
+<i>Has auto cutter:</i> <span id="autoCutter"> </span><br>
+<i>Has transparent display:</i> <span id="hasTransparentDisplay"> </span><br>
+<i>Baud rate:</i> <span id="baud9600"> </span><br>
+<i>Missing display:</i> <span id="missingDisplay"> </span><br>
+<i>Automatic till open:</i> <span id="autoTillOpen"> </span><br>
+<i>Pring logo:</i> <span id="printLogo"> </span><br>
+<i>Electronic Journal (EJ) mode:</i> <span id="ejmode"> </span><br>
+<i>Print currency in receipt:</i> <span id="currency"> </span><br>
+</p>
+
+<p class="msghead">
+<script language="JavaScript">mf_text("api", "Application Program Interface (API)");</script>
+<br>
+<div id="api" class="msgbody">
+	Not Entered
+	<br>
+</div>
+<script language="JavaScript">mf_text("protocol", "Comunication Protocol Details");</script>
+<br>
+<div id="protocol" class="msgbody">
+	Not Entered
+	<br>
+</div>
+<script language="JavaScript">mf_text("io", "Input / Output");</script>
+<br>
+<div id="io" class="msgbody">
+	<h2>To Fiscal Printer</h2>
+	<pre id="zfpinput">&nbsp;</pre>
+	<br>
+	<h2>To PC</h2>
+	<pre id="zfpoutput">&nbsp;</pre>
+	<br>
+</div>
+</p>
+
+</body>
+
+</html>

@@ -1,0 +1,26 @@
+HKCR
+{
+	Zfpcom.TaxNumbers.1 = s 'TaxNumbers Class'
+	{
+		CLSID = s '{5C5335AF-6042-4246-94CE-4343FD3F7872}'
+	}
+	Zfpcom.TaxNumbers = s 'TaxNumbers Class'
+	{
+		CLSID = s '{5C5335AF-6042-4246-94CE-4343FD3F7872}'
+		CurVer = s 'Zfpcom.TaxNumbers.1'
+	}
+	NoRemove CLSID
+	{
+		ForceRemove {5C5335AF-6042-4246-94CE-4343FD3F7872} = s 'TaxNumbers Class'
+		{
+			ProgID = s 'Zfpcom.TaxNumbers.1'
+			VersionIndependentProgID = s 'Zfpcom.TaxNumbers'
+			ForceRemove 'Programmable'
+			InprocServer32 = s '%MODULE%'
+			{
+				val ThreadingModel = s 'Apartment'
+			}
+			'TypeLib' = s '{B1F547D6-DFAD-47C0-BDE6-407702E27360}'
+		}
+	}
+}

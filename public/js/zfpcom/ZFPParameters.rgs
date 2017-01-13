@@ -1,0 +1,26 @@
+HKCR
+{
+	Zfpcom.ZFPParameters.1 = s 'ZFPParameters Class'
+	{
+		CLSID = s '{75E2C498-0DAE-4CFC-BD3F-20CBEC338EA7}'
+	}
+	Zfpcom.ZFPParameters = s 'ZFPParameters Class'
+	{
+		CLSID = s '{75E2C498-0DAE-4CFC-BD3F-20CBEC338EA7}'
+		CurVer = s 'Zfpcom.ZFPParameters.1'
+	}
+	NoRemove CLSID
+	{
+		ForceRemove {75E2C498-0DAE-4CFC-BD3F-20CBEC338EA7} = s 'ZFPParameters Class'
+		{
+			ProgID = s 'Zfpcom.ZFPParameters.1'
+			VersionIndependentProgID = s 'Zfpcom.ZFPParameters'
+			ForceRemove 'Programmable'
+			InprocServer32 = s '%MODULE%'
+			{
+				val ThreadingModel = s 'Apartment'
+			}
+			'TypeLib' = s '{B1F547D6-DFAD-47C0-BDE6-407702E27360}'
+		}
+	}
+}

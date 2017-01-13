@@ -1,0 +1,65 @@
+<html>
+
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=windows-1251">
+<meta http-equiv="Content-Language" content="bg">
+<link rel="stylesheet" type="text/css" href="../main.css">
+<title>IZekaFP Interface</title>
+</head>
+
+<body>
+
+<pre>
+IZekaFP
+
+// интерфейси които се връщат като резултат
+IGetCurrentBonInfoRes
+ITaxNumbers
+IPayTypes
+IZFPParameters
+IOperatorInfo
+IArticleInfo
+IDailySums
+IFiscalReportData
+IDailyReport
+</pre>
+
+<b><br>
+Бележки</b><p>Интерфейсът <b>IZekaFP</b> заедно 
+с интерфейсите съдържащи изходните резултати от методите на <b>IZekaFP</b> съдържа необходимата функционалност за 
+работа със Фискален Принтер Зека. Поддържат се всички комуникационни команди 
+които се отнасят към крайния потребител както и някои от основните команди за 
+настройка и сервиз.</p>
+<p>Файлът zfpcom.dll съдържа цялата функционалност, <b>IZekaFP</b> и всички интерфейси връщани от неговите методи</p>
+<p>Файлът zfpcom.tlb съдържа описанието на типовете (Type 
+library) на горните интерфейси.</p>
+<p>Всички методи връщат само един резултат, като в случайте когато е необходимо 
+да се върнат много резултати се връща интерфейсен указател който ги съдържа. 
+Не винаги всички свойства на върнатия интерфейс се попълват. В случаите когато 
+дадена функция попълва само част от свойствата на интерфейса който връща, тези 
+свойства се изброяват в документацията на съответната функция. Когато няма 
+избоени свойства, да се разбира, че функцията попълва всички свойства.</p>
+<p>Всички методи на <b>IZekaFP</b> попълват 
+свойството (property) errorCode. Така може да се установи кода на грешка.</p>
+<p><b>Виж също</b>
+
+<br><br>
+
+<a href="IZekaFP_bg.html">Методи на интерфейса IZekaFP</a><br><br>
+Интерфейси които се връщат като резултат<br>
+<a href="IGetCurrentBonInfoRes_bg.html">Методи на интерфейса IGetCurrentBonInfoRes</a><br>
+<a href="ITaxNumbers_bg.html">Методи на интерфейса ITaxNumbers</a><br>
+<a href="IPayTypes_bg.html">Методи на интерфейса IPayTypes</a><br>
+<a href="IZFPParameters_bg.html">Методи на интерфейса IZFPParameters</a><br>
+<a href="IOperatorInfo_bg.html">Методи на интерфейса IOperatorInfo</a><br>
+<a href="IArticleInfo_bg.html">Методи на интерфейса IArticleInfo</a><br>
+<a href="IDailySums_bg.html">Методи на интерфейса IDailySums</a><br>
+<a href="IFiscalReportData_bg.html">Методи на интерфейса IFiscalReportData</a><br>
+<a href="IDailyReport_bg.html">Методи на интерфейса IDailyReport</a><br>
+<a href="IZFPStatus_bg.html">Методи на интерфейса IZFPStatus</a><br>
+
+</p>
+
+</body>
+
+</html>

@@ -1,0 +1,75 @@
+<html>
+
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=windows-1251">
+<meta http-equiv="Content-Language" content="bg">
+<link rel="stylesheet" type="text/css" href="main.css">
+<script language="JavaScript" src="main.js"></script>
+
+<title>Open NonFiscal Receipt</title>
+<base target="_self">
+</head>
+
+<body>
+
+<script language="javascript">
+function work()
+{
+	result.innerText = "...";
+	var zfp = new ActiveXObject("Zfpcom.ZekaFP");
+	var res = zfp.Setup(4, 9600, 3, 1000);
+//    open non-fiscal receipt
+//	res = zfp.OpenBonWithEJ(parseInt(line.value, 10), pass.value, 1);
+
+//    open fiscal receipt
+//  operator_no,pswd, detail(1,0), vat(0,1)
+    	res = zfp.OpenFiscalBon(1, 0000, 0, 1);
+		// res = zfp.OpenFiscalBon(parseInt(line.value, 10), pass.value, dp.checked ? 1 : 0, dds.checked ? 1 : 0);
+
+
+
+    // console.log(zfp.GetParameters());
+
+//    closing non-fiscal receipt
+//    res = zfp.CloseBon();
+//    close fiscal device
+	res = zfp.CloseFiscalBon();
+
+
+	result_color(zfp);
+	result.innerText = zfp.GetErrorString(zfp.errorCode, 0);
+
+//	zfpinput.innerText = zfp.GetInputHexFormated();
+//	zfpoutput.innerText = zfp.GetResponseHexFormated();
+}
+</script>
+
+<h1>Open Fiscal Receipt</h1>
+<p>
+
+<input type="button" value="Open" name="start" language="JavaScript" onclick="work();">
+</p>
+<p>
+Result: <span id="result">None</span>
+</p>
+
+<p class="msghead">
+<script language="JavaScript">mf_text("api", "Application Program Interface (API)");</script>
+<br>
+<div id="api" class="msgbody">
+	Not Entered
+	<br>
+</div>
+<script language="JavaScript">mf_text("protocol", "Comunication Protocol Details");</script>
+<br>
+<div id="protocol" class="msgbody">
+	Not Entered
+	<br>
+</div>
+<br>
+
+</p>
+
+</body>
+
+</html>

@@ -1,0 +1,26 @@
+HKCR
+{
+	Zfpcom.GetCurrentBonInfoRes.1 = s 'GetCurrentBonInfoRes Class'
+	{
+		CLSID = s '{A52D1058-A873-4BE7-A94C-1A5DF6E6D345}'
+	}
+	Zfpcom.GetCurrentBonInfoRes = s 'GetCurrentBonInfoRes Class'
+	{
+		CLSID = s '{A52D1058-A873-4BE7-A94C-1A5DF6E6D345}'
+		CurVer = s 'Zfpcom.GetCurrentBonInfoRes.1'
+	}
+	NoRemove CLSID
+	{
+		ForceRemove {A52D1058-A873-4BE7-A94C-1A5DF6E6D345} = s 'GetCurrentBonInfoRes Class'
+		{
+			ProgID = s 'Zfpcom.GetCurrentBonInfoRes.1'
+			VersionIndependentProgID = s 'Zfpcom.GetCurrentBonInfoRes'
+			ForceRemove 'Programmable'
+			InprocServer32 = s '%MODULE%'
+			{
+				val ThreadingModel = s 'Apartment'
+			}
+			'TypeLib' = s '{B1F547D6-DFAD-47C0-BDE6-407702E27360}'
+		}
+	}
+}

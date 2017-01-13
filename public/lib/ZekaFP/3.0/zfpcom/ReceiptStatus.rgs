@@ -1,0 +1,25 @@
+HKCR
+{
+	Zfpcom.ReceiptStatus.1 = s 'ReceiptStatus Class'
+	{
+		CLSID = s '{7C5D7CBE-0071-433B-A5F5-311D47DA43F2}'
+	}
+	Zfpcom.ReceiptStatus = s 'ReceiptStatus Class'
+	{
+		CLSID = s '{7C5D7CBE-0071-433B-A5F5-311D47DA43F2}'
+	}
+	NoRemove CLSID
+	{
+		ForceRemove {7C5D7CBE-0071-433B-A5F5-311D47DA43F2} = s 'ReceiptStatus Class'
+		{
+			ProgID = s 'Zfpcom.ReceiptStatus.1'
+			VersionIndependentProgID = s 'Zfpcom.ReceiptStatus'
+			ForceRemove 'Programmable'
+			InprocServer32 = s '%MODULE%'
+			{
+				val ThreadingModel = s 'Apartment'
+			}
+			'TypeLib' = s '{B1F547D6-DFAD-47C0-BDE6-407702E27360}'
+		}
+	}
+}

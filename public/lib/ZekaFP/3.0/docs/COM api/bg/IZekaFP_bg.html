@@ -1,0 +1,2193 @@
+<html>
+
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=windows-1251">
+<meta http-equiv="Content-Language" content="bg">
+<link rel="stylesheet" type="text/css" href="../main.css">
+<script language="JavaScript" src="../main.js"></script>
+<title>Interface IZekaFP</title>
+</head>
+
+<body>
+
+<p class="msghead">
+
+<p><b>Настойка / Грешки</b></p>
+
+<script language="JavaScript">mf_text("Setup", "Setup");</script>&nbsp;-&nbsp; 
+Задава настойки на интерфейса
+<br>
+<div id="Setup" class="msgbody">
+<pre>
+HRESULT Setup([in] WORD wCom, [in] DWORD baud, [in] WORD retries, [in] DWORD retryWait);
+</pre>
+<h3>Входящи параметри:</h3>
+<dl>
+	<dt>
+	wCom
+	<dd>
+		Задава номера на COM порта (1 = COM1)
+	</dd></dt>
+	<dt>
+	baud
+	<dd>
+		Задава скорост на връзката. Възможни скорости: 9600 и 19200 bps
+	</dd></dt>
+	<dt>
+	retries 
+	<dd>
+		Колко опита да се правят от членовете на класа преди да се върне грешка 
+		&quot;ЗАЕТ ФИСКАЛЕН ПРИНТЕР&quot;
+	</dd></dt>
+	<dt>
+	retryWait 
+	<dd>
+		Колко дълго да се изчаква между отделните опити (в милисекунди)
+	</dd></dt>
+</dl>
+<br>
+</div>
+
+<script language="JavaScript">mf_text("Setup2", "Setup2");</script>&nbsp;-&nbsp; 
+Задава настойки на интерфейса
+<br>
+<div id="Setup2" class="msgbody">
+<pre>
+HRESULT Setup2([in] BYTE wCom, [in] long baud, [in] long retries, [in] long retryWait);
+</pre>
+<h3>Входящи параметри:</h3>
+<dl>
+	<dt>
+	wCom
+	<dd>
+		Задава номера на COM порта (1 = COM1)
+	</dd></dt>
+	<dt>
+	baud
+	<dd>
+		Задава скорост на връзката. Възможни скорости: 9600 и 19200 bps
+	</dd></dt>
+	<dt>
+	retries 
+	<dd>
+		Колко опита да се правят от членовете на класа преди да се върне грешка 
+		&quot;ЗАЕТ ФИСКАЛЕН ПРИНТЕР&quot;
+	</dd></dt>
+	<dt>
+	retryWait 
+	<dd>
+		Колко дълго да се изчаква между отделните опити (в милисекунди)
+	</dd></dt>
+</dl>
+<h3>Бележки:</h3>
+<p>Тази команда има същото действие като Setup с единствената разлика в типа на входните данни.
+Причината за това е че VBA не може да работи с 2 и 4 байтови числа без знак.</p>
+<br>
+</div>
+
+<script language="JavaScript">mf_text("BusyWait", "BusyWait");</script>&nbsp;-&nbsp; 
+Изчаква фискалния принтер да се освободи след команда за отчет
+<br>
+<div id="BusyWait" class="msgbody">
+<pre>
+HRESULT BusyWait([in] DWORD timeout, [out, retval] long *pRes);
+</pre>
+<h3>Параметри:</h3>
+<dl>
+	<dt>
+	timeout
+	<dd>
+		Максимално време за чакане в милисекунди или ZFP_INFINITE (0xFFFFFFFF) при което се чака безкрайно
+	</dd></dt>
+</dl>
+<h3>Върната стойност (резултат):</h3>
+<p>ZFPE_NOFPRINTER ако не може да бъде открит фискален принтер<br>
+ZFPE_FPBUSYTIMEOUT ако е изтекло времето зададено в timeout
+ZFPE_SUCCESS принтера в готов да обработва команди
+</p>
+<h3>Бележки:</h3>
+<p>Тази команда може да се използва след командите за отчет с цел изчакване на фискалния принтер да 
+приключи текущата си задача. Ако желаете след всяка команда за отчет автоматично да се чака използвайте 
+SetAutoBusyWait със параметър различен от ZFP_NOBUSYWAIT. Командата може да се приключи преди 
+изтичането на timeout ако междувременно принтера спре да отговаря на запитванията. По този начин ако 
+желаете да изчакате "безкрайно" за освобождаването на принтера но междувременно принтера бъде изключен
+или разкачен, това няма да предизвика "увисване" на вашата програма. Бъдете внимателни при ползването на
+тази функция тъй като тя блокирва текущата нишка до освобождаването на фискалния принтер</p>
+<br>
+</div>
+
+<script language="JavaScript">mf_text("SetAutoBusyWait", "SetAutoBusyWait");</script>&nbsp;-&nbsp; 
+Задава / спира автоматичното изчакване да се освободи фискалния принтер след команда за отчет.
+<br>
+<div id="SetAutoBusyWait" class="msgbody">
+<pre>
+HRESULT SetAutoBusyWait([in] DWORD timeout);
+</pre>
+<h3>Параметри:</h3>
+<dl>
+	<dt>
+	timeout
+	<dd>
+		Максимално време за чакане в милисекунди или ZFP_INFINITE (0xFFFFFFFF) при което се чака безкрайно, 
+		ZFP_NOBUSYWAIT (0) за да няма изчакване.
+	</dd></dt>
+</dl>
+<h3>Бележки:</h3>
+<p>Тази команда задава дали да се прави автоматично извикване на BusyWait(timeout) след всяка команда за отчет,
+но само ако въпросната команда за отчет е приключила успешно. В такъв случай резултата от изпълнението на
+функцията за отчет съвпада с резултата от изпълнението на BusyWait(timeout). По подразбиране няма изчакване за 
+освобождаване на фискалния принтер.<br>
+<br>
+Защо е нужно такова изчакване?<br>
+Когато се подаде коректна команда за отчет, фискалния принтер отговаря позитивно и започва отчета. Продължителността
+на отчета не е известна предварително, тъй като е зависима от различните видове натрупвания на суми във фискалната памет.
+По тази причина е възможно ако се опитате да подадете следваща команда през това време да получите грешка ZFPE_FPRINTERBUSY
+(Фискалния принтер е зает). Ако използвате SetAutoBusyWait(ZFP_INFINITE) при настройката този клас, фунциите за
+отчет ще Ви връщат управлението едва когато фискалния принтер се освободи за следваща команда.</p>
+<br>
+</div>
+
+<script language="JavaScript">mf_text("FindFirstFPCOM", "FindFirstFPCOM");</script>
+&nbsp;-&nbsp;Търси Зека Фискален Принтер на всички COM портове и връща първия COM порт към който има свързан Зека Фискален Принтер
+<br>
+<div id="FindFirstFPCOM" class="msgbody">
+<pre>
+HRESULT FindFirstFPCOM([out, retval] DWORD *pRes);
+</pre>
+<h3>Върната стойност:</h3>
+<p>При успех младшите 16 бита съдържат номер на COM порт а старшите скоростта на връзка (9600 или 19200), резултата е нула при неуспех</p>
+<br>
+</div>
+
+<script language="JavaScript">mf_text("GetErrorString", "GetErrorString");</script>&nbsp;-&nbsp; 
+Връща текстово описание на грешката
+<br>
+<div id="GetErrorString" class="msgbody">
+<pre>
+HRESULT GetErrorString([in] int error, [in] int lang, [out, retval] BSTR *pRes);
+</pre>
+<h3>Входящи параметри:</h3>
+<dl>
+	<dt>
+	error
+	<dd>
+		Задава номер на грешка
+	</dd></dt>
+	<dt>
+	lang
+	<dd>
+		Идентификатор на език на на който да бъде описана грешката (0 = Английски, 1 = Български)
+	</dd></dt>
+</dl>
+<h3>Върната стойност:</h3>
+<p>BSTR съдържащ описание на грешката</p>
+<br>
+</div>
+
+<p><b>Свойства (properties)</b></p>
+<p><font color="#4169E1">errorCode</font> - Код на грешка от изпълнението на последната команда 
+<i>(само за четене)</i><br>
+
+<font color="#4169E1">zfplibVersion</font> - Версия на библиотеката. Младшите 3 байта са определящи. 
+При резултат 0x010203, версията се чете като 1 (0x01) . 2 (0x02) . 3 (0x03) т.е. версия 1.2.3 
+<i>(само за четене)</i><br>
+
+<font color="#4169E1">zfpType</font> - Тип на фискалния принтер (ZFPT_BG = 0 за България или ZFPT_RO = 1 за Румъния)</p>
+
+<p><b>Работа с буфери</b></p>
+
+<script language="JavaScript">mf_text("GetInputBuffer", "GetInputBuffer");</script>
+&nbsp;-&nbsp;Връща входящия буфер
+<br>
+<div id="GetInputBuffer" class="msgbody">
+<pre>
+HRESULT GetInputBuffer([out, retval] BSTR *pRes);
+</pre>
+<h3>Върната стойност:</h3>
+<p>BSTR съдържащ данните</p>
+<h3>Бележки:</h3>
+<p>Буфера съдържа командата изпратена до фискалния принтер от последно извиканата командна функция. 
+Буфера може да се използва за по-добро разбиране на протокола и за дебъг. 
+Не е необходимо да викате този метод за нормална работа с фискалния принтер. 
+</p>
+<br>
+</div>
+
+<script language="JavaScript">mf_text("GetResponseBuffer", "GetResponseBuffer");</script>
+&nbsp;-&nbsp;Връща изходящия буфер
+<br>
+<div id="GetResponseBuffer" class="msgbody">
+<pre>
+HRESULT GetResponseBuffer([out, retval] BSTR *pRes);
+</pre>
+<h3>Върната стойност:</h3>
+<p>BSTR съдържащ данните</p>
+<h3>Бележки:</h3>
+<p>Буфера съдържа отговора на фискалния принтер от последно извиканата командна функция. 
+Буфера може да се използва за по-добро разбиране на протокола и за дебъг. 
+Не е необходимо да викате тази фунцкия за нормална работа с фискалния принтер. 
+</p>
+<br>
+</div>
+
+<script language="JavaScript">mf_text("GetInputHexFormated", "GetInputHexFormated");</script>
+&nbsp;-&nbsp;Връща входящия буфер под формата на стринг, съдържащ шестнадесетични стойности
+<br>
+<div id="GetInputHexFormated" class="msgbody">
+<pre>
+HRESULT GetInputHexFormated([out, retval] BSTR *pRes)
+</pre>
+<h3>Върната стойност:</h3>
+<p>BSTR съдържащ данните</p>
+<h3>Бележки:</h3>
+<p>Буфера съдържа командата изпратена до фискалния принтер от последно извиканата командна функция форматирана като
+шестнадесетични стойности и нормални данни на ред по 16 байта. 
+Буфера може да се използва за по-добро разбиране на протокола и за дебъг. 
+Не е необходимо да викате тази фунцкия за нормална работа с фискалния принтер. 
+</p>
+<br>
+</div>
+
+<script language="JavaScript">mf_text("GetResponseHexFormated", "GetResponseHexFormated");</script>
+&nbsp;-&nbsp;Връща изходящия буфер под формата на стринг, съдържащ шестнадесетични стойности
+<br>
+<div id="GetResponseHexFormated" class="msgbody">
+<pre>
+HRESULT GetResponseHexFormated([out, retval] BSTR *pRes);
+</pre>
+<h3>Върната стойност:</h3>
+<p>BSTR съдържащ данните</p>
+<h3>Бележки:</h3>
+<p>Буфера съдържа отговора на фискалния принтер от последно извиканата командна функция. 
+Буфера може да се използва за по-добро разбиране на протокола и за дебъг. 
+Не е необходимо да викате тази фунцкия за нормална работа с фискалния принтер. 
+</p>
+<br>
+</div>
+
+<p><b>Команди</b></p>
+
+<script language="JavaScript">mf_text("GetStatus", "GetStatus");</script>
+&nbsp;-&nbsp;Връща информация за текущото състояние на принтера
+<br>
+<div id="GetStatus" class="msgbody">
+<pre>
+HRESULT GetStatus([out, retval] LPDISPATCH *pRes);
+</pre>
+<h3>Върната стойност (резултат):</h3>
+<p>Интерфейс към <a href="IZFPStatus_bg.html">IZFPStatus</a> съдържащ информация за текущото състояние на принтера</p>
+<br>
+</div>
+
+<script language="JavaScript">mf_text("GetVersion", "GetVersion");</script>
+&nbsp;-&nbsp;Връща информация за версията на фискалния принтер
+<br>
+<div id="GetVersion" class="msgbody">
+<pre>
+HRESULT GetVersion([out, retval] BSTR *pRes);
+</pre>
+<h3>Върната стойност:</h3>
+<p>BSTR съдържащ версията</p>
+<br>
+</div>
+
+<script language="JavaScript">mf_text("Diagnostic", "Diagnostic");</script>
+&nbsp;-&nbsp;Печат на диагностична информация
+<br>
+<div id="Diagnostic" class="msgbody">
+<pre>
+HRESULT Diagnostic([out, retval] long *pRes);
+</pre>
+<h3>Върната стойност (резултат):</h3>
+<p>ZFPE_SUCCESS при успех, код на грешка при неуспех</p>
+<br>
+</div>
+
+<script language="JavaScript">mf_text("DisplayClear", "DisplayClear");</script>
+&nbsp;-&nbsp;Изчистване на външния дисплей
+<br>
+<div id="DisplayClear" class="msgbody">
+<pre>
+HRESULT DisplayClear([out, retval] long *pRes);
+</pre>
+<h3>Върната стойност (резултат):</h3>
+<p>ZFPE_SUCCESS при успех, код на грешка при неуспех</p>
+<br>
+</div>
+
+<script language="JavaScript">mf_text("DisplayLine1", "DisplayLine1");</script>
+&nbsp;-&nbsp;Показва текст на първия ред на дисплея
+<br>
+<div id="DisplayLine1" class="msgbody">
+<pre>
+HRESULT DisplayLine1([in] BSTR line, [out, retval] long *pRes);
+</pre>
+<h3>Входящи параметри:</h3>
+<dl>
+	<dt>
+	line
+	<dd>
+		Стринг, който съдържа текста за показване. 
+		Ако текста е по-дълъг от 20 байта той се отрязва.
+	</dd></dt>
+</dl>
+<h3>Върната стойност (резултат):</h3>
+<p>ZFPE_SUCCESS при успех, код на грешка при неуспех</p>
+<br>
+</div>
+
+<script language="JavaScript">mf_text("DisplayLine2", "DisplayLine2");</script>
+&nbsp;-&nbsp;Показва текст на втория ред на дисплея
+<br>
+<div id="DisplayLine2" class="msgbody">
+<pre>
+HRESULT DisplayLine2([in] BSTR line, [out, retval] long *pRes);
+</pre>
+<h3>Входящи параметри:</h3>
+<dl>
+	<dt>
+	line
+	<dd>
+		Стринг, който съдържа текста за показване. 
+		Ако текста е по-дълъг от 20 байта той се отрязва.
+	</dd></dt>
+</dl>
+<h3>Върната стойност (резултат):</h3>
+<p>ZFPE_SUCCESS при успех, код на грешка при неуспех</p>
+<br>
+</div>
+
+<script language="JavaScript">mf_text("Display", "Display");</script>
+&nbsp;-&nbsp;Показва текст на двата реда на дисплея
+<br>
+<div id="Display" class="msgbody">
+<pre>
+HRESULT Display([in] BSTR line, [out, retval] long *pRes);
+</pre>
+<h3>Входящи параметри:</h3>
+<dl>
+	<dt>
+	line
+	<dd>
+		Стринг, който съдържа текста за показване. 
+		Ако текста е по-дълъг от 40 байта той се отрязва.
+	</dd></dt>
+</dl>
+<h3>Върната стойност (резултат):</h3>
+<p>ZFPE_SUCCESS при успех, код на грешка при неуспех</p>
+<br>
+</div>
+
+<script language="JavaScript">mf_text("DisplayDateTime", "DisplayDateTime");</script>
+&nbsp;-&nbsp;Показва текущите дата и час на външния дисплей
+<br>
+<div id="DisplayDateTime" class="msgbody">
+<pre>
+HRESULT DisplayDateTime([out, retval] long *pRes);
+</pre>
+<h3>Върната стойност (резултат):</h3>
+<p>ZFPE_SUCCESS при успех, код на грешка при неуспех</p>
+<br>
+</div>
+
+<script language="JavaScript">mf_text("OpenTill", "OpenTill");</script>
+&nbsp;-&nbsp;Отваря чекмеджето
+<br>
+<div id="OpenTill" class="msgbody">
+<pre>
+HRESULT OpenTill([out, retval] long *pRes);
+</pre>
+<h3>Върната стойност (резултат):</h3>
+<p>ZFPE_SUCCESS при успех, код на грешка при неуспех</p>
+<br>
+</div>
+
+<script language="JavaScript">mf_text("PaperCut", "PaperCut");</script>
+&nbsp;-&nbsp;Срязва хартията
+<br>
+<div id="PaperCut" class="msgbody">
+<pre>
+HRESULT PaperCut([out, retval] long *pRes);
+</pre>
+<h3>Върната стойност (резултат):</h3>
+<p>ZFPE_SUCCESS при успех, код на грешка при неуспех</p>
+<br>
+</div>
+
+<script language="JavaScript">mf_text("LineFeed", "LineFeed");</script>
+&nbsp;-&nbsp;Печата празен ред (изтиква хартията)
+<br>
+<div id="LineFeed" class="msgbody">
+<pre>
+HRESULT LineFeed([out, retval] long *pRes);
+</pre>
+<h3>Върната стойност (резултат):</h3>
+<p>ZFPE_SUCCESS при успех, код на грешка при неуспех</p>
+<br>
+</div>
+
+<br>
+
+<script language="JavaScript">mf_text("GetFactoryNumber", "GetFactoryNumber");</script>
+&nbsp;-&nbsp;Връща фабричния номер
+<br>
+<div id="GetFactoryNumber" class="msgbody">
+<pre>
+HRESULT GetFactoryNumber([out, retval] BSTR *pRes);
+</pre>
+<h3>Върната стойност:</h3>
+<p>BSTR съдържащ фабричния номер</p>
+<br>
+</div>
+
+<script language="JavaScript">mf_text("GetFiscalNumber", "GetFiscalNumber");</script>
+&nbsp;-&nbsp;Връща фискалния номер
+<br>
+<div id="GetFiscalNumber" class="msgbody">
+<pre>
+HRESULT GetFiscalNumber([out, retval] BSTR *pRes);
+</pre>
+<h3>Върната стойност:</h3>
+<p>BSTR съдържащ фискалния номер</p>
+<br>
+</div>
+
+<script language="JavaScript">mf_text("GetTaxNumber", "GetTaxNumber");</script>
+&nbsp;-&nbsp;Връща данъчния номер на фискалния принтер
+<br>
+<div id="GetTaxNumber" class="msgbody">
+<pre>
+HRESULT GetTaxNumber([out, retval] BSTR *pRes);
+</pre>
+<h3>Върната стойност:</h3>
+<p>BSTR съдържащ данъчния номер на фискалния принтер</p>
+<br>
+</div>
+
+<script language="JavaScript">mf_text("GetTaxPercents", "GetTaxPercents");</script>
+&nbsp;-&nbsp;Връща данъчните проценти за различните данъчни групи
+<br>
+<div id="GetTaxPercents" class="msgbody">
+<pre>
+HRESULT GetTaxPercents([out, retval] LPDISPATCH *pRes);
+</pre>
+<h3>Върната стойност (резултат):</h3>
+<p>Интерфейс към <a href="ITaxNumbers_bg.html">ITaxNumbers</a> съдържащ данъчните проценти</p>
+<br>
+</div>
+
+<script language="JavaScript">mf_text("GetDecimalPoint", "GetDecimalPoint");</script>
+&nbsp;-&nbsp;Връща позицията на десетичната точка
+<br>
+<div id="GetDecimalPoint" class="msgbody">
+<pre>
+HRESULT GetDecimalPoint([out, retval] long *pPoint);
+</pre>
+<h3>Върната стойност (резултат):</h3>
+<p>Позицията на десетичната точка</p>
+<br>
+</div>
+
+<script language="JavaScript">mf_text("GetPayTypes", "GetPayTypes");</script>
+&nbsp;-&nbsp;Връща имената на различните типове плащане
+<br>
+<div id="GetPayTypes" class="msgbody">
+<pre>
+HRESULT GetPayTypes([out, retval] LPDISPATCH *pRes);
+</pre>
+<h3>Върната стойност (резултат):</h3>
+<p>Интерфейс към <a href="IPayTypes_bg.html">IPayTypes</a> съдържащ имената на различните типове плащане. 
+Попълват се следните свойства: paytype0 до paytype4</p>
+<br>
+</div>
+
+<script language="JavaScript">mf_text("GetParameters", "GetParameters");</script>
+&nbsp;-&nbsp;Връща различни параметри на фискалния принтер
+<br>
+<div id="GetParameters" class="msgbody">
+<pre>
+HRESULT GetParameters([out, retval] LPDISPATCH *pRes);
+</pre>
+<h3>Върната стойност (резултат):</h3>
+<p>Интерфейс към <a href="IZFPParameters_bg.html">IZFPParameters</a> съдържащ стойностите на различните параметри на фискалния принтер</p>
+<br>
+</div>
+
+<script language="JavaScript">mf_text("GetEJMode", "GetEJMode");</script>
+&nbsp;-&nbsp;Връща режима на печат на електронната контролна лента (ЕКЛ)
+<br>
+<div id="GetEJMode" class="msgbody">
+<pre>
+HRESULT GetEJMode([out, retval] long *pIsShort);
+</pre>
+<h3>Върната стойност (резултат):</h3>
+<p>Режима на печат на електронната контролна лента (ЕКЛ). 0 = разширен, 1 = съкратен</p>
+<br>
+</div>
+
+<script language="JavaScript">mf_text("GetFreeFiscalSpace", "GetFreeFiscalSpace");</script>
+&nbsp;-&nbsp;Връща броя на оставащите свободни записи във ФП
+<br>
+<div id="GetFreeFiscalSpace" class="msgbody">
+<pre>
+HRESULT GetFreeFiscalSpace([out, retval] long *pRecords);
+</pre>
+<h3>Върната стойност (резултат):</h3>
+<p>Броя на оставащите свободни записи във ФП</p>
+<br>
+</div>
+
+<script language="JavaScript">mf_text("GetDateTime", "GetDateTime");</script>
+&nbsp;-&nbsp;Връща текущите дата и час
+<br>
+<div id="GetDateTime" class="msgbody">
+<pre>
+HRESULT GetDateTime([out, retval] DATE* pVal);
+</pre>
+<h3>Върната стойност (резултат):</h3>
+<p>DATE тип който съдържа текущите дата и час на фискалния принтер</p>
+<br>
+</div>
+
+<script language="JavaScript">mf_text("GetClicheLine", "GetClicheLine");</script>
+&nbsp;-&nbsp;Връща текста на клишето по зададен номер на ред
+<br>
+<div id="GetClicheLine" class="msgbody">
+<pre>
+HRESULT GetClicheLine([in]BYTE num, [out, retval] BSTR *pRes);
+</pre>
+<h3>Входящи параметри:</h3>
+<dl>
+	<dt>
+	lineNum
+	<dd>
+		Задава номер на ред. Валидни стойности от 1 до 8
+	</dd></dt>
+</dl>
+<h3>Върната стойност (резултат):</h3>
+<p>BSTR съдържащ текста на клишето от зададен номер на ред</p>
+<br>
+</div>
+
+<script language="JavaScript">mf_text("GetDepartment", "GetDepartment");</script>
+&nbsp;-&nbsp;Връща информация за департамент
+<br>
+<div id="GetDepartment" class="msgbody">
+<pre>
+HRESULT GetDepartment([in] WORD number, [out, retval] LPDISPATCH *pRes);
+</pre>
+<h3>Параметри:</h3>
+<dl>
+	<dt>
+	number
+	<dd>
+		Задава номер на департамент
+	</dd></dt>
+</dl>
+<h3>Върната стойност (резултат):</h3>
+<p>Интерфейс към <a href="IArticleInfo_bg.html">IArticleInfo</a> съдържащ информация за за избрания 
+артикул от вътрешната база данни на фискалния принтер</p>
+<br>
+</div>
+
+<script language="JavaScript">mf_text("GetOperatorUserPass", "GetOperatorUserPass");</script>
+&nbsp;-&nbsp;Връща името и паролата на оператор по зададен номер
+<br>
+<div id="GetOperatorUserPass" class="msgbody">
+<pre>
+HRESULT GetOperatorUserPass([in] BYTE oper, [out, retval] LPDISPATCH *pRes);
+</pre>
+<h3>Входящи параметри:</h3>
+<dl>
+	<dt>
+	oper
+	<dd>
+		Задава номер на оператора от 1 до 9.
+	</dd></dt>
+</dl>
+<h3>Върната стойност (резултат):</h3>
+<p>Интерфейс към <a href="IOperatorInfo_bg.html">IOperatorInfo</a> съдържащ името и паролата на оператора
+съответстващ на зададения номер</p>
+<br>
+</div>
+
+<script language="JavaScript">mf_text("PrintLogo", "PrintLogo");</script>
+&nbsp;-&nbsp;Печата логото
+<br>
+<div id="PrintLogo" class="msgbody">
+<pre>
+HRESULT PrintLogo([out, retval] long *pRes);
+</pre>
+<h3>Върната стойност (резултат):</h3>
+<p>ZFPE_SUCCESS при успех, код на грешка при неуспех</p>
+<br>
+</div>
+
+<br>
+
+<script language="JavaScript">mf_text("OpenBon", "OpenBon");</script>
+&nbsp;-&nbsp;Отваря служебен бон
+<br>
+<div id="OpenBon" class="msgbody">
+<pre>
+HRESULT OpenBon([in]BYTE oper, [in] BSTR passwd, [out, retval] long *pRes);
+</pre>
+<h3>Входящи параметри:</h3>
+<dl>
+	<dt>
+	oper
+	<dd>
+		Задава номер на оператор от 1 до 9.
+	</dd></dt>
+	<dt>
+	passwd
+	<dd>
+		Стринг, който съдържа паролата на оператора. Стринга се отрязва до първите 4 символа ако е по-дълъг.
+	</dd></dt>
+</dl>
+<h3>Върната стойност (резултат):</h3>
+<p>ZFPE_SUCCESS при успех, код на грешка при неуспех</p>
+<br>
+</div>
+
+<script language="JavaScript">mf_text("OpenBonWithEJ", "OpenBonWithEJ");</script>
+&nbsp;-&nbsp;Отваря служебен бон с параметър за запис в ЕКЛ
+<br>
+<div id="OpenBonWithEJ" class="msgbody">
+<pre>
+HRESULT OpenBonWithEJ([in]BYTE oper, [in] BSTR passwd, [in] BOOL hasEJ, [out, retval] long *pRes);
+</pre>
+<h3>Входящи параметри:</h3>
+<dl>
+	<dt>
+	oper
+	<dd>
+		Задава номер на оператор от 1 до 9.
+	</dd></dt>
+	<dt>
+	passwd
+	<dd>
+		Стринг, който съдържа паролата на оператора. Стринга се отрязва до първите 4 символа ако е по-дълъг.
+	</dd></dt>
+	<dt>
+	hasEJ
+	<dd>
+		определя дали този бон да се запише в ЕКЛ (само в Zeka FP03 и по-нови, за останалите се игнорира).
+	</dd></dt>
+</dl>
+<h3>Върната стойност (резултат):</h3>
+<p>ZFPE_SUCCESS при успех, код на грешка при неуспех</p>
+<br>
+</div>
+
+<script language="JavaScript">mf_text("CloseBon", "CloseBon");</script>
+&nbsp;-&nbsp;Затваря служебен бон
+<br>
+<div id="CloseBon" class="msgbody">
+<pre>
+HRESULT CloseBon([out, retval] long *pRes);
+</pre>
+<h3>Върната стойност (резултат):</h3>
+<p>ZFPE_SUCCESS при успех, код на грешка при неуспех</p>
+<br>
+</div>
+
+<script language="JavaScript">mf_text("OpenFiscalBon", "OpenFiscalBon");</script>
+&nbsp;-&nbsp;Отваря фискален бон
+<br>
+<div id="OpenFiscalBon" class="msgbody">
+<pre>
+HRESULT OpenFiscalBon([in] BYTE oper, [in] BSTR passwd, [in] BYTE detailed, [in] BYTE printVat, [out, retval] long *pRes);
+</pre>
+<h3>Входящи параметри:</h3>
+<dl>
+	<dt>
+	oper
+	<dd>
+		Задава номер на оператор от 1 до 9.
+	</dd></dt>
+	<dt>
+	passwd
+	<dd>
+		Стринг, който съдържа паролата на оператора. Стринга се отрязва до първите 4 символа ако е по-дълъг.
+	</dd></dt>
+	<dt>
+	detailed
+	<dd>
+		флаг определящ дали да се печата детайлен формат на бона (0 = не се печата, 1 = печата се)
+	</dd></dt>
+	<dt>
+	printVat
+	<dd>
+		Флаг определящ дали да се печата сумата по ДДС сметка (0 = не се печата, 1 = печата се)
+	</dd></dt>
+</dl>
+<h3>Върната стойност (резултат):</h3>
+<p>ZFPE_SUCCESS при успех, код на грешка при неуспех</p>
+<br>
+</div>
+
+<script language="JavaScript">mf_text("OpenInvoice", "OpenInvoice");</script>
+&nbsp;-&nbsp;Отваря фискален бон - фактура
+<br>
+<div id="OpenInvoice" class="msgbody">
+<pre>
+HRESULT OpenInvoice([in] BYTE oper, [in] BSTR passwd, [in] BSTR client, [in] BSTR receiver, 
+                    [in] BSTR vatNum, [in] BSTR identNum, [in] BSTR address, [out, retval] long *pRes);
+</pre>
+<h3>Входящи параметри:</h3>
+<dl>
+	<dt>
+	oper
+	<dd>
+		Задава номер на оператор от 1 до 9.
+	</dd></dt>
+	<dt>
+	passwd
+	<dd>
+		Стринг, който съдържа паролата на оператора. Стринга се отрязва до първите 4 символа ако е по-дълъг.
+	</dd></dt>
+	<dt>
+	client
+	<dd>
+		Стринг, който съдържа името на клиента. Стринга се отрязва до първите 26 символа ако е по-дълъг.
+	</dd></dt>
+	<dt>
+	receiver
+	<dd>
+		Стринг, който съдържа името на получаващия фактурата. Стринга се отрязва до първите 16 символа ако е по-дълъг.
+	</dd></dt>
+	<dt>
+	vatNum
+	<dd>
+		Стринг, който съдържа номера по ЗДДС на клиента. Стринга се отрязва до първите 13 символа ако е по-дълъг.
+	</dd></dt>
+	<dt>
+	identNum
+	<dd>
+		Стринг, който съдържа Идентификационния номер на клиента. Стринга се отрязва до първите 13 символа ако е по-дълъг.
+	</dd></dt>
+	<dt>
+	address
+	<dd>
+		Стринг, който съдържа адреса на клиента. Стринга се отрязва до първите 30 символа ако е по-дълъг.
+	</dd></dt>
+</dl>
+<h3>Върната стойност (резултат):</h3>
+<p>ZFPE_SUCCESS при успех, код на грешка при неуспех</p>
+<br>
+</div>
+
+<script language="JavaScript">mf_text("SellFree", "SellFree");</script>
+&nbsp;-&nbsp;Свободна продажба на артикул
+<br>
+<div id="SellFree" class="msgbody">
+<pre>
+HRESULT SellFree([in] BSTR name, [in] BYTE taxgrp, [in] double price, [in] double quantity, [in] double discount, [out, retval] long *pRes);
+</pre>
+<h3>Входящи параметри:</h3>
+<dl>
+	<dt>
+	name
+	<dd>
+		Име на артикула. Отрязва се до първите 36 символа ако е по-дълго.
+	</dd></dt>
+	<dt>
+	taxgrp
+	<dd>
+		Задава данъчната група. Валидни стойности 'А', 'Б','В, 0, 1, 2, '0', '1', '2'
+	</dd></dt>
+	<dt>
+	price
+	<dd>
+		Задава цена.
+	</dd></dt>
+	<dt>
+	quantity 
+	<dd>
+		Задава количество
+	</dd></dt>
+	<dt>
+	discount
+	<dd>
+		Задава отстъпка/надбавка в проценти.
+	</dd></dt>
+</dl>
+<h3>Върната стойност (резултат):</h3>
+<p>ZFPE_SUCCESS при успех, код на грешка при неуспех</p>
+<br>
+</div>
+
+<script language="JavaScript">mf_text("SellDepartment", "SellDepartment");</script>
+&nbsp;-&nbsp;Продажба от департамент
+<br>
+<div id="SellDepartment" class="msgbody">
+<pre>
+HRESULT SellDepartment([in] BSTR name, [in] WORD depNum, [in] double price, [in] double quantity, [in] double discount, [out, retval] long *pRes);
+</pre>
+<h3>Параметри:</h3>
+<dl>
+	<dt>
+	name
+	<dd>
+		Буфер завършващ с нула който съдържа името на артикула. Този буфер се отрязва до първите 36 символа ако е по-дълъг.
+	</dd></dt>
+	<dt>
+	depNum
+	<dd>
+		Номер на департамент
+	</dd></dt>
+	<dt>
+	price
+	<dd>
+		Задава цена.
+	</dd></dt>
+	<dt>
+	quantity 
+	<dd>
+		Задава количество
+	</dd></dt>
+	<dt>
+	discount
+	<dd>
+		Задава отстъпка/надбавка в проценти.
+	</dd></dt>
+</dl>
+<h3>Върната стойност (резултат):</h3>
+<p>ZFPE_SUCCESS при успех, код на грешка при неуспех</p>
+<br>
+</div>
+
+<script language="JavaScript">mf_text("SellDB", "SellDB");</script>
+&nbsp;-&nbsp;Продажба на артикул от вътрешната база на Фискалния принтер
+<br>
+<div id="SellDB" class="msgbody">
+<pre>
+HRESULT SellDB([in] BOOL isVoid, [in] WORD number, [in] double quantity, [in] double discount, [out, retval] long *pRes);
+</pre>
+<h3>Входящи параметри:</h3>
+<dl>
+	<dt>
+	isVoid
+	<dd>
+		флаг който определя дали тази операция е продажба или войдиране (0 = продажба, 1 = войдиране)
+	</dd></dt>
+	<dt>
+	number
+	<dd>
+		Задава номер от базата данни от 1 до 1024.
+	</dd></dt>
+	<dt>
+	quantity 
+	<dd>
+		Задава количество
+	</dd></dt>
+	<dt>
+	discount
+	<dd>
+		Задава отстъпка/надбавка в проценти.
+	</dd></dt>
+</dl>
+<h3>Върната стойност (резултат):</h3>
+<p>ZFPE_SUCCESS при успех, код на грешка при неуспех</p>
+<br>
+</div>
+
+<script language="JavaScript">mf_text("CalcIntermediateSum", "CalcIntermediateSum");</script>
+&nbsp;-&nbsp;Изчислява междинна сума
+<br>
+<div id="CalcIntermediateSum" class="msgbody">
+<pre>
+HRESULT CalcIntermediateSum([in] BOOL doprint, [in] BOOL dodisplay, [in] BOOL dopercents, [in] double discount, [out, retval] double *pRes);
+</pre>
+<h3>Входящи параметри:</h3>
+<dl>
+	<dt>
+	doprint
+	<dd>
+		флаг определящ дали да се печата междинната сума
+	</dd></dt>
+	<dt>
+	dodisplay
+	<dd>
+		флаг определящ дали междинната сума да се покаже на дисплея
+	</dd></dt>
+	<dt>
+	dopercents
+	<dd>
+		флаг определящ дали параметъра discount е в проценти
+	</dd></dt>
+	<dt>
+	discount
+	<dd>
+		Задава отстъпка/надбавка (като сума или в проценти зависи от флага dopercents).
+	</dd></dt>
+</dl>
+<h3>Върната стойност (резултат):</h3>
+<p>Междинната сума натрупана до момента</p>
+<br>
+</div>
+
+<script language="JavaScript">mf_text("Payment", "Payment");</script>
+&nbsp;-&nbsp;Регистриране на плащане
+<br>
+<div id="Payment" class="msgbody">
+<pre>
+HRESULT Payment([in] double sum, [in] BYTE type, [in] BOOL noRest, [out, retval] long *pRes);
+</pre>
+<h3>Входящи параметри:</h3>
+<dl>
+	<dt>
+	sum
+	<dd>
+		Платена сума
+	</dd></dt>
+	<dt>
+	type
+	<dd>
+		Тип на плащането (0, 1, 2 или 3)
+	</dd></dt>
+	<dt>
+	noRest
+	<dd>
+		Плащането не изисква ресто (взема се под внимание само за някои типове плащания - примерно с купон)
+	</dd></dt>
+</dl>
+<h3>Върната стойност (резултат):</h3>
+<p>ZFPE_SUCCESS при успех, код на грешка при неуспех</p>
+<br>
+</div>
+
+<script language="JavaScript">mf_text("PrintText", "PrintText");</script>
+&nbsp;-&nbsp;Печата свободен текст
+<br>
+<div id="PrintText" class="msgbody">
+<pre>
+HRESULT PrintText([in] BSTR text, [in] int align, [out, retval] long *pRes);
+</pre>
+<h3>Входящи параметри:</h3>
+<dl>
+	<dt>
+	text
+	<dd>
+		Текста за печат. Отрязва до първите 34 символа ако е по-дълъг.
+	</dd></dt>
+	<dt>
+	align
+	<dd>
+		режим на подравняване (0 = ляво подравняване, 1 = дясно подравняване, 2 = центриране)
+	</dd></dt>
+</dl>
+<h3>Върната стойност (резултат):</h3>
+<p>ZFPE_SUCCESS при успех, код на грешка при неуспех</p>
+<h3>Бележки:</h3>
+<p>Свободен текст може да се печата навсякъде, не само вътре в бон</p>
+<br>
+</div>
+
+<script language="JavaScript">mf_text("GetCurrentBonInfo", "GetCurrentBonInfo");</script>
+&nbsp;-&nbsp;Връща информация за текущо отворения фискален бон
+<br>
+<div id="GetCurrentBonInfo" class="msgbody">
+<pre>
+HRESULT GetCurrentBonInfo([out, retval] LPDISPATCH *pVal);
+</pre>
+<h3>Върната стойност (резултат):</h3>
+<p>Интерфейс към <a href="IGetCurrentBonInfoRes_bg.html">IGetCurrentBonInfoRes</a> съдържащ информация за текущо 
+отворения фискален бон</p>
+<h3>Бележки:</h3>
+<p>При успешно завършване на функцията трябва първо да проверите стойността на свойството flags на 
+интерфейса IGetCurrentBonInfoRes. Ако този flags е нула останалата информация не е валидна тъй като нямаме 
+отворен фискален бон</p>
+<br>
+</div>
+
+<script language="JavaScript">mf_text("CloseFiscalBon", "CloseFiscalBon");</script>
+&nbsp;-&nbsp;Затваря фискален бон
+<br>
+<div id="CloseFiscalBon" class="msgbody">
+<pre>
+HRESULT CloseFiscalBon([out, retval] long *pRes);
+</pre>
+<h3>Върната стойност (резултат):</h3>
+<p>ZFPE_SUCCESS при успех, код на грешка при неуспех</p>
+<br>
+</div>
+
+<script language="JavaScript">mf_text("PrintDuplicate", "PrintDuplicate");</script>
+&nbsp;-&nbsp;Печата дупликат на последния фискален бон
+<br>
+<div id="PrintDuplicate" class="msgbody">
+<pre>
+HRESULT PrintDuplicate([out, retval] long *pRes);
+</pre>
+<h3>Върната стойност (резултат):</h3>
+<p>ZFPE_SUCCESS при успех, код на грешка при неуспех</p>
+<br>
+</div>
+
+<script language="JavaScript">mf_text("GetBonNumber", "GetBonNumber");</script>
+&nbsp;-&nbsp;Взема номер на последния отпечатан бон
+<br>
+<div id="GetBonNumber" class="msgbody">
+<pre>
+HRESULT GetBonNumber([out, retval] long *pNumber);
+</pre>
+<h3>Върната стойност (резултат):</h3>
+<p>Номера на последния отпечатан бон</p>
+<br>
+</div>
+
+<br>
+
+<script language="JavaScript">mf_text("OfficialSums", "OfficialSums");</script>
+&nbsp;-&nbsp;Регистрира въвеждане/извеждане на служебни суми
+<br>
+<div id="OfficialSums" class="msgbody">
+<pre>
+HRESULT OfficialSums([in]BYTE num, [in] BSTR passwd, [in] BYTE type, [in] double sum, [out, retval] long *pRes);
+</pre>
+<h3>Входящи параметри:</h3>
+<dl>
+	<dt>
+	oper
+	<dd>
+		Задава номер на оператор от 1 до 9.
+	</dd></dt>
+	<dt>
+	passwd
+	<dd>
+		Парола на оператора. Отрязва се до първите 4 символа ако е по-дълга.
+	</dd></dt>
+	<dt>
+	type
+	<dd>
+		Тип на плащането (0, 1, 2 или 3)
+	</dd></dt>
+	<dt>
+	sum
+	<dd>
+		Сума (въведена или изведена - зависи от знака на числото)
+	</dd></dt>
+</dl>
+<h3>Върната стойност (резултат):</h3>
+<p>ZFPE_SUCCESS при успех, код на грешка при неуспех</p>
+<br>
+</div>
+
+<script language="JavaScript">mf_text("GetArticleInfo", "GetArticleInfo");</script>
+&nbsp;-&nbsp;Връща информация за избран артикул от вътрешната база данни на фискалния принтер
+<br>
+<div id="GetArticleInfo" class="msgbody">
+<pre>
+HRESULT GetArticleInfo([in] WORD number, [out, retval] LPDISPATCH *pRes);
+</pre>
+<h3>Входящи параметри:</h3>
+<dl>
+	<dt>
+	number
+	<dd>
+		Задава номер на артикула от 1 до 1024.
+	</dd></dt>
+</dl>
+<h3>Върната стойност (резултат):</h3>
+<p>Интерфейс към <a href="IArticleInfo_bg.html">IArticleInfo</a> съдържащ информация за за избрания 
+артикул от вътрешната база данни на фискалния принтер</p>
+<br>
+</div>
+
+<script language="JavaScript">mf_text("GetDailySums", "GetDailySums");</script>
+&nbsp;-&nbsp;Връща информация за натрупаните до този момент суми в различните данъчни групи
+<br>
+<div id="GetDailySums" class="msgbody">
+<pre>
+HRESULT GetDailySums([out, retval] LPDISPATCH *pRes);
+</pre>
+<h3>Върната стойност (резултат):</h3>
+<p>Интерфейс към <a href="ITaxNumbers_bg.html">ITaxNumbers</a> съдържащ информация за натрупаните до този 
+момент суми в различните данъчни групи</p>
+<br>
+</div>
+
+<script language="JavaScript">mf_text("GetDailyInfo", "GetDailyInfo");</script>
+&nbsp;-&nbsp;Четене на информация за деня
+<br>
+<div id="GetDailyInfo" class="msgbody">
+<pre>
+HRESULT GetDailyInfo([out, retval] LPDISPATCH *pRes);
+</pre>
+<h3>Върната стойност (резултат):</h3>
+<p>Интерфейс към <a href="IDailySums_bg.html">IDailySums</a> съдържащ информация за сумите натрупани за деня</p>
+<br>
+</div>
+
+<script language="JavaScript">mf_text("GetDailyPayments", "GetDailyPayments");</script>
+&nbsp;-&nbsp;Връща наличните суми в касата по различните видове плащания
+<br>
+<div id="GetDailyPayments" class="msgbody">
+<pre>
+HRESULT GetDailyPayments([out, retval] LPDISPATCH *pRes);
+</pre>
+<h3>Върната стойност (резултат):</h3>
+<p>Интерфейс към <a href="IPayTypes_bg.html">IPayTypes</a> съдържащ наличните суми в касата по различните видове плащания. 
+Попълват се следните свойства: paytype0sum до paytype4sum</p>
+<br>
+</div>
+
+<script language="JavaScript">mf_text("GetDailyIncomes", "GetDailyIncomes");</script>
+&nbsp;-&nbsp;Връща получените суми за различните видове плащания
+<br>
+<div id="GetDailyIncomes" class="msgbody">
+<pre>
+HRESULT GetDailyIncomes([out, retval] LPDISPATCH *pRes);
+</pre>
+<h3>Върната стойност (резултат):</h3>
+<p>Интерфейс към <a href="IPayTypes_bg.html">IPayTypes</a> съдържащ получените суми за различните видове плащания. 
+Попълват се следните свойства: paytype0sum до paytype4sum</p>
+<br>
+</div>
+
+<script language="JavaScript">mf_text("GetDailyOfficialIncomes", "GetDailyOfficialIncomes");</script>
+&nbsp;-&nbsp;Връща служебно въведените в касата суми по различните видове плащания и броя им<br>
+<div id="GetDailyOfficialIncomes" class="msgbody">
+<pre>
+HRESULT GetDailyOfficialIncomes([out, retval] LPDISPATCH *pRes);
+</pre>
+<h3>Върната стойност (резултат):</h3>
+<p>Интерфейс към <a href="IPayTypes_bg.html">IPayTypes</a> съдържащ служебно въведените в 
+касата суми по различните видове плащания и броя им. Попълват се следните свойства: paytype0sum до paytype4sum, operations</p>
+<br>
+</div>
+
+<script language="JavaScript">mf_text("GetDailyOfficialExpenses", "GetDailyOfficialExpenses");</script>
+&nbsp;-&nbsp;Връща служебно изведените от касата суми по различните видове плащания и броя им<br>
+<div id="GetDailyOfficialExpenses" class="msgbody">
+<pre>
+HRESULT GetDailyOfficialExpenses([out, retval] LPDISPATCH *pRes);
+</pre>
+<h3>Върната стойност (резултат):</h3>
+<p>Интерфейс към <a href="IPayTypes_bg.html">IPayTypes</a> съдържащ служебно изведените от касата 
+суми по различните видове плащания и броя им. Попълват се следните свойства: paytype0sum до paytype4sum, operations</p>
+<br>
+</div>
+
+<script language="JavaScript">mf_text("GetDailyReport", "GetDailyReport");</script>
+&nbsp;-&nbsp;Връща информация за брояч на отчетите, номер последен отчет във ФП, номер ЕКЛ (ако има) и дата на последен отчет
+<br>
+<div id="GetDailyReport" class="msgbody">
+<pre>
+HRESULT GetDailyReport([out, retval] LPDISPATCH *pRes);
+</pre>
+<h3>Върната стойност (резултат):</h3>
+<p>Интерфейс към <a href="IDailyReport_bg.html">IDailyReport</a> съдържащ информация за брояч на отчетите, 
+номер последен отчет във ФП, номер ЕКЛ (ако има) и дата на последен отчет</p>
+<br>
+</div>
+
+<script language="JavaScript">mf_text("GetLastFiscalReportData", "GetLastFiscalReportData");</script>
+&nbsp;-&nbsp;Връща датата и номера на последния дневен отчет и номера на последното нулиране на РАМ.
+<br>
+<div id="GetLastFiscalReportData" class="msgbody">
+<pre>
+HRESULT GetLastFiscalReportData([out, retval] LPDISPATCH *pRes);
+</pre>
+<h3>Върната стойност (резултат):</h3>
+<p>Интерфейс към <a href="IFiscalReportData_bg.html">IFiscalReportData</a> съдържащ датата и номера 
+на последния дневен отчет и номера на последното нулиране на РАМ</p>
+<br>
+</div>
+
+<br>
+
+<script language="JavaScript">mf_text("GetOperatorInfo", "GetOperatorInfo");</script>
+&nbsp;-&nbsp;Връща натрупаните общ брой клиенти, брой отстъпки/надбавки/войдирания и натрупаните суми по тях за съответния оператор<br>
+<div id="GetOperatorInfo" class="msgbody">
+<pre>
+HRESULT GetOperatorInfo([in] BYTE oper, [out, retval] LPDISPATCH *pRes);
+</pre>
+<h3>Входящи параметри:</h3>
+<dl>
+	<dt>
+	oper
+	<dd>
+		Задава номер на оператор от 1 до 9.
+	</dd></dt>
+</dl>
+<h3>Върната стойност (резултат):</h3>
+<p>Интерфейс към <a href="IDailySums_bg.html">IDailySums</a> съдържащ натрупаните общ брой клиенти, 
+брой отстъпки/надбавки/войдирания и натрупаните суми по тях за съответния оператор</p>
+<br>
+</div>
+
+<script language="JavaScript">mf_text("GetOperatorIncomes", "GetOperatorIncomes");</script>
+&nbsp;-&nbsp;Връща служебно въведените в касата суми по различните видове плащания и броя им за съответния оператор
+<br>
+<div id="GetOperatorIncomes" class="msgbody">
+<pre>
+HRESULT GetOperatorIncomes([in] BYTE oper, [out, retval] LPDISPATCH *pRes);
+</pre>
+<h3>Входящи параметри:</h3>
+<dl>
+	<dt>
+	oper
+	<dd>
+		Задава номер на оператор от 1 до 9.
+	</dd></dt>
+</dl>
+<h3>Върната стойност (резултат):</h3>
+<p>Интерфейс към <a href="IPayTypes_bg.html">IPayTypes</a> съдържащ служебно въведените в касата суми 
+по различните видове плащания и броя им за съответния оператор. Попълват се следните свойства: paytype0sum до paytype4sum, operations</p>
+<br>
+</div>
+
+<script language="JavaScript">mf_text("GetOperatorExpenses", "GetOperatorExpenses");</script>
+&nbsp;-&nbsp;Връща служебно изведените от касата суми по различните видове плащания и броя им за съответния оператор
+<br>
+<div id="GetOperatorExpenses" class="msgbody">
+<pre>
+HRESULT GetOperatorExpenses([in] BYTE oper, [out, retval] LPDISPATCH *pRes);
+</pre>
+<h3>Входящи параметри:</h3>
+<dl>
+	<dt>
+	oper
+	<dd>
+		Задава номер на оператор от 1 до 9.
+	</dd></dt>
+</dl>
+<h3>Върната стойност (резултат):</h3>
+<p>Интерфейс към <a href="IPayTypes_bg.html">IPayTypes</a> съдържащ служебно изведените от касата суми 
+по различните видове плащания и броя им за съответния оператор. Попълват се следните свойства: paytype0sum до paytype4sum, operations</p>
+<br>
+</div>
+
+<script language="JavaScript">mf_text("GetOperatorReceives", "GetOperatorReceives");</script>
+&nbsp;-&nbsp;Връща получените суми за съответния оператор по различните видове плащания
+<br>
+<div id="GetOperatorReceives" class="msgbody">
+<pre>
+HRESULT GetOperatorReceives([in] BYTE oper, [out, retval] LPDISPATCH *pRes);
+</pre>
+<h3>Входящи параметри:</h3>
+<dl>
+	<dt>
+	oper
+	<dd>
+		Задава номер на оператор от 1 до 9.
+	</dd></dt>
+</dl>
+<h3>Върната стойност (резултат):</h3>
+<p>Интерфейс към <a href="IPayTypes_bg.html">IPayTypes</a> съдържащ получените суми за съответния оператор 
+по различните видове плащания. Попълват се следните свойства: paytype0sum до paytype4sum</p>
+<br>
+</div>
+
+<script language="JavaScript">mf_text("GetOperatorCounter", "GetOperatorCounter");</script>
+&nbsp;-&nbsp;Връща номер и дата на последния операторски отчет
+<br>
+<div id="GetOperatorCounter" class="msgbody">
+<pre>
+HRESULT GetOperatorCounter([in] BYTE oper, [out, retval] LPDISPATCH *pRes);
+</pre>
+<h3>Входящи параметри:</h3>
+<dl>
+	<dt>
+	oper
+	<dd>
+		Задава номер на оператор от 1 до 9.
+	</dd></dt>
+</dl>
+<h3>Върната стойност (резултат):</h3>
+<p>Интерфейс към <a href="IDailyReport_bg.html">IDailyReport</a> съдържащ номер и дата на последния операторски отчет. 
+Попълват се следните свойства: counter, datetime</p>
+<br>
+</div>
+
+<p><b>Помощни команди и команди за настройка</b></p>
+
+<script language="JavaScript">mf_text("SetPayType", "SetPayType");</script>
+&nbsp;-&nbsp;Програмиране имената на видовете плащания
+<br>
+<div id="SetPayType" class="msgbody">
+<pre>
+HRESULT SetPayType([in]BYTE type, [in] BSTR line, [out, retval] long *pRes);
+</pre>
+<h3>Входящи параметри:</h3>
+<dl>
+	<dt>
+	type
+	<dd>
+		Задава номер на вид плащане (1, 2 или 3)
+	</dd></dt>
+	<dt>
+	line
+	<dd>
+		Стринг, който съдържа името на вида плащане. Отрязва се до първите 10 символа ако е по-дълъг.
+	</dd></dt>
+</dl>
+<h3>Върната стойност (резултат):</h3>
+<p>ZFPE_SUCCESS при успех, код на грешка при неуспех</p>
+<br>
+</div>
+
+<script language="JavaScript">mf_text("SetParameters", "SetParameters");</script>
+&nbsp;-&nbsp;Програмиране на номер на касово място, параметър за печатане на лого, 
+параметър за чекмедже, за прозрачен дисплей и автоматичен резач.<br>
+<div id="SetParameters" class="msgbody">
+<pre>
+HRESULT SetParameters([in] WORD fpnum, [in] BOOL logo, [in] BOOL till, [in] BOOL autocut, [in] BOOL transparent, [out, retval] long *pRes);
+</pre>
+<h3>Входящи параметри:</h3>
+<dl>
+	<dt>
+	fpNum
+	<dd>
+		Задава номер на касово място
+	</dd></dt>
+	<dt>
+	logo
+	<dd>
+		Задава параметър за печатане на лого (0 = не се печата)
+	</dd></dt>
+	<dt>
+	till
+	<dd>
+		Задава параметър за чекмедже (0 = няма чекмедже)
+	</dd></dt>
+	<dt>
+	autocut
+	<dd>
+		Задава параметър за автоматичен резач (0 = няма автоматичен резач)
+	</dd></dt>
+	<dt>
+	transparent
+	<dd>
+		Задава параметър за прозрачен дисплей (0 = няма прозрачен дисплей)
+	</dd></dt>
+</dl>
+<h3>Върната стойност (резултат):</h3>
+<p>ZFPE_SUCCESS при успех, код на грешка при неуспех</p>
+<br>
+</div>
+
+<script language="JavaScript">mf_text("SetDateTime", "SetDateTime");</script>
+&nbsp;-&nbsp;Сверява дата и час и връща разпечатка
+<br>
+<div id="SetDateTime" class="msgbody">
+<pre>
+HRESULT SetDateTime([in] DATE datetime, [out, retval] long *pRes);
+</pre>
+<h3>Входящи параметри:</h3>
+<dl>
+	<dt>
+	datetime
+	<dd>
+		Задава дата и час
+	</dd></dt>
+</dl>
+<h3>Върната стойност (резултат):</h3>
+<p>ZFPE_SUCCESS при успех, код на грешка при неуспех</p>
+<br>
+</div>
+
+<script language="JavaScript">mf_text("SetClicheLine", "SetClicheLine");</script>
+&nbsp;-&nbsp;Програмиране на ред от клишето
+<br>
+<div id="SetClicheLine" class="msgbody">
+<pre>
+HRESULT SetClicheLine([in]BYTE num, [in] BSTR text, [out, retval] long *pRes);
+</pre>
+<h3>Входящи параметри:</h3>
+<dl>
+	<dt>
+	lineNum
+	<dd>
+		Задава номер на ред от 1 до 8
+	</dd></dt>
+	<dt>
+	text
+	<dd>
+		Стринг, който съдържа реда от клишето. Отрязва се до първите 38 символа ако е по-дълъг.
+	</dd></dt>
+</dl>
+<h3>Върната стойност (резултат):</h3>
+<p>ZFPE_SUCCESS при успех, код на грешка при неуспех</p>
+<br>
+</div>
+
+<script language="JavaScript">mf_text("SetOperatorUserPass", "SetOperatorUserPass");</script>
+&nbsp;-&nbsp;Програмиране на име и парола на оператор
+<br>
+<div id="SetOperatorUserPass" class="msgbody">
+<pre>
+HRESULT SetOperatorUserPass([in] BYTE oper, [in] BSTR name, [in] BSTR passwd, [out, retval] long *pRes);
+</pre>
+<h3>Входящи параметри:</h3>
+<dl>
+	<dt>
+	oper
+	<dd>
+		Задава номер на оператор от 1 до 9.
+	</dd></dt>
+	<dt>
+	name
+	<dd>
+		Стринг, който съдържа името на оператора. Отрязва се до първите 20 символа ако е по-дълъг.
+	</dd></dt>
+	<dt>
+	passwd
+	<dd>
+		Стринг, който съдържа паролата на оператора. Отрязва се до първите 4 символа ако е по-дълъг.
+	</dd></dt>
+</dl>
+<h3>Върната стойност (резултат):</h3>
+<p>ZFPE_SUCCESS при успех, код на грешка при неуспех</p>
+<br>
+</div>
+
+<script language="JavaScript">mf_text("SetArticleInfo", "SetArticleInfo");</script>
+&nbsp;-&nbsp;Програмиране на артикул от вътрешната база данни на фискалния принтер
+<br>
+<div id="SetArticleInfo" class="msgbody">
+<pre>
+HRESULT SetArticleInfo([in] WORD num, [in] BSTR name, [in] double price, [in] BYTE taxgrp, [out, retval] long *pRes);
+</pre>
+<h3>Входящи параметри:</h3>
+<dl>
+	<dt>
+	number
+	<dd>
+		Номер на артикул от 1 до 1024.
+	</dd></dt>
+	<dt>
+	name
+	<dd>
+		Стринг, който съдържа името на артикула. Отрязва до първите 20 символа ако е по-дълъг.
+	</dd></dt>
+	<dt>
+	price
+	<dd>
+		цена
+	</dd></dt>
+	<dt>
+	taxgrp
+	<dd>
+		Задава данъчната група. Валидни стойности 'А', 'Б','В, 0, 1, 2, '0', '1', '2'
+	</dd></dt>
+</dl>
+<h3>Върната стойност (резултат):</h3>
+<p>ZFPE_SUCCESS при успех, код на грешка при неуспех</p>
+<br>
+</div>
+
+<script language="JavaScript">mf_text("SetArticleInfoEx", "SetArticleInfoEx");</script>
+&nbsp;-&nbsp;Програмиране на артикул от вътрешната база данни на фискалния принтер с номер на департамент
+<br>
+<div id="SetArticleInfoEx" class="msgbody">
+<pre>
+HRESULT SetArticleInfoEx([in] WORD num, [in] BSTR name, [in] double price, [in] BYTE taxgrp, [in] WORD department, [out, retval] long *pRes);
+</pre>
+<h3>Входящи параметри:</h3>
+<dl>
+	<dt>
+	number
+	<dd>
+		Номер на артикул от 1 до 1024.
+	</dd></dt>
+	<dt>
+	name
+	<dd>
+		Стринг, който съдържа името на артикула. Отрязва до първите 20 символа ако е по-дълъг.
+	</dd></dt>
+	<dt>
+	price
+	<dd>
+		цена
+	</dd></dt>
+	<dt>
+	taxgrp
+	<dd>
+		Задава данъчната група. Валидни стойности 'А', 'Б','В, 0, 1, 2, '0', '1', '2'
+	</dd></dt>
+	<dt>
+	department
+	<dd>
+		Задава номер на департамент
+	</dd></dt>
+</dl>
+<h3>Върната стойност (резултат):</h3>
+<p>ZFPE_SUCCESS при успех, код на грешка при неуспех</p>
+<br>
+</div>
+
+<script language="JavaScript">mf_text("SetLogoFile", "SetLogoFile");</script>
+&nbsp;-&nbsp;Програмиране на лого
+<br>
+<div id="SetLogoFile" class="msgbody">
+<pre>
+HRESULT SetLogoFile([in] BSTR filename, [out, retval] long *pRes);
+</pre>
+<h3>Входящи параметри:</h3>
+<dl>
+	<dt>
+	filename
+	<dd>
+		Стринг, който съдържа името на файла
+	</dd></dt>
+</dl>
+<h3>Върната стойност (резултат):</h3>
+<p>ZFPE_SUCCESS при успех, код на грешка при неуспех</p>
+<h3>Бележки:</h3>
+<p>Логото трябва да е битмап  (.BMP) фаил с 1 bpp и размери 384 x 80. 
+Резултата е файл с размер 3902 байта</p>
+<br>
+</div>
+
+<script language="JavaScript">mf_text("SetLocalDateTime", "SetLocalDateTime");</script>
+&nbsp;-&nbsp;Задава часа и датата на фискалния принтер да е този на компютъра
+<br>
+<div id="SetLocalDateTime" class="msgbody">
+<pre>
+HRESULT SetLocalDateTime([out, retval] long *pRes);
+</pre>
+<h3>Върната стойност (резултат):</h3>
+<p>ZFPE_SUCCESS при успех, код на грешка при неуспех</p>
+<br>
+</div>
+
+<script language="JavaScript">mf_text("SetExternalDisplayFile", "SetExternalDisplayFile");</script>
+&nbsp;-&nbsp;Програмиране на външен дисплей
+<br>
+<div id="SetExternalDisplayFile" class="msgbody">
+<pre>
+HRESULT SetExternalDisplayFile([in] BSTR password, [in] BSTR filename, [out, retval] long *pRes);
+</pre>
+<h3>Входящи параметри:</h3>
+<dl>
+	<dt>
+	password
+	<dd>
+		Стринг, който съдържа парола за достъп до дисплея.Отрязва се до първите 6 символа ако е по-дълъг.
+	</dd></dt>
+	<dt>
+	filename
+	<dd>
+		Буфер завършващ с нула който съдържа името на файла. Формата на файла е следния:<br/>
+		<pre>
+		Поле			размер в байта
+		----------------------------------------
+		Бр.БайтаКом1ред		1
+		Ком1ред			8
+		Бр.БайтаКом2ред		1
+		Ком2ред			8
+		Бр.БайтаClrDis		1
+		КомClrDis			8
+		Бр.БайтаXtrКом		1
+		Ком БайтаXtrКом		8
+		ФлагПрекод		1
+		ПреКодТабл		64
+		</pre>
+		<h3>Пояснения:</h3>
+		Програмира се външния дисплей, като за брой байта команда се задават N 
+		броя управляващи командни символи. След което се задават 8 байта 
+		управляващи символи, като 1вите N са командата, а останалите не се 
+		взимат под внимание, но трябва да са общо 8, за да се запази формата на 
+		командата. Ако дисплея има екстра (за скрийн сейвър) се процедира по 
+		същия начин, а ако няма &lt;Бр.БайтаXtrКом&gt; се записва със стойност 0. 
+		&lt;ФлагПрекод&gt; е 0 или 1 в зависимост от това дали трябва да се извършва 
+		прекодиране на кирилицата или не. След което се изпраща и кодовата 
+		таблица.
+		
+	</dd></dt>
+</dl>
+<h3>Върната стойност (резултат):</h3>
+<p>ZFPE_SUCCESS при успех, код на грешка при неуспех</p>
+<br>
+</div>
+
+<script language="JavaScript">mf_text("SetDepartment", "SetDepartment");</script>
+&nbsp;-&nbsp;Програмиране на информация за департамент
+<br>
+<div id="SetDepartment" class="msgbody">
+<pre>
+HRESULT SetDepartment([in] WORD number, [in] BSTR name, [in] BYTE taxgrp, [out, retval] long *pRes);
+</pre>
+<h3>Параметри:</h3>
+<dl>
+	<dt>
+	number
+	<dd>
+		Номер на департамент.
+	</dd></dt>
+	<dt>
+	name
+	<dd>
+		Името на департамента. Oтрязва до първите 20 символа ако е по-дълго.
+	</dd></dt>
+	<dt>
+	taxgrp
+	<dd>
+		Задава данъчната група. Валидни стойности 'А', 'Б','В, 0, 1, 2, '0', '1', '2'
+	</dd></dt>
+</dl>
+<h3>Върната стойност (резултат):</h3>
+<p>ZFPE_SUCCESS при успех, код на грешка при неуспех</p>
+<br>
+</div>
+
+<script language="JavaScript">mf_text("SetEJMode", "SetEJMode");</script>
+&nbsp;-&nbsp;Задаване режим на електронна контролна лента (ЕКЛ)
+<br>
+<div id="SetEJMode" class="msgbody">
+<pre>
+HRESULT SetEJMode([in] BOOL bShort, [out, retval] long *pRes)
+</pre>
+<h3>Параметри:</h3>
+<dl>
+	<dt>
+	bShort
+	<dd>
+		Когато е различно от 0 (т.е. TRUE) - използва се съкратена ЕКЛ, в противен случай ЕКЛ е разширена
+	</dd></dt>
+</dl>
+<h3>Върната стойност (резултат):</h3>
+<p>ZFPE_SUCCESS при успех, код на грешка при неуспех</p>
+<br>
+</div>
+
+<p><b>Отчети</b></p>
+
+<script language="JavaScript">mf_text("ReportSpecialFiscal", "ReportSpecialFiscal");</script>
+&nbsp;-&nbsp;Специален фискален отчет
+<br>
+<div id="ReportSpecialFiscal" class="msgbody">
+<pre>
+HRESULT ReportSpecialFiscal([out, retval] long *pRes);
+</pre>
+<h3>Върната стойност (резултат):</h3>
+<p>ZFPE_SUCCESS при успех, код на грешка при неуспех</p>
+<h3>Бележки:</h3>
+<p>Фискалния принтер разпечатва всички специални събития записани във ФП.</p>
+<br>
+</div>
+
+<script language="JavaScript">mf_text("ReportFiscalByBlock", "ReportFiscalByBlock");</script>
+&nbsp;-&nbsp;Подробен Фискален отчет по номера на запис във ФП
+<br>
+<div id="ReportFiscalByBlock" class="msgbody">
+<pre>
+HRESULT ReportFiscalByBlock([in] BOOL detailed, [in] WORD startNumber, [in] WORD endNumber, [out, retval] long *pRes);
+</pre>
+<h3>Входящи параметри:</h3>
+<dl>
+	<dt>
+	detailed
+	<dd>
+		Дали отчета да е подробен (0 = съкратен)
+	</dd></dt>
+	<dt>
+	startNumber
+	<dd>
+		Начален номер
+	</dd></dt>
+	<dt>
+	endNumber
+	<dd>
+		Краен номер
+	</dd></dt>
+</dl>
+<h3>Върната стойност (резултат):</h3>
+<p>ZFPE_SUCCESS при успех, код на грешка при неуспех</p>
+<br>
+</div>
+
+<script language="JavaScript">mf_text("ReportFiscalByDate", "ReportFiscalByDate");</script>
+&nbsp;-&nbsp;Фискален отчет по дати
+<br>
+<div id="ReportFiscalByDate" class="msgbody">
+<pre>
+HRESULT ReportFiscalByDate([in] BOOL detailed, [in] DATE start, [in] DATE end, [out, retval] long *pRes);
+</pre>
+<h3>Входящи параметри:</h3>
+<dl>
+	<dt>
+	detailed
+	<dd>
+		Дали отчета да е подробен (0 = съкратен)
+	</dd></dt>
+	<dt>
+	start
+	<dd>
+		Начални ден, месец и година
+	</dd></dt>
+	<dt>
+	end
+	<dd>
+		Крайни ден, месец и година
+	</dd></dt>
+</dl>
+<h3>Върната стойност (резултат):</h3>
+<p>ZFPE_SUCCESS при успех, код на грешка при неуспех</p>
+<br>
+</div>
+
+<script language="JavaScript">mf_text("ReportDaily", "ReportDaily");</script>
+&nbsp;-&nbsp;Дневен финансов отчет
+<br>
+<div id="ReportDaily" class="msgbody">
+<pre>
+HRESULT ReportDaily([in] BOOL zero, [in] BOOL extended, [out, retval] long *pRes);
+</pre>
+<h3>Входящи параметри:</h3>
+<dl>
+	<dt>
+	zero
+	<dd>
+		Параметър за нулирване (0 = без нулирване)
+	</dd></dt>
+	<dt>
+	extended
+	<dd>
+		Дали отчета да е разширен - т.е. първо артикулен и после дневен (0 = нормален)
+	</dd></dt>
+</dl>
+<h3>Върната стойност (резултат):</h3>
+<p>ZFPE_SUCCESS при успех, код на грешка при неуспех</p>
+<br>
+</div>
+
+<script language="JavaScript">mf_text("ReportEJ", "ReportEJ");</script>
+&nbsp;-&nbsp;Отчет на елекронната контролна лента (ЕКЛ)
+<br>
+<div id="ReportEJ" class="msgbody">
+<pre>
+HRESULT ReportEJ([out, retval] long *pRes);
+</pre>
+<h3>Върната стойност (резултат):</h3>
+<p>ZFPE_SUCCESS при успех, код на грешка при неуспех</p>
+<br>
+</div>
+
+<script language="JavaScript">mf_text("ReportEJ2", "ReportEJ2");</script>
+&nbsp;-&nbsp;Отчет на елекронната контролна лента (ЕКЛ)
+<br>
+<div id="ReportEJ" class="msgbody">
+<pre>
+HRESULT ReportEJ2([in] WORD num, [out, retval] long *pRes);
+</pre>
+<h3>Параметри:</h3>
+<dl>
+	<dt>
+	num 
+	<dd>
+		Параметър за отпечатване номер на бон. Този параметър се игнорирва за българския вариант на Zeka FP
+	</dd></dt>
+</dl>
+<h3>Върната стойност (резултат):</h3>
+<p>ZFPE_SUCCESS при успех, код на грешка при неуспех</p>
+<br>
+</div>
+
+<script language="JavaScript">mf_text("ReportOperator", "ReportOperator");</script>
+&nbsp;-&nbsp;Операторски отчет
+<br>
+<div id="ReportOperator" class="msgbody">
+<pre>
+HRESULT ReportOperator([in] BOOL zero, [in] BYTE oper, [out, retval] long *pRes);
+</pre>
+<h3>Входящи параметри:</h3>
+<dl>
+	<dt>
+	zero
+	<dd>
+		Параметър за нулирване (0 = без нулирване)
+	</dd></dt>
+	<dt>
+	oper
+	<dd>
+		Задава номер на оператор от 0 до 9 (0 = всички).
+	</dd></dt>
+</dl>
+<h3>Върната стойност (резултат):</h3>
+<p>ZFPE_SUCCESS при успех, код на грешка при неуспех</p>
+<br>
+</div>
+
+<script language="JavaScript">mf_text("ReportArticles", "ReportArticles");</script>
+&nbsp;-&nbsp;Отчет по артикули
+<br>
+<div id="ReportArticles" class="msgbody">
+<pre>
+HRESULT ReportArticles([in] BOOL zero, [out, retval] long *pRes);
+</pre>
+<h3>Входящи параметри:</h3>
+<dl>
+	<dt>
+	zero
+	<dd>
+		Параметър за нулирване (0 = без нулирване)
+	</dd></dt>
+</dl>
+<h3>Върната стойност (резултат):</h3>
+<p>ZFPE_SUCCESS при успех, код на грешка при неуспех</p>
+<br>
+</div>
+
+<script language="JavaScript">mf_text("ReadFiscalMemory", "ReadFiscalMemory");</script>
+&nbsp;-&nbsp;Четене на фискалната памет във файл
+<br>
+<div id="ReadFiscalMemory" class="msgbody">
+<pre>
+HRESULT ReadFiscalMemory([in] BSTR filename, [out, retval] long *pRes);
+</pre>
+<h3>Входящи параметри:</h3>
+<dl>
+	<dt>
+	filename
+	<dd>
+		Стринг, който съдържа името на файла във който ще се прочете фискалната памет. 
+		Ако файла не съществува той се създава. Ако съществува, съдържанието му се презаписва. Формата на файла е следния:<br/>
+		<pre>
+&lt;NBL&gt;&lt;CMD&gt;&lt;номер сегмент&gt;;&lt;код на запис&gt;;&lt;дата на запис&gt;;&lt;статус&gt;;&lt;данни&gt;
+….
+…..
+&lt;NBL&gt;&lt;CMD&gt;&lt;номер сегмент&gt;;&lt;код на запис&gt;;&lt;дата на запис&gt;;&lt;статус&gt;;&lt;данни&gt;
+…
+
+&lt;NBL&gt;&lt;CMD&gt;&lt;номер сегмент&gt;;&lt;@&gt; - край на записите
+
+код на запис / тип запис
+00 фабричен запис
+01 фискализация 
+04 дневен отчет
+05 нулиран рам
+06 дан. проценти
+07 десетична точка
+	</pre>
+	</dd></dt>
+</dl>
+<h3>Върната стойност (резултат):</h3>
+<p>ZFPE_SUCCESS при успех, код на грешка при неуспех</p>
+<br>
+</div>
+
+<p><b>Нови фукции в Zeka FP-E и Zeka FP01-E</b></p>
+<p>
+Следните функции са добавени във версия 2.0 на библиотеката и поддържат добавената във Zeka FP-E и Zeka FP01-E функционалност.
+Тези функции може свободно да се ползват и със старите версии на Zeka FP и Zeka FP01, като новата функционалност
+работи със стойности по подразбиране във старите устройства.
+</p>
+
+<script language="JavaScript">mf_text("PaymentEU", "PaymentEU");</script>
+&nbsp;-&nbsp;Регистриране на плащане
+<br>
+<div id="PaymentEU" class="msgbody">
+<pre>
+HRESULT PaymentEU([in] double sum, [in] BYTE type, [in] BOOL noChange, [in] BYTE changeType, [out, retval] long *pRes);
+</pre>
+<h3>Параметри:</h3>
+<dl>
+	<dt>
+	sum
+	<dd>
+		Платена сума
+	</dd></dt>
+	<dt>
+	type
+	<dd>
+		Тип на плащането (0 до 4)
+	</dd></dt>
+	<dt>
+	noChange
+	<dd>
+		Плащането не изисква ресто (взема се под внимание само за някои типове плащания - примерно с купон)
+	</dd></dt>
+	<dt>
+	changeType
+	<dd>
+		Тип на рестото. 0 = в брой (т.е. тип плащане 0), 1 = рестото е от зададения тип плащане (по подразбиране за Zeka FP и Zeka FP01), 2 = ресто във валута (т.е. тип плащане 4)
+	</dd></dt>
+</dl>
+<h3>Върната стойност (резултат):</h3>
+<p>ZFPE_SUCCESS при успех, код на грешка при неуспех</p>
+<br>
+</div>
+
+<script language="JavaScript">mf_text("GetOperatorChangeEU", "GetOperatorChangeEU");</script>
+&nbsp;-&nbsp;Връща върнатите като ресто суми от оператора за различните видове плащания (нова функция за Zeka FP-E и Zeka FP01-E)
+<br>
+<div id="GetOperatorChangeEU" class="msgbody">
+<pre>
+HRESULT GetOperatorChangeEU([in] BYTE oper, [out, retval] LPDISPATCH *pRes);
+</pre>
+<h3>Входящи параметри:</h3>
+<dl>
+	<dt>
+	oper
+	<dd>
+		Задава номер на оператор от 1 до 9.
+	</dd></dt>
+</dl>
+<h3>Върната стойност (резултат):</h3>
+<p>Интерфейс към <a href="IPayTypes_bg.html">IPayTypes</a> съдържащ върнатите като ресто суми от оператора 
+по различните видове плащания. Попълват се следните свойства: paytype0sum до paytype4sum</p>
+<br>
+</div>
+
+<script language="JavaScript">mf_text("GetDailyChangeEU", "GetDailyChangeEU");</script>
+&nbsp;-&nbsp;Връща върнатите като ресто суми за деня за различните видове плащания (нова функция за Zeka FP-E и Zeka FP01-E)
+<br>
+<div id="GetDailyChangeEU" class="msgbody">
+<pre>
+GetDailyChangeEU([out, retval] LPDISPATCH *pRes);
+</pre>
+<h3>Върната стойност (резултат):</h3>
+<p>Интерфейс към <a href="IPayTypes_bg.html">IPayTypes</a> съдържащ върнатите като ресто суми за деня 
+по различните видове плащания. Попълват се следните свойства: paytype0sum до paytype4sum</p>
+<br>
+</div>
+
+<script language="JavaScript">mf_text("GetInvoiceNextNumberEU", "GetInvoiceNextNumberEU");</script>
+&nbsp;-&nbsp;Връща следващия номер на фактура и последния номер на фактура в зададения интервал (нова функция за Zeka FP-E и Zeka FP01-E)
+<br>
+<div id="GetInvoiceNextNumberEU" class="msgbody">
+<pre>
+HRESULT GetInvoiceNextNumberEU([out, retval] LPDISPATCH *pRes);
+</pre>
+<h3>Върната стойност (резултат):</h3>
+<p>Интерфейс към <a href="IInvoiceNumbers_bg.html">IInvoiceNumbers</a> съдържащ следващия и последния номер  
+на фактура съгласно зададения интервал</p>
+<br>
+</div>
+
+<script language="JavaScript">mf_text("SetInvoiceNumbersRangeEU", "SetInvoiceNumbersRangeEU");</script>
+&nbsp;-&nbsp;Задава обхват номера на фактури който да издава фискалния принтер (нова функция за Zeka FP-E и Zeka FP01-E)
+<br>
+<div id="SetInvoiceNumbersRangeEU" class="msgbody">
+<pre>
+HRESULT SetInvoiceNumbersRangeEU([in] BSTR startNum, [in] BSTR lastNum, [out, retval] long *pRes);
+</pre>
+<h3>Параметри:</h3>
+<dl>
+	<dt>
+	startNum
+	<dd>
+		Началния номер на фактура издавана от фискалния принтер. Отрязва се до първите 10 символа ако е по-дълъг и се допълва с водещи нули ако е по-къс.
+	</dd></dt>
+	<dt>
+	lastNum
+	<dd>
+		Последния номер на фактура издавана от фискалния принтер. Отрязва до първите 10 символа ако е по-дълъг и се допълва с водещи нули ако е по-къс.
+	</dd></dt>
+</dl>
+<h3>Върната стойност (резултат):</h3>
+<p>ZFPE_SUCCESS при успех, код на грешка при неуспех</p>
+<br>
+</div>
+
+<script language="JavaScript">mf_text("OpenInvoiceEU", "OpenInvoiceEU");</script>
+&nbsp;-&nbsp;Отваря фискален бон - фактура
+<br>
+<div id="OpenInvoiceEU" class="msgbody">
+<pre>
+HRESULT OpenInvoiceEU([in] BYTE oper, [in] BSTR passwd, [in] BSTR client, [in] BSTR receiver, [in] BSTR identNum, [in] BSTR address, [out, retval] long *pRes);
+</pre>
+<h3>Входящи параметри:</h3>
+<dl>
+	<dt>
+	oper
+	<dd>
+		Задава номер на оператор от 1 до 9.
+	</dd></dt>
+	<dt>
+	passwd
+	<dd>
+		Стринг, който съдържа паролата на оператора. Стринга се отрязва до първите 4 символа ако е по-дълъг.
+	</dd></dt>
+	<dt>
+	client
+	<dd>
+		Стринг, който съдържа името на клиента. Стринга се отрязва до първите 26 символа ако е по-дълъг.
+	</dd></dt>
+	<dt>
+	receiver
+	<dd>
+		Стринг, който съдържа името на получаващия фактурата. Стринга се отрязва до първите 16 символа ако е по-дълъг.
+	</dd></dt>
+	<dt>
+	identNum
+	<dd>
+		Стринг, който съдържа индентификационния номер на клиента. Стринга се отрязва до първите 13 символа ако е по-дълъг.
+	</dd></dt>
+	<dt>
+	address
+	<dd>
+		Стринг, който съдържа адреса на клиента. Стринга се отрязва до първите 30 символа ако е по-дълъг.
+	</dd></dt>
+</dl>
+<h3>Върната стойност (резултат):</h3>
+<p>ZFPE_SUCCESS при успех, код на грешка при неуспех</p>
+<br>
+</div>
+
+<script language="JavaScript">mf_text("SetTaxPercentsEU", "SetTaxPercentsEU");</script>
+&nbsp;-&nbsp;Задава данъчните проценти за различните данъчни групи.
+<br>
+<div id="SetTaxPercentsEU" class="msgbody">
+<pre>
+HRESULT SetTaxPercentsEU([in] BSTR password, [in] double tgr1, [in] double tgr2, [in] double tgr3, [in] double tgr4, [in] double tgr5, [in] double tgr6, [in] double tgr7, [in] double tgr8, [out, retval] long *pRes);
+</pre>
+<h3>Параметри:</h3>
+<dl>
+	<dt>
+	password
+	<dd>
+		Стринг, който съдържа фискалната парола за достъп. Стринга се отрязва до първите 6 символа ако е по-дълъг.
+	</dd></dt>
+	<dt>
+	tgr1 до tgr8
+	<dd>
+		Процентите за различните данъчни групи.
+	</dd></dt>
+</dl>
+<h3>Върната стойност (резултат):</h3>
+<p>ZFPE_SUCCESS при успех, код на грешка при неуспех</p>
+<h3>Бележки:</h3>
+<p>Възможно е да забраните данъчни групи Д,Е,Ж или З (т.е. 4 до 8). За целта като процент задайте -1.0</p>
+<br>
+</div>
+
+<script language="JavaScript">mf_text("SetPayTypeEU", "SetPayTypeEU");</script>
+&nbsp;-&nbsp;Програмиране имената на видовете плащания и валутен курс
+<br>
+<div id="SetPayTypeEU" class="msgbody">
+<pre>
+HRESULT SetPayTypeEU([in]BYTE type, [in] BSTR line, [in] double exchRate, [out, retval] long *pRes);
+</pre>
+<h3>Параметри:</h3>
+<dl>
+	<dt>
+	type
+	<dd>
+		Задава номер на вид плащане (1, 2, 3 или 4)
+	</dd></dt>
+	<dt>
+	line
+	<dd>
+		Стринг, който съдържа името на вида плащане. Стринга се отрязва до първите 10 символа ако е по-дълъг.
+	</dd></dt>
+	<dt>
+	exchRate
+	<dd>
+		Валутен курс.
+	</dd></dt>
+</dl>
+<h3>Върната стойност (резултат):</h3>
+<p>ZFPE_SUCCESS при успех, код на грешка при неуспех</p>
+<br>
+</div>
+
+<script language="JavaScript">mf_text("SetParametersEU", "SetParametersEU");</script>
+&nbsp;-&nbsp;Задава параметрите на фискалния принтер.
+<br>
+<div id="SetParametersEU" class="msgbody">
+<pre>
+SetParametersEU([in] WORD fpnum, [in] BOOL logo, [in] BOOL till, [in] BOOL autocut, [in] BOOL transparent, [in] BOOL shortEJ, [in] BOOL currency, [out, retval] long *pRes);
+</pre>
+<h3>Входящи параметри:</h3>
+<dl>
+	<dt>
+	fpnum
+	<dd>
+		Задава номер на касово място
+	</dd></dt>
+	<dt>
+	logo
+	<dd>
+		Задава параметър за печатане на лого (0 = не се печата)
+	</dd></dt>
+	<dt>
+	till
+	<dd>
+		Задава параметър за чекмедже (0 = няма чекмедже)
+	</dd></dt>
+	<dt>
+	autocut
+	<dd>
+		Задава параметър за автоматичен резач (0 = няма автоматичен резач)
+	</dd></dt>
+	<dt>
+	transparent
+	<dd>
+		Задава параметър за прозрачен дисплей (0 = няма прозрачен дисплей)
+	</dd></dt>
+	<dt>
+	shortEJ
+	<dd>
+		Задава режим на ЕКЛ (0 = подробна)
+	</dd></dt>
+	<dt>
+	currency
+	<dd>
+		Използване на валута в бона (0 = не се ползва)
+	</dd></dt>
+</dl>
+<h3>Върната стойност (резултат):</h3>
+<p>ZFPE_SUCCESS при успех, код на грешка при неуспех</p>
+<br>
+</div>
+
+</p>
+
+<p><b>Нови фукции във версии 2.5 - 3.0</b></p>
+<p>Подробно описание на параметрите има в описанието на методите на класа <a href="..\..\api\bg\members_bg.html">CZekaFP</a>.</p>
+<p>
+SetLogo  - Избор на текущо лого<br>
+GetLogoInfo  - Четене на информация за заредени лога и текущо активно. Резултатът от операцията се записва в посочения буфер<br>
+FindFirstFPCOMEx  - Търси Зека Фискален Принтер на всички COM портове и връща първия COM порт към който има свързан Зека Фискален Принтер<br>
+SetLogoFileEx  - Програмиране на лого<br>
+PrintLogoEx  - Печата лого (0-9)<br>
+CloseBonInCash  - Директно приключване на фискален бон в брой<br>
+PaymentEx  - Регистриране на плащане<br>
+SellDepartmentEx  - Продажба от департамент<br>
+SellFreeEx  - Свободна продажба на артикул<br>
+SellDBEx  - Продажба на артикул от вътрешната база на Фискалния принтер<br>
+GetArticleInfoEx  - Връща информация за избран артикул от вътрешната база данни на фискалния принтер<br>
+SetArticleInfo2  - Програмиране на артикул от вътрешната база данни на фискалния принтер. Използва SetArticleInfoEx от CZekaFP<br>
+OfficialSumsEx  - Регистрира въвеждане/извеждане на служебни суми<br>
+ReportDepartments  - Отчет по департаменти<br>
+GetVersionGS  - Връща информация за версията на фискалния принтер<br>
+EnableCommGS  - Комуникация на фискален принтер<br>
+SetSpeedGS  - Установява скорост на комуникация на ФП<br>
+LoadScaleProtocolGS  - Зареждане на протокол на везна<br><br>
+EnableBarcode  - Включва и изключва печатането на баркод под бележките<br>
+FormatBarcode  - Задава формат на баркода<br>
+PrintBarcode  - Отпечатва конкретен баркод<br>
+SetLineWidth  - Установява ширина на реда на ФП (брой символи)<br>
+SetPrintMode  - Задава режим на печат<br>
+OpenTillEx  - Отваряне на чекмедже<br>
+OpenSerialPort  - Отваряне на серийния порт със задържане в отворено състояние до CloseSerialPort<br>
+CloseSerialPort  - Освобождава серийния порт<br>
+TerminateBon  - Затваря фискален или служебен бон, ако има отворен.
+Командата е съставна и изпраща няколко команди от протокола на ФП според случая
+</p>
+
+<p><b>Виж също</b>
+<br>
+<a href="index_bg.html">Бележки</a>
+</p>
+<p>Интерфейси които се връщат като резултат<br>
+<a href="IGetCurrentBonInfoRes_bg.html">Методи на интерфейса IGetCurrentBonInfoRes</a><br>
+<a href="ITaxNumbers_bg.html">Методи на интерфейса ITaxNumbers</a><br>
+<a href="IPayTypes_bg.html">Методи на интерфейса IPayTypes</a><br>
+<a href="IZFPParameters_bg.html">Методи на интерфейса IZFPParameters</a><br>
+<a href="IOperatorInfo_bg.html">Методи на интерфейса IOperatorInfo</a><br>
+<a href="IArticleInfo_bg.html">Методи на интерфейса IArticleInfo</a><br>
+<a href="IDailySums_bg.html">Методи на интерфейса IDailySums</a><br>
+<a href="IFiscalReportData_bg.html">Методи на интерфейса IFiscalReportData</a><br>
+<a href="IDailyReport_bg.html">Методи на интерфейса IDailyReport</a><br>
+<a href="IZFPStatus_bg.html">Методи на интерфейса IZFPStatus</a><br>
+<a href="IInvoiceNumbers_bg.html">Методи на интерфейса IInvoiceNumbers</a><br>
+</p>
+</body>
+</html>

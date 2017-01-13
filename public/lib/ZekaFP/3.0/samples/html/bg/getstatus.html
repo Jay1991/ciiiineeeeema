@@ -1,0 +1,136 @@
+<html>
+
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=windows-1251">
+<meta http-equiv="Content-Language" content="bg">
+<link rel="stylesheet" type="text/css" href="main.css">
+<script language="JavaScript" src="main.js"></script>
+<title>Статус</title>
+<base target="_self">
+</head>
+
+<body>
+
+<script language="javascript">
+function work()
+{
+	result.innerText = "...";
+	var zfp = new ActiveXObject("Zfpcom.ZekaFP");
+	var res = zfp.Setup(parseInt(parent.frames.contents.comport.value, 10), parseInt(parent.frames.contents.baud.value, 10), 3, 1000);
+	res = zfp.GetStatus();
+
+    result_color(zfp);
+	if (!zfp.errorCode)
+	{
+		readOnlyFM.innerText = res.readOnlyFM ? "да" : "не";
+		powerDown.innerText = res.powerDown ? "да" : "не";
+		printerOverheat.innerText = res.printerOverheat ? "да" : "не";
+		wrongTimer.innerText = res.wrongTimer ? "да" : "не";
+		wrongDate.innerText = res.wrongDate ? "да" : "не";
+		wrongRAM.innerText = res.wrongRAM ? "да" : "не";
+		clockHardwareError.innerText = res.clockHardwareError ? "да" : "не";
+		paperOutPrinterError.innerText = res.paperOutPrinterError ? "да" : "не";
+		reportSumOverflow.innerText = res.reportSumOverflow ? "да" : "не";
+		nonzeroDailyReport.innerText = res.nonzeroDailyReport ? "да" : "не";
+		nonzeroArticleReport.innerText = res.nonzeroArticleReport ? "да" : "не";
+		nonzeroOperatorReport.innerText = res.nonzeroOperatorReport ? "да" : "не";
+		duplicateNotPrinted.innerText = res.duplicateNotPrinted ? "да" : "не";
+		openOfficialBon.innerText = res.openOfficialBon ? "да" : "не";
+		openFiscalBon.innerText = res.openFiscalBon ? "да" : "не";
+		detailedInfo.innerText = res.detailedInfo ? "да" : "не";
+		VATinfo.innerText = res.VATinfo ? "да" : "не";
+		EJLimitNear.innerText = res.EJLimitNear ? "да" : "не";
+		fullEJ.innerText = res.fullEJ ? "да" : "не";
+		missingFiscalMemory.innerText = res.missingFiscalMemory ? "да" : "не";
+		wrongFiscalMemory.innerText = res.wrongFiscalMemory ? "да" : "не";
+		fullFiscalMemory.innerText = res.fullFiscalMemory ? "да" : "не";
+		fiscalMemoryLimitNear.innerText = res.fiscalMemoryLimitNear ? "да" : "не";
+		hasDecimalPoint.innerText = res.hasDecimalPoint? "дробни числа" : "цели числа";
+		isFiscal.innerText = res.isFiscal ? "да" : "не";
+		hasFiscalAndFactoryNum.innerText = res.hasFiscalAndFactoryNum ? "да" : "не";
+		autoCutter.innerText = res.autoCutter ? "има" : "няма";
+		hasTransparentDisplay.innerText = res.hasTransparentDisplay ? "има" : "няма";
+		baud9600.innerText = res.baud9600 ? "9600" : "19200";
+		autoTillOpen.innerText = res.autoTillOpen ? "автоматично" : "ръчно";
+		printLogo.innerText = res.printLogo ? "печата се" : "не се печата";
+		ejmode.innerText = res.shortEJMode ? "кратък" : "разширен";
+		currency.innerText = res.printCurrency ? "печата се" : "не се печата";
+	}
+	
+	result.innerText = zfp.GetErrorString(zfp.errorCode, 1);
+		
+	zfpinput.innerText = zfp.GetInputHexFormated();
+	zfpoutput.innerText = zfp.GetResponseHexFormated();
+}
+</script>
+
+<h1>Статус</h1>
+<p>
+<input type="button" value="Старт" name="start" language="JavaScript" onclick="work();">
+</p>
+<p>
+Резултат: <span id="result">няма</span> <br> <br>
+<b>Статус</b><br>
+<i>Фискалната памет е в режим само за четене:</i> <span id="readOnlyFM"> </span><br>
+<i>Имало е прекъсване на захранването във фискална касова бележка:</i> <span id="powerDown"> </span><br>
+<i>Прегрят принтер:</i> <span id="printerOverheat"> </span><br>
+<i>Несверен часовник:</i> <span id="wrongTimer"> </span><br>
+<i>Некоректна дата:</i> <span id="wrongDate"> </span><br>
+<i>Грешен RAM:</i> <span id="wrongRAM"> </span><br>
+<i>Хардуерна грешка в часовника:</i> <span id="clockHardwareError"> </span><br>
+<i>Липсва хартия:</i> <span id="paperOutPrinterError"> </span><br>
+<i>Препълване в натрупванията на отчетите:</i> <span id="reportSumOverflow"> </span><br>
+<i>Ненулев дневен отчет:</i> <span id="nonzeroDailyReport"> </span><br>
+<i>Ненулев артикулен отчет:</i> <span id="nonzeroArticleReport"> </span><br>
+<i>Ненулев операторски отчет:</i> <span id="nonzeroOperatorReport"> </span><br>
+<i>Не е отпечатан дубликат:</i> <span id="duplicateNotPrinted"> </span><br>
+<i>Отворен служебен бон:</i> <span id="openOfficialBon"> </span><br>
+<i>Отворен фискален бон:</i> <span id="openFiscalBon"> </span><br>
+<i>Разширена касова бележка:</i> <span id="detailedInfo"> </span><br>
+<i>С ДДС в бона:</i> <span id="VATinfo"> </span><br>
+<i>Почти пълна електронна контролна лента (ЕКЛ):</i> <span id="EJLimitNear"> </span><br>
+<i>Пълна електронна контролна лента (ЕКЛ):</i> <span id="fullEJ"> </span><br>
+<i>Липсва ФП:</i> <span id="missingFiscalMemory"> </span><br>
+<i>Грешка във ФП:</i> <span id="wrongFiscalMemory"> </span><br>
+<i>Пълна ФП:</i> <span id="fullFiscalMemory"> </span><br>
+<i>Остават 50 или по-малко свободни записи във ФП:</i> <span id="fiscalMemoryLimitNear"> </span><br>
+<i>Десетична точка:</i> <span id="hasDecimalPoint"> </span><br>
+<i>Принтера е фискализиран:</i> <span id="isFiscal"> </span><br>
+<i>Зададени фабричен и фискален номер:</i> <span id="hasFiscalAndFactoryNum"> </span><br>
+<i>Автоматично отрязване на бележката:</i> <span id="autoCutter"> </span><br>
+<i>Прозрачен дисплей:</i> <span id="hasTransparentDisplay"> </span><br>
+<i>Скорост на комуникация:</i> <span id="baud9600"> </span><br>
+<i>Автоматично отваряне на чекмедже:</i> <span id="autoTillOpen"> </span><br>
+<i>С печат на лого в бележката:</i> <span id="printLogo"> </span><br>
+<i>Режим на електронната контролна лента (ЕКЛ):</i> <span id="ejmode"> </span><br>
+<i>Печат на валута в бона:</i> <span id="currency"> </span><br>
+</p>
+
+<p class="msghead">
+<script language="JavaScript">mf_text("api", "Детайли за програмния интерфейс (API)");</script>
+<br>
+<div id="api" class="msgbody">
+	Няма въведени
+	<br>
+</div>
+<script language="JavaScript">mf_text("protocol", "Детайли за протокола на комуникация");</script>
+<br>
+<div id="protocol" class="msgbody">
+	Няма въведени
+	<br>
+</div>
+<script language="JavaScript">mf_text("io", "Вход / Изход");</script>
+<br>
+<div id="io" class="msgbody">
+	<h2>Към фискалния принтер</h2>
+	<pre id="zfpinput">&nbsp;</pre>
+	<br>
+	<h2>От фискалния принтер</h2>
+	<pre id="zfpoutput">&nbsp;</pre>
+	<br>
+</div>
+</p>
+
+</body>
+
+</html>

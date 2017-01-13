@@ -1,0 +1,90 @@
+<html>
+
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=windows-1251">
+<meta http-equiv="Content-Language" content="bg">
+<link rel="stylesheet" type="text/css" href="main.css">
+<script language="JavaScript" src="main.js"></script>
+<title>Parameters</title>
+<base target="_self">
+</head>
+
+<body>
+
+<script language="javascript">
+function work()
+{
+	result.innerText = "...";
+	var zfp = new ActiveXObject("Zfpcom.ZekaFP");
+	var res = zfp.Setup(parseInt(parent.frames.contents.comport.value, 10), parseInt(parent.frames.contents.baud.value, 10), 3, 1000);
+	res = zfp.GetParameters();
+
+    result_color(zfp);
+	if (!zfp.errorCode)
+	{
+		fpnum.innerText = res.fpnum;
+		logo.innerText = res.logo ? "Print" : "Don't Print";
+		till.innerText = res.till ? "Yes" : "No";
+		autocut.innerText = res.autocut ? "Yes" : "No";
+		transparent.innerText = res.transparent ? "Yes" : "No";
+		shortEJ.innerText = res.shortEJ ? "Short" : "Full";
+		currency.innerText = res.currency & 1? "Yes" : "No";
+		cb_font.innerText = res.currency & 2 ? "Yes" : "No";
+		text_ej.innerText = res.currency & 4 ? "Yes" : "No";
+		op1.innerText = res.currency & 8 ? "Yes" : "No";
+	}
+	
+	result.innerText = zfp.GetErrorString(zfp.errorCode, 0);
+		
+	zfpinput.innerText = zfp.GetInputHexFormated();
+	zfpoutput.innerText = zfp.GetResponseHexFormated();
+}
+</script>
+
+<h1>Parameters</h1>
+<p>
+<input type="button" value="Start" name="start" language="JavaScript" onclick="work();">
+</p>
+<p>
+Result: <span id="result">None</span> <br> <br>
+<b>Parameters</b><br>
+ECR Number: <span id="fpnum"> </span><br>
+Print LOGO: <span id="logo"> </span><br>
+Cash Drawer: <span id="till"> </span><br>
+Auto Cutter: <span id="autocut"> </span><br>
+Transparent Display: <span id="transparent"> </span><br>
+EJ mode: <span id="shortEJ"> </span><br>
+Print currency in receipt: <span id="currency"> </span><br>
+Print EJ with small font: <span id="cb_font"> </span><br>
+Free Text in EJ: <span id="text_ej"> </span><br>
+Single Operator: <span id="op1"> </span><br>
+</p>
+
+<p class="msghead">
+<script language="JavaScript">mf_text("api", "Application Program Interface (API)");</script>
+<br>
+<div id="api" class="msgbody">
+	Not Entered
+	<br>
+</div>
+<script language="JavaScript">mf_text("protocol", "Comunication Protocol Details");</script>
+<br>
+<div id="protocol" class="msgbody">
+	Not Entered
+	<br>
+</div>
+<script language="JavaScript">mf_text("io", "Input / Output");</script>
+<br>
+<div id="io" class="msgbody">
+	<h2>To Fiscal Printer</h2>
+	<pre id="zfpinput">&nbsp;</pre>
+	<br>
+	<h2>To PC</h2>
+	<pre id="zfpoutput">&nbsp;</pre>
+	<br>
+</div>
+</p>
+
+</body>
+
+</html>

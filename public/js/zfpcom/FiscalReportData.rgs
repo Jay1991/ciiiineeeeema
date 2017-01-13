@@ -1,0 +1,26 @@
+HKCR
+{
+	Zfpcom.FiscalReportData.1 = s 'FiscalReportData Class'
+	{
+		CLSID = s '{DDFA7C5F-E120-4293-97D6-2467DBED2B9B}'
+	}
+	Zfpcom.FiscalReportData = s 'FiscalReportData Class'
+	{
+		CLSID = s '{DDFA7C5F-E120-4293-97D6-2467DBED2B9B}'
+		CurVer = s 'Zfpcom.FiscalReportData.1'
+	}
+	NoRemove CLSID
+	{
+		ForceRemove {DDFA7C5F-E120-4293-97D6-2467DBED2B9B} = s 'FiscalReportData Class'
+		{
+			ProgID = s 'Zfpcom.FiscalReportData.1'
+			VersionIndependentProgID = s 'Zfpcom.FiscalReportData'
+			ForceRemove 'Programmable'
+			InprocServer32 = s '%MODULE%'
+			{
+				val ThreadingModel = s 'Apartment'
+			}
+			'TypeLib' = s '{B1F547D6-DFAD-47C0-BDE6-407702E27360}'
+		}
+	}
+}

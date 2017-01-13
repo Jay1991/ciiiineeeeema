@@ -1,0 +1,51 @@
+*{
+	font-family: Verdana, sans-serif;
+	font-size: 10pt;
+}
+
+body {
+		background: White;
+}
+button {
+	background: ButtonFace;	
+}
+
+PRE {
+	margin: 5px 10px 5px 10px;
+	padding: 10px 10px 10px 10px;
+	font-family : monospace;
+	font-size : 10pt;
+	color : Black;
+	border: 1px solid #E5E5E5;
+	background-color : #F6F6F6;
+}
+
+.screenhidden {
+		display: none;
+}
+
+a:link {
+	color: #4169E1;
+}
+
+a:visited {
+	color: #4169E1;
+}
+
+a:active {
+	color: #BC7ADC;
+}
+
+a:hover {
+	color: #BC7ADC;
+}
+
+.smfont {
+	font-weight: lighter;
+	font: smaller Verdana, sans-serif;
+}
+
+.menuopt 
+{
+	margin-left:-16;margin-top:2pt;margin-bottom:2pt;display:none;
+}

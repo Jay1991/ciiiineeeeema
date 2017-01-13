@@ -1,0 +1,26 @@
+HKCR
+{
+	Zfpcom.OperatorInfo.1 = s 'OperatorInfo Class'
+	{
+		CLSID = s '{97866887-9FF8-4D60-A7EE-132E46587FA5}'
+	}
+	Zfpcom.OperatorInfo = s 'OperatorInfo Class'
+	{
+		CLSID = s '{97866887-9FF8-4D60-A7EE-132E46587FA5}'
+		CurVer = s 'Zfpcom.OperatorInfo.1'
+	}
+	NoRemove CLSID
+	{
+		ForceRemove {97866887-9FF8-4D60-A7EE-132E46587FA5} = s 'OperatorInfo Class'
+		{
+			ProgID = s 'Zfpcom.OperatorInfo.1'
+			VersionIndependentProgID = s 'Zfpcom.OperatorInfo'
+			ForceRemove 'Programmable'
+			InprocServer32 = s '%MODULE%'
+			{
+				val ThreadingModel = s 'Apartment'
+			}
+			'TypeLib' = s '{B1F547D6-DFAD-47C0-BDE6-407702E27360}'
+		}
+	}
+}

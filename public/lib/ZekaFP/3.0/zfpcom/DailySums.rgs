@@ -1,0 +1,26 @@
+HKCR
+{
+	Zfpcom.DailySums.1 = s 'DailySums Class'
+	{
+		CLSID = s '{52F50CD0-B861-457C-9F2C-6D1295060DC3}'
+	}
+	Zfpcom.DailySums = s 'DailySums Class'
+	{
+		CLSID = s '{52F50CD0-B861-457C-9F2C-6D1295060DC3}'
+		CurVer = s 'Zfpcom.DailySums.1'
+	}
+	NoRemove CLSID
+	{
+		ForceRemove {52F50CD0-B861-457C-9F2C-6D1295060DC3} = s 'DailySums Class'
+		{
+			ProgID = s 'Zfpcom.DailySums.1'
+			VersionIndependentProgID = s 'Zfpcom.DailySums'
+			ForceRemove 'Programmable'
+			InprocServer32 = s '%MODULE%'
+			{
+				val ThreadingModel = s 'Apartment'
+			}
+			'TypeLib' = s '{B1F547D6-DFAD-47C0-BDE6-407702E27360}'
+		}
+	}
+}

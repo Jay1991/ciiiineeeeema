@@ -1,0 +1,669 @@
+//////////////////////////////////////////////////////////////////////
+// Copyright (c) 2007-2008 Tremol Ltd.
+// License: Mozilla Public License 1.1
+// Contacts: software@tremol.bg
+//////////////////////////////////////////////////////////////////////
+// zfpcom.idl : IDL source for zfpcom.dll
+//
+
+// This file will be processed by the MIDL tool to
+// produce the type library (zfpcom.tlb) and marshalling code.
+
+#if (__midl >= 501)
+midl_pragma warning( disable: 2362 )
+#endif
+
+import "oaidl.idl";
+import "ocidl.idl";
+	[
+		object,
+		uuid(955B3931-1A9C-4E6D-8343-000BEF1E4C27),
+		dual,
+		helpstring("IZekaFP Interface"),
+		pointer_default(unique)
+	]
+	interface IZekaFP : IDispatch
+	{
+		[id(1), helpstring("method GetCurrentBonInfo")] HRESULT GetCurrentBonInfo([out, retval] LPDISPATCH *pVal);
+		[id(2), helpstring("method Setup")] HRESULT Setup([in] WORD wCom, [in] DWORD baud, [in] WORD retries, [in] DWORD retryWait);
+		[propget, id(3), helpstring("property errorCode")] HRESULT errorCode([out, retval] long *pVal);
+		[id(4), helpstring("method Diagnostic")] HRESULT Diagnostic([out, retval] long *pRes);
+		[id(5), helpstring("method DisplayClear")] HRESULT DisplayClear([out, retval] long *pRes);
+		[id(6), helpstring("method DisplayDateTime")] HRESULT DisplayDateTime([out, retval] long *pRes);
+		[id(7), helpstring("method OpenTill")] HRESULT OpenTill([out, retval] long *pRes);
+		[id(8), helpstring("method LineFeed")] HRESULT LineFeed([out, retval] long *pRes);
+		[id(9), helpstring("method PrintLogo")] HRESULT PrintLogo([out, retval] long *pRes);
+		[id(10), helpstring("method CloseBon")] HRESULT CloseBon([out, retval] long *pRes);
+		[id(12), helpstring("method CloseFiscalBon")] HRESULT CloseFiscalBon([out, retval] long *pRes);
+		[id(13), helpstring("method PrintDuplicate")] HRESULT PrintDuplicate([out, retval] long *pRes);
+		[id(14), helpstring("method SetLocalDateTime")] HRESULT SetLocalDateTime([out, retval] long *pRes);
+		[id(15), helpstring("method GetTaxNumber")] HRESULT GetTaxNumber([out, retval] BSTR *pRes);
+		[id(16), helpstring("method GetDecimalPoint")] HRESULT GetDecimalPoint([out, retval] long *pPoint);
+		[id(17), helpstring("method GetClicheLine")] HRESULT GetClicheLine([in]BYTE num, [out, retval] BSTR *pRes);
+		[id(18), helpstring("method OpenBon")] HRESULT OpenBon([in]BYTE oper, [in] BSTR passwd, [out, retval] long *pRes);
+		[id(19), helpstring("method OpenFiscalBon")] HRESULT OpenFiscalBon([in] BYTE oper, [in] BSTR passwd, [in] BYTE defPass, [in] BYTE dds, [out, retval] long *pRes);
+		[id(20), helpstring("method SellFree")] HRESULT SellFree([in] BSTR name, [in] BYTE taxgrp, [in] double price, [in] double quantity, [in] double discount, [out, retval] long *pRes);
+		[id(21), helpstring("method Payment")] HRESULT Payment([in] double sum, [in] BYTE type, [in] BOOL noRest, [out, retval] long *pRes);
+		[id(22), helpstring("method OfficialSums")] HRESULT OfficialSums([in]BYTE num, [in] BSTR passwd, [in] BYTE type, [in] double sum, [out, retval] long *pRes);
+		[id(23), helpstring("method GetBonNumber")] HRESULT GetBonNumber([out, retval] long *pNumber);
+		[id(24), helpstring("method SetPayType")] HRESULT SetPayType([in]BYTE type, [in] BSTR line, [out, retval] long *pRes);
+		[id(25), helpstring("method SetParameters")] HRESULT SetParameters([in] WORD fpnum, [in] BOOL logo, [in] BOOL till, [in] BOOL autocut, [in] BOOL transparent, [out, retval] long *pRes);
+		[id(26), helpstring("method SetClicheLine")] HRESULT SetClicheLine([in]BYTE num, [in] BSTR text, [out, retval] long *pRes);
+		[id(27), helpstring("method SetOperatorUserPass")] HRESULT SetOperatorUserPass([in] BYTE oper, [in] BSTR name, [in] BSTR passwd, [out, retval] long *pRes);
+		[id(28), helpstring("method SetArticleInfo")] HRESULT SetArticleInfo([in] WORD num, [in] BSTR name, [in] double price, [in] BYTE taxgrp, [out, retval] long *pRes);
+		[id(29), helpstring("method SetLogoFile")] HRESULT SetLogoFile([in] BSTR filename, [out, retval] long *pRes);
+		[id(30), helpstring("method GetFactoryNumber")] HRESULT GetFactoryNumber([out, retval] BSTR *pRes);
+		[id(31), helpstring("method GetFiscalNumber")] HRESULT GetFiscalNumber([out, retval] BSTR *pRes);
+		[id(32), helpstring("method SellDB")] HRESULT SellDB([in] BOOL isVoid, [in] WORD number, [in] double quantity, [in] double discount, [out, retval] long *pRes);
+		[id(33), helpstring("method GetTaxPercents")] HRESULT GetTaxPercents([out, retval] LPDISPATCH *pRes);
+		[id(34), helpstring("method GetPayTypes")] HRESULT GetPayTypes([out, retval] LPDISPATCH *pRes);
+		[id(35), helpstring("method GetParameters")] HRESULT GetParameters([out, retval] LPDISPATCH *pRes);
+		[id(36), helpstring("method GetOperatorUserPass")] HRESULT GetOperatorUserPass([in] BYTE oper, [out, retval] LPDISPATCH *pRes);
+		[id(37), helpstring("method GetDailySums")] HRESULT GetDailySums([out, retval] LPDISPATCH *pRes);
+		[id(38), helpstring("method GetArticleInfo")] HRESULT GetArticleInfo([in] WORD number, [out, retval] LPDISPATCH *pRes);
+		[id(39), helpstring("method GetDailyInfo")] HRESULT GetDailyInfo([out, retval] LPDISPATCH *pRes);
+		[id(40), helpstring("method GetOperatorInfo")] HRESULT GetOperatorInfo([in] BYTE oper, [out, retval] LPDISPATCH *pRes);
+		[id(41), helpstring("method GetOperatorReceives")] HRESULT GetOperatorReceives([in] BYTE oper, [out, retval] LPDISPATCH *pRes);
+		[id(42), helpstring("method GetDateTime")] HRESULT GetDateTime([out, retval] DATE* pVal);
+		[id(43), helpstring("method Display")] HRESULT Display([in] BSTR line, [out, retval] long *pRes);
+		[id(44), helpstring("method DisplayLine1")] HRESULT DisplayLine1([in] BSTR line, [out, retval] long *pRes);
+		[id(45), helpstring("method DisplayLine2")] HRESULT DisplayLine2([in] BSTR line, [out, retval] long *pRes);
+		[id(46), helpstring("method GetVersion")] HRESULT GetVersion([out, retval] BSTR *pRes);
+		[id(47), helpstring("method GetInputBuffer")] HRESULT GetInputBuffer([out, retval] BSTR *pRes);
+		[id(48), helpstring("method GetResponseBuffer")] HRESULT GetResponseBuffer([out, retval] BSTR *pRes);
+		[id(49), helpstring("method GetInputHexFormated")] HRESULT GetInputHexFormated([out, retval] BSTR *pRes);
+		[id(50), helpstring("method GetResponseHexFormated")] HRESULT GetResponseHexFormated([out, retval] BSTR *pRes);
+		[id(51), helpstring("method GetErrorString")] HRESULT GetErrorString([in] int error, [in] int lang, [out, retval] BSTR *pRes);
+		[id(52), helpstring("method GetOperatorIncomes")] HRESULT GetOperatorIncomes([in] BYTE oper, [out, retval] LPDISPATCH *pRes);
+		[id(53), helpstring("method GetOperatorExpenses")] HRESULT GetOperatorExpenses([in] BYTE oper, [out, retval] LPDISPATCH *pRes);
+		[id(54), helpstring("method GetDailyPayments")] HRESULT GetDailyPayments([out, retval] LPDISPATCH *pRes);
+		[id(55), helpstring("method GetDailyIncomes")] HRESULT GetDailyIncomes([out, retval] LPDISPATCH *pRes);
+		[id(56), helpstring("method GetDailyOfficialIncomes")] HRESULT GetDailyOfficialIncomes([out, retval] LPDISPATCH *pRes);
+		[id(57), helpstring("method GetDailyOfficialExpenses")] HRESULT GetDailyOfficialExpenses([out, retval] LPDISPATCH *pRes);
+		[id(58), helpstring("method CalcIntermediateSum")] HRESULT CalcIntermediateSum([in] BOOL doprint, [in] BOOL dodisplay, [in] BOOL dopercents, [in] double discount, [out, retval] double *pRes);
+		[id(59), helpstring("method GetLastFiscalReportData")] HRESULT GetLastFiscalReportData([out, retval] LPDISPATCH *pRes);
+		[id(60), helpstring("method ReportSpecialFiscal")] HRESULT ReportSpecialFiscal([out, retval] long *pRes);
+		[id(61), helpstring("method ReportFiscalByBlock")] HRESULT ReportFiscalByBlock([in] BOOL detailed, [in] WORD startNumber, [in] WORD endNumber, [out, retval] long *pRes);
+		[id(62), helpstring("method ReportDaily")] HRESULT ReportDaily([in] BOOL zero, [in] BOOL extended, [out, retval] long *pRes);
+		[id(63), helpstring("method ReportArticles")] HRESULT ReportArticles([in] BOOL zero, [out, retval] long *pRes);
+		[id(64), helpstring("method SetDateTime")] HRESULT SetDateTime([in] DATE datetime, [out, retval] long *pRes);
+		[id(65), helpstring("method ReportFiscalByDate")] HRESULT ReportFiscalByDate([in] BOOL detailed, [in] DATE start, [in] DATE end, [out, retval] long *pRes);
+		[id(66), helpstring("method ReportOperator")] HRESULT ReportOperator([in] BOOL zero, [in] BYTE oper, [out, retval] long *pRes);
+		[id(67), helpstring("method PrintText")] HRESULT PrintText([in] BSTR text, [in] int align, [out, retval] long *pRes);
+		[id(68), helpstring("method GetDailyReport")] HRESULT GetDailyReport([out, retval] LPDISPATCH *pRes);
+		[id(69), helpstring("method GetOperatorCounter")] HRESULT GetOperatorCounter([in] BYTE oper, [out, retval] LPDISPATCH *pRes);
+		[id(70), helpstring("method SetExternalDisplayFile")] HRESULT SetExternalDisplayFile([in] BSTR password, [in] BSTR filename, [out, retval] long *pRes);
+		[id(71), helpstring("method ReadFiscalMemory")] HRESULT ReadFiscalMemory([in] BSTR filename, [out, retval] long *pRes);
+		[id(72), helpstring("method FindFirstFPCOM")] HRESULT FindFirstFPCOM([out, retval] DWORD *pRes);
+		[id(73), helpstring("method PaperCut")] HRESULT PaperCut([out, retval] long *pRes);
+		[id(74), helpstring("method GetStatus")] HRESULT GetStatus([out, retval] LPDISPATCH *pRes);
+		[id(75), helpstring("method GetFreeFiscalSpace")] HRESULT GetFreeFiscalSpace([out, retval] long *pRecords);
+		[propget, id(76), helpstring("property zfpType")] HRESULT zfpType([out, retval] long *pVal);
+		[propput, id(76), helpstring("property zfpType")] HRESULT zfpType([in] long newVal);
+		[id(77), helpstring("method OpenInvoice")] HRESULT OpenInvoice([in] BYTE oper, [in] BSTR passwd, [in] BSTR client, [in] BSTR receiver, [in] BSTR vatNum, [in] BSTR identNum, [in] BSTR address, [out, retval] long *pRes);
+		[id(78), helpstring("method BusyWait")] HRESULT BusyWait([in] DWORD timeout, [out, retval] long *pRes);
+		[id(79), helpstring("method SetAutoBusyWait")] HRESULT SetAutoBusyWait([in] DWORD timeout);
+		[id(80), helpstring("method SetSerialNumber")] HRESULT SetSerialNumber([in] BSTR password, [in] BSTR manifactureNum, [in] BSTR fiscalNum, [in] BSTR controlSum, [out, retval] long *pRes);
+		[id(81), helpstring("method SetTaxNumber")] HRESULT SetTaxNumber([in] BSTR password, [in] BSTR taxNum, [in] BSTR fiscalNum, [out, retval] long *pRes);
+		[id(82), helpstring("method MakeFiscal")] HRESULT MakeFiscal([in] BSTR password, [out, retval] long *pRes);
+		[id(83), helpstring("method SetTaxPercents")] HRESULT SetTaxPercents([in] BSTR password, [in] double tgr1, [in] double tgr2, [in] double tgr3, [in] double tgr4, [out, retval] long *pRes);
+		[id(84), helpstring("method SetDecimalPoint")] HRESULT SetDecimalPoint([in] BSTR password, [in] int point, [out, retval] long *pRes);
+		[id(85), helpstring("method GetEJMode")] HRESULT GetEJMode([out, retval] long *pIsShort);
+		[id(86), helpstring("method SetEJMode")] HRESULT SetEJMode([in] BOOL bShort, [out, retval] long *pRes);
+		[id(87), helpstring("method ReportEJ")] HRESULT ReportEJ([out, retval] long *pRes);
+		[id(88), helpstring("method SellDepartment")] HRESULT SellDepartment([in] BSTR name, [in] WORD depNum, [in] double price, [in] double quantity, [in] double discount, [out, retval] long *pRes);
+		[id(89), helpstring("method SetDepartment")] HRESULT SetDepartment([in] WORD number, [in] BSTR name, [in] BYTE taxgrp, [out, retval] long *pRes);
+		[id(90), helpstring("method GetDepartment")] HRESULT GetDepartment([in] WORD number, [out, retval] LPDISPATCH *pRes);
+		[id(91), helpstring("method SetArticleInfoEx")] HRESULT SetArticleInfoEx([in] WORD num, [in] BSTR name, [in] double price, [in] BYTE taxgrp, [in] WORD department, [out, retval] long *pRes);
+		[id(92), helpstring("method CalcIntermediateSum2")] HRESULT CalcIntermediateSum2([in] BOOL doprint, [in] BOOL dodisplay, [in] BOOL dopercents, [in] double discount, [in] short taxgrp, [out, retval] double *pRes);
+		[id(93), helpstring("method ReportEJ2")] HRESULT ReportEJ2([in] WORD num, [out, retval] long *pRes);
+		[id(94), helpstring("method SetTaxPercentsEU")] HRESULT SetTaxPercentsEU([in] BSTR password, [in] double tgr1, [in] double tgr2, [in] double tgr3, [in] double tgr4, [in] double tgr5, [in] double tgr6, [in] double tgr7, [in] double tgr8, [out, retval] long *pRes);
+		[id(95), helpstring("method SetPayTypeEU")] HRESULT SetPayTypeEU([in]BYTE type, [in] BSTR line, [in] double exchRate, [out, retval] long *pRes);
+		[id(96), helpstring("method GetOperatorChangeEU")] HRESULT GetOperatorChangeEU([in] BYTE oper, [out, retval] LPDISPATCH *pRes);
+		[id(97), helpstring("method SetInvoiceNumbersRangeEU")] HRESULT SetInvoiceNumbersRangeEU([in] BSTR startNum, [in] BSTR lastNum, [out, retval] long *pRes);
+		[id(98), helpstring("method PaymentEU")] HRESULT PaymentEU([in] double sum, [in] BYTE type, [in] BOOL noChange, [in] BYTE changeType, [out, retval] long *pRes);
+		[id(99), helpstring("method SetParametersEU")] HRESULT SetParametersEU([in] WORD fpnum, [in] BOOL logo, [in] BOOL till, [in] BOOL autocut, [in] BOOL transparent, [in] BOOL shortEJ, [in] BOOL currency, [out, retval] long *pRes);
+		[id(101), helpstring("method SendCommandDirect")] HRESULT SendCommandDirect([in] BSTR cmd, [out, retval] BSTR *pRes);
+		[id(103), helpstring("method GetDailyChangeEU")] HRESULT GetDailyChangeEU([out, retval] LPDISPATCH *pRes);
+		[id(104), helpstring("method UpdateClicheKE")] HRESULT UpdateClicheKE([in]BYTE mode, [in] BSTR password, [out, retval] long *pRes);
+		[id(105), helpstring("method Setup2")] HRESULT Setup2([in] BYTE wCom, [in] long baud, [in] long retries, [in] long retryWait);
+		[id(106), helpstring("method OpenBonWithEJ")] HRESULT OpenBonWithEJ([in]BYTE oper, [in] BSTR passwd, [in] BOOL hasEJ, [out, retval] long *pRes);
+		[propget, id(107), helpstring("property zfplibVersion")] HRESULT zfplibVersion([out, retval] long *pVal);
+		[id(108), helpstring("method GetInvoiceNextNumberEU")] HRESULT GetInvoiceNextNumberEU([out, retval] LPDISPATCH *pRes);
+		[id(109), helpstring("method SetLogo")] HRESULT SetLogo([in]char logo, [out, retval] long *pRes);
+		[id(110), helpstring("method GetLogoInfo")] HRESULT GetLogoInfo([out, retval] BSTR *pRes);
+		[id(111), helpstring("method FindFirstFPCOMEx")] HRESULT FindFirstFPCOMEx([out, retval] DWORD *pRes);
+		[id(112), helpstring("method SetLogoFileEx")] HRESULT SetLogoFileEx([in]char logo_id, [in] BSTR filename, [out, retval] long *pRes);
+		[id(113), helpstring("method PrintLogoEx")] HRESULT PrintLogoEx([in]char logo_id, [out, retval] long *pRes);
+		[id(114), helpstring("method CloseBonInCash")] HRESULT CloseBonInCash([out, retval] long *pRes);
+		[id(115), helpstring("method PaymentEx")] HRESULT PaymentEx([in] double sum, [in] BYTE type, [in] BOOL noChange, [in] BYTE changeType, [in] BOOL fPaidExactSum, [out, retval] long *pRes);
+		[id(116), helpstring("method GetVersionGS")] HRESULT GetVersionGS([out, retval] BSTR *pRes);
+		[id(117), helpstring("method EnableCommGS")] HRESULT EnableCommGS([in] char, [in] WORD device_no, [out, retval] long *pRes);
+		[id(118), helpstring("method SetSpeedGS")] HRESULT SetSpeedGS([in] char speed, [out, retval] long *pRes);
+		[id(119), helpstring("method LoadScaleProtocolGS")] HRESULT LoadScaleProtocolGS([in] BSTR protocol, [out, retval] long *pRes);
+		[id(120), helpstring("method SellDepartmentEx")] HRESULT SellDepartmentEx([in] BSTR name, [in] WORD depNum, [in] double price, [in] double quantity, [in] double discount, [in] char flag, [out, retval] long *pRes);
+		[id(121), helpstring("method SellFreeEx")] HRESULT SellFreeEx([in] BSTR name, [in] BYTE taxgrp, [in] double price, [in] double quantity, [in] double discount, [in] char flag, [out, retval] long *pRes);
+		[id(122), helpstring("method SellDBEx")] HRESULT SellDBEx([in] BOOL isVoid, [in] DWORD number, [in] double quantity, [in] double discount, [in] char flag, [out, retval] long *pRes);
+		[id(123), helpstring("method GetArticleInfoEx")] HRESULT GetArticleInfoEx([in] DWORD number, [out, retval] LPDISPATCH *pRes);
+		[id(124), helpstring("method SetArticleInfo2")] HRESULT SetArticleInfo2([in] DWORD num, [in] BSTR name, [in] double price, [in] BYTE taxgrp, [in] WORD department, [out, retval] long *pRes);
+		[id(125), helpstring("method ReportDepartments")] HRESULT ReportDepartments([in] BOOL zero, [out, retval] long *pRes);
+		[id(126), helpstring("method OfficialSumsEx")] HRESULT OfficialSumsEx([in]BYTE num, [in] BSTR passwd, [in] BYTE type, [in] double sum, [in] BSTR note, [out, retval] long *pRes);
+
+		[id(127), helpstring("method EnableBarcode")] HRESULT EnableBarcode([in] char, [out, retval] long *pRes);
+		[id(128), helpstring("method FormatBarcode")] HRESULT FormatBarcode([in] BSTR, [out, retval] long *pRes);
+		[id(129), helpstring("method PrintBarcode")] HRESULT PrintBarcode([in] BSTR, [in] BYTE, [out, retval] long *pRes);
+		[id(130), helpstring("method SetLineWidth")] HRESULT SetLineWidth([in] int, [out, retval] long *pRes);
+		[id(131), helpstring("method SetPrintMode")] HRESULT SetPrintMode([in] DWORD, [out, retval] long *pRes);
+		[id(132), helpstring("method OpenTillEx")] HRESULT OpenTillEx([in] char, [out, retval] long *pRes);
+		[id(133), helpstring("method OpenSerialPort")] HRESULT OpenSerialPort([out, retval] long *pRes);
+		[id(134), helpstring("method CloseSerialPort")] HRESULT CloseSerialPort([out, retval] long *pRes);
+		[id(135), helpstring("method Storno")] HRESULT Storno([in] BSTR name, [in] BYTE taxgrp, [in] double price, [in] double quantity, [out, retval] long *pRes);
+		[id(136), helpstring("method SellFreeDiv")] HRESULT SellFreeDiv([in] BSTR name, [in] BYTE taxgrp, [in] double price, [in] double quantity, [in] double discount, [in] char flag, DWORD divider, [out, retval] long *pRes);
+		[id(137), helpstring("method TerminateBon")] HRESULT TerminateBon([in] BOOL, [out, retval] long *pRes);
+
+		[id(147), helpstring("method ReadFiscalMemory2")] HRESULT ReadFiscalMemory2([in] BSTR filename, [out, retval] long *pRes);
+		[id(148), helpstring("method AddDiscount")] HRESULT AddDiscount([in] BOOL dotrans, [in] BOOL doauto, [in] BOOL dodisplay, [in] BOOL dopercents, [in] double discount, [out, retval] long *pRes);
+
+		[id(151), helpstring("method SellDBEx2")] HRESULT SellDBEx2([in] BOOL isVoid, [in] DWORD number, [in] double price, [in] double quantity, [in] double discount, [in] char flag, [out, retval] long *pRes);
+		[id(152), helpstring("method GetLineWidth")] HRESULT GetLineWidth([out, retval] long *pChars);
+		[id(153), helpstring("method SetArticleInfo3")] HRESULT SetArticleInfo3([in] DWORD num, [in] BSTR name, [in] double price, [in] BYTE taxgrp, [in] WORD department, [in] BSTR unit, [out, retval] long *pRes);
+		[id(154), helpstring("method GetArticleUnit")] HRESULT GetArticleUnit([in] DWORD number, [out, retval] BSTR *pRes);
+		[id(155), helpstring("method SetPayTypeEx")] HRESULT SetPayTypeEx([in]BYTE type, [in] BSTR line, [in] double exchRate, [in] int code, [out, retval] long *pRes);
+		[id(156), helpstring("method GetStartDateFM")] HRESULT GetStartDateFM([out, retval] BSTR *pRes);
+
+		[id(157), helpstring("method PrintTextKP")] HRESULT PrintTextKP([in] BSTR text, [out, retval] long *pRes);
+		[id(158), helpstring("method PrintTextKP2")] HRESULT PrintTextKP2([in] BSTR format, [in] int flags, [in] BSTR text_param, [in] double numeric_param, [out, retval] long *pRes);
+	};
+
+[
+	uuid(B1F547D6-DFAD-47C0-BDE6-407702E27360),
+	version(1.0),
+	helpstring("zfpcom 1.0 Type Library")
+]
+library ZFPCOMLib
+{
+	importlib("stdole32.tlb");
+	importlib("stdole2.tlb");
+
+	[
+		uuid(1CF92986-79B9-418F-9D84-F8052A9C6286),
+		helpstring("_IZekaFPEvents Interface")
+	]
+	dispinterface _IZekaFPEvents
+	{
+		properties:
+		methods:
+	};
+	[
+		object,
+		uuid(15F4A466-C600-48AD-9138-AE4E5734ED8B),
+		dual,
+		helpstring("IGetCurrentBonInfoRes Interface"),
+		pointer_default(unique)
+	]
+	interface IGetCurrentBonInfoRes : IDispatch
+	{
+		[propget, id(1), helpstring("property flags")] HRESULT flags([out, retval] long *pVal);
+		[propput, id(1), helpstring("property flags")] HRESULT flags([in] long newVal);
+		[propget, id(2), helpstring("property purchases")] HRESULT purchases([out, retval] long *pVal);
+		[propput, id(2), helpstring("property purchases")] HRESULT purchases([in] long newVal);
+		[propget, id(3), helpstring("property taxgrp1")] HRESULT taxgrp1([out, retval] double *pVal);
+		[propput, id(3), helpstring("property taxgrp1")] HRESULT taxgrp1([in] double newVal);
+		[propget, id(4), helpstring("property taxgrp2")] HRESULT taxgrp2([out, retval] double *pVal);
+		[propput, id(4), helpstring("property taxgrp2")] HRESULT taxgrp2([in] double newVal);
+		[propget, id(5), helpstring("property taxgrp3")] HRESULT taxgrp3([out, retval] double *pVal);
+		[propput, id(5), helpstring("property taxgrp3")] HRESULT taxgrp3([in] double newVal);
+		[propget, id(6), helpstring("property novoid")] HRESULT novoid([out, retval] BOOL *pVal);
+		[propput, id(6), helpstring("property novoid")] HRESULT novoid([in] BOOL newVal);
+		[propget, id(7), helpstring("property dds")] HRESULT dds([out, retval] BOOL *pVal);
+		[propput, id(7), helpstring("property dds")] HRESULT dds([in] BOOL newVal);
+		[propget, id(8), helpstring("property detailed")] HRESULT detailed([out, retval] BOOL *pVal);
+		[propput, id(8), helpstring("property detailed")] HRESULT detailed([in] BOOL newVal);
+		[propget, id(9), helpstring("property paystarted")] HRESULT paystarted([out, retval] BOOL *pVal);
+		[propput, id(9), helpstring("property paystarted")] HRESULT paystarted([in] BOOL newVal);
+		[propget, id(10), helpstring("property paid")] HRESULT paid([out, retval] BOOL *pVal);
+		[propput, id(10), helpstring("property paid")] HRESULT paid([in] BOOL newVal);
+		[propget, id(11), helpstring("property taxgrp4")] HRESULT taxgrp4([out, retval] double *pVal);
+		[propput, id(11), helpstring("property taxgrp4")] HRESULT taxgrp4([in] double newVal);
+		[propget, id(12), helpstring("property taxgrp5")] HRESULT taxgrp5([out, retval] double *pVal);
+		[propput, id(12), helpstring("property taxgrp5")] HRESULT taxgrp5([in] double newVal);
+		[propget, id(13), helpstring("property powerdown")] HRESULT powerdown([out, retval] long *pVal);
+		[propput, id(13), helpstring("property powerdown")] HRESULT powerdown([in] long newVal);
+		[propget, id(14), helpstring("property invoice")] HRESULT invoice([out, retval] long *pVal);
+		[propput, id(14), helpstring("property invoice")] HRESULT invoice([in] long newVal);
+		[propget, id(15), helpstring("property taxgrp6")] HRESULT taxgrp6([out, retval] double *pVal);
+		[propput, id(15), helpstring("property taxgrp6")] HRESULT taxgrp6([in] double newVal);
+		[propget, id(16), helpstring("property taxgrp7")] HRESULT taxgrp7([out, retval] double *pVal);
+		[propput, id(16), helpstring("property taxgrp7")] HRESULT taxgrp7([in] double newVal);
+		[propget, id(17), helpstring("property taxgrp8")] HRESULT taxgrp8([out, retval] double *pVal);
+		[propput, id(17), helpstring("property taxgrp8")] HRESULT taxgrp8([in] double newVal);
+		[propget, id(18), helpstring("property change")] HRESULT change([out, retval] double *pVal);
+		[propput, id(18), helpstring("property change")] HRESULT change([in] double newVal);
+		[propget, id(19), helpstring("property changeType")] HRESULT changeType([out, retval] short *pVal);
+		[propput, id(19), helpstring("property changeType")] HRESULT changeType([in] short newVal);
+	};
+	[
+		object,
+		uuid(C58962A1-28FB-422A-B3BB-2435C4CB559F),
+		dual,
+		helpstring("ITaxNumbers Interface"),
+		pointer_default(unique)
+	]
+	interface ITaxNumbers : IDispatch
+	{
+		[propget, id(1), helpstring("property taxgrp1")] HRESULT taxgrp1([out, retval] double *pVal);
+		[propput, id(1), helpstring("property taxgrp1")] HRESULT taxgrp1([in] double newVal);
+		[propget, id(2), helpstring("property taxgrp2")] HRESULT taxgrp2([out, retval] double *pVal);
+		[propput, id(2), helpstring("property taxgrp2")] HRESULT taxgrp2([in] double newVal);
+		[propget, id(3), helpstring("property taxgrp3")] HRESULT taxgrp3([out, retval] double *pVal);
+		[propput, id(3), helpstring("property taxgrp3")] HRESULT taxgrp3([in] double newVal);
+		[propget, id(4), helpstring("property taxgrp4")] HRESULT taxgrp4([out, retval] double *pVal);
+		[propput, id(4), helpstring("property taxgrp4")] HRESULT taxgrp4([in] double newVal);
+		[propget, id(5), helpstring("property taxgrp5")] HRESULT taxgrp5([out, retval] double *pVal);
+		[propput, id(5), helpstring("property taxgrp5")] HRESULT taxgrp5([in] double newVal);
+		[propget, id(6), helpstring("property taxgrp6")] HRESULT taxgrp6([out, retval] double *pVal);
+		[propput, id(6), helpstring("property taxgrp6")] HRESULT taxgrp6([in] double newVal);
+		[propget, id(7), helpstring("property taxgrp7")] HRESULT taxgrp7([out, retval] double *pVal);
+		[propput, id(7), helpstring("property taxgrp7")] HRESULT taxgrp7([in] double newVal);
+		[propget, id(8), helpstring("property taxgrp8")] HRESULT taxgrp8([out, retval] double *pVal);
+		[propput, id(8), helpstring("property taxgrp8")] HRESULT taxgrp8([in] double newVal);
+	};
+	[
+		object,
+		uuid(29F4A8DC-786A-4274-A771-4B5C05003536),
+		dual,
+		helpstring("IPayTypes Interface"),
+		pointer_default(unique)
+	]
+	interface IPayTypes : IDispatch
+	{
+		[propget, id(1), helpstring("property paytype1")] HRESULT paytype1([out, retval] BSTR *pVal);
+		[propput, id(1), helpstring("property paytype1")] HRESULT paytype1([in] BSTR newVal);
+		[propget, id(2), helpstring("property paytype2")] HRESULT paytype2([out, retval] BSTR *pVal);
+		[propput, id(2), helpstring("property paytype2")] HRESULT paytype2([in] BSTR newVal);
+		[propget, id(3), helpstring("property paytype3")] HRESULT paytype3([out, retval] BSTR *pVal);
+		[propput, id(3), helpstring("property paytype3")] HRESULT paytype3([in] BSTR newVal);
+		[propget, id(4), helpstring("property paytype4")] HRESULT paytype4([out, retval] BSTR *pVal);
+		[propput, id(4), helpstring("property paytype4")] HRESULT paytype4([in] BSTR newVal);
+		[propget, id(5), helpstring("property paytype0")] HRESULT paytype0([out, retval] BSTR *pVal);
+		[propput, id(5), helpstring("property paytype0")] HRESULT paytype0([in] BSTR newVal);
+		[propget, id(6), helpstring("property paytype1sum")] HRESULT paytype1sum([out, retval] double *pVal);
+		[propput, id(6), helpstring("property paytype1sum")] HRESULT paytype1sum([in] double newVal);
+		[propget, id(7), helpstring("property paytype2sum")] HRESULT paytype2sum([out, retval] double *pVal);
+		[propput, id(7), helpstring("property paytype2sum")] HRESULT paytype2sum([in] double newVal);
+		[propget, id(8), helpstring("property paytype3sum")] HRESULT paytype3sum([out, retval] double *pVal);
+		[propput, id(8), helpstring("property paytype3sum")] HRESULT paytype3sum([in] double newVal);
+		[propget, id(9), helpstring("property paytype4sum")] HRESULT paytype4sum([out, retval] double *pVal);
+		[propput, id(9), helpstring("property paytype4sum")] HRESULT paytype4sum([in] double newVal);
+		[propget, id(10), helpstring("property paytype0sum")] HRESULT paytype0sum([out, retval] double *pVal);
+		[propput, id(10), helpstring("property paytype0sum")] HRESULT paytype0sum([in] double newVal);
+		[propget, id(11), helpstring("property operations")] HRESULT operations([out, retval] long *pVal);
+		[propput, id(11), helpstring("property operations")] HRESULT operations([in] long newVal);
+		[propget, id(12), helpstring("property exchRate")] HRESULT exchRate([out, retval] double *pVal);
+		[propput, id(12), helpstring("property exchRate")] HRESULT exchRate([in] double newVal);
+	};
+	[
+		object,
+		uuid(71FD4FFE-545C-4CE3-B3CF-8F2A7DEA8277),
+		dual,
+		helpstring("IZFPParameters Interface"),
+		pointer_default(unique)
+	]
+	interface IZFPParameters : IDispatch
+	{
+		[propget, id(1), helpstring("property fpnum")] HRESULT fpnum([out, retval] long *pVal);
+		[propput, id(1), helpstring("property fpnum")] HRESULT fpnum([in] long newVal);
+		[propget, id(2), helpstring("property logo")] HRESULT logo([out, retval] long *pVal);
+		[propput, id(2), helpstring("property logo")] HRESULT logo([in] long newVal);
+		[propget, id(3), helpstring("property till")] HRESULT till([out, retval] long *pVal);
+		[propput, id(3), helpstring("property till")] HRESULT till([in] long newVal);
+		[propget, id(4), helpstring("property autocut")] HRESULT autocut([out, retval] long *pVal);
+		[propput, id(4), helpstring("property autocut")] HRESULT autocut([in] long newVal);
+		[propget, id(5), helpstring("property transparent")] HRESULT transparent([out, retval] long *pVal);
+		[propput, id(5), helpstring("property transparent")] HRESULT transparent([in] long newVal);
+		[propget, id(6), helpstring("property shortEJ")] HRESULT shortEJ([out, retval] long *pVal);
+		[propput, id(6), helpstring("property shortEJ")] HRESULT shortEJ([in] long newVal);
+		[propget, id(7), helpstring("property currency")] HRESULT currency([out, retval] long *pVal);
+		[propput, id(7), helpstring("property currency")] HRESULT currency([in] long newVal);
+	};
+	[
+		object,
+		uuid(72495AB9-215A-4C8F-AE1F-BC88FD92B788),
+		dual,
+		helpstring("IOperatorInfo Interface"),
+		pointer_default(unique)
+	]
+	interface IOperatorInfo : IDispatch
+	{
+		[propget, id(1), helpstring("property name")] HRESULT name([out, retval] BSTR *pVal);
+		[propput, id(1), helpstring("property name")] HRESULT name([in] BSTR newVal);
+		[propget, id(2), helpstring("property passwd")] HRESULT passwd([out, retval] BSTR *pVal);
+		[propput, id(2), helpstring("property passwd")] HRESULT passwd([in] BSTR newVal);
+	};
+	[
+		object,
+		uuid(96CAD3E3-70CD-4BED-AB8B-ADDD77D301D3),
+		dual,
+		helpstring("IArticleInfo Interface"),
+		pointer_default(unique)
+	]
+	interface IArticleInfo : IDispatch
+	{
+		[propget, id(1), helpstring("property name")] HRESULT name([out, retval] BSTR *pVal);
+		[propput, id(1), helpstring("property name")] HRESULT name([in] BSTR newVal);
+		[propget, id(2), helpstring("property price")] HRESULT price([out, retval] double *pVal);
+		[propput, id(2), helpstring("property price")] HRESULT price([in] double newVal);
+		[propget, id(3), helpstring("property taxgroup")] HRESULT taxgroup([out, retval] short *pVal);
+		[propput, id(3), helpstring("property taxgroup")] HRESULT taxgroup([in] short newVal);
+		[propget, id(4), helpstring("property turnover")] HRESULT turnover([out, retval] double *pVal);
+		[propput, id(4), helpstring("property turnover")] HRESULT turnover([in] double newVal);
+		[propget, id(5), helpstring("property sells")] HRESULT sells([out, retval] double *pVal);
+		[propput, id(5), helpstring("property sells")] HRESULT sells([in] double newVal);
+		[propget, id(6), helpstring("property counter")] HRESULT counter([out, retval] long *pVal);
+		[propput, id(6), helpstring("property counter")] HRESULT counter([in] long newVal);
+		[propget, id(7), helpstring("property reportdate")] HRESULT reportdate([out, retval] DATE *pVal);
+		[propput, id(7), helpstring("property reportdate")] HRESULT reportdate([in] DATE newVal);
+		[propget, id(8), helpstring("property department")] HRESULT department([out, retval] short *pVal);
+		[propput, id(8), helpstring("property department")] HRESULT department([in] short newVal);
+		[propget, id(9), helpstring("property quantity")] HRESULT quantity([out, retval] double *pVal);
+		[propput, id(9), helpstring("property quantity")] HRESULT quantity([in] double newVal);
+	};
+	[
+		object,
+		uuid(9DF5E8A6-B16D-4F5E-92BC-70E2670E2AFB),
+		dual,
+		helpstring("IDailySums Interface"),
+		pointer_default(unique)
+	]
+	interface IDailySums : IDispatch
+	{
+		[propget, id(1), helpstring("property clients")] HRESULT clients([out, retval] long *pVal);
+		[propput, id(1), helpstring("property clients")] HRESULT clients([in] long newVal);
+		[propget, id(2), helpstring("property discounts")] HRESULT discounts([out, retval] long *pVal);
+		[propput, id(2), helpstring("property discounts")] HRESULT discounts([in] long newVal);
+		[propget, id(3), helpstring("property sumdiscount")] HRESULT sumdiscount([out, retval] double *pVal);
+		[propput, id(3), helpstring("property sumdiscount")] HRESULT sumdiscount([in] double newVal);
+		[propget, id(4), helpstring("property adding")] HRESULT adding([out, retval] long *pVal);
+		[propput, id(4), helpstring("property adding")] HRESULT adding([in] long newVal);
+		[propget, id(5), helpstring("property sumadding")] HRESULT sumadding([out, retval] double *pVal);
+		[propput, id(5), helpstring("property sumadding")] HRESULT sumadding([in] double newVal);
+		[propget, id(6), helpstring("property voids")] HRESULT voids([out, retval] long *pVal);
+		[propput, id(6), helpstring("property voids")] HRESULT voids([in] long newVal);
+		[propget, id(7), helpstring("property sumvoids")] HRESULT sumvoids([out, retval] double *pVal);
+		[propput, id(7), helpstring("property sumvoids")] HRESULT sumvoids([in] double newVal);
+	};
+	[
+		object,
+		uuid(C80831C3-069A-4D31-A042-CD5A2D1BF43B),
+		dual,
+		helpstring("IFiscalReportData Interface"),
+		pointer_default(unique)
+	]
+	interface IFiscalReportData : IDispatch
+	{
+		[propget, id(1), helpstring("property reportdate")] HRESULT reportdate([out, retval] DATE *pVal);
+		[propput, id(1), helpstring("property reportdate")] HRESULT reportdate([in] DATE newVal);
+		[propget, id(2), helpstring("property lastreport")] HRESULT lastreport([out, retval] long *pVal);
+		[propput, id(2), helpstring("property lastreport")] HRESULT lastreport([in] long newVal);
+		[propget, id(3), helpstring("property lastzeroram")] HRESULT lastzeroram([out, retval] long *pVal);
+		[propput, id(3), helpstring("property lastzeroram")] HRESULT lastzeroram([in] long newVal);
+	};
+	[
+		object,
+		uuid(79B6621A-0804-4742-859A-333D1CB3EFBD),
+		dual,
+		helpstring("IDailyReport Interface"),
+		pointer_default(unique)
+	]
+	interface IDailyReport : IDispatch
+	{
+		[propget, id(1), helpstring("property counter")] HRESULT counter([out, retval] long *pVal);
+		[propput, id(1), helpstring("property counter")] HRESULT counter([in] long newVal);
+		[propget, id(2), helpstring("property lastreport")] HRESULT lastreport([out, retval] long *pVal);
+		[propput, id(2), helpstring("property lastreport")] HRESULT lastreport([in] long newVal);
+		[propget, id(3), helpstring("property ecl")] HRESULT ecl([out, retval] long *pVal);
+		[propput, id(3), helpstring("property ecl")] HRESULT ecl([in] long newVal);
+		[propget, id(4), helpstring("property datetime")] HRESULT datetime([out, retval] DATE *pVal);
+		[propput, id(4), helpstring("property datetime")] HRESULT datetime([in] DATE newVal);
+	};
+	[
+		object,
+		uuid(6C75FC08-31BD-4B9E-B5E0-BBF69AA9F041),
+		dual,
+		helpstring("IZFPStatus Interface"),
+		pointer_default(unique)
+	]
+	interface IZFPStatus : IDispatch
+	{
+		[propget, id(1), helpstring("property ST0")] HRESULT ST0([out, retval] BYTE *pVal);
+		[propput, id(1), helpstring("property ST0")] HRESULT ST0([in] BYTE newVal);
+		[propget, id(2), helpstring("property ST1")] HRESULT ST1([out, retval] BYTE *pVal);
+		[propput, id(2), helpstring("property ST1")] HRESULT ST1([in] BYTE newVal);
+		[propget, id(3), helpstring("property ST2")] HRESULT ST2([out, retval] BYTE *pVal);
+		[propput, id(3), helpstring("property ST2")] HRESULT ST2([in] BYTE newVal);
+		[propget, id(4), helpstring("property ST3")] HRESULT ST3([out, retval] BYTE *pVal);
+		[propput, id(4), helpstring("property ST3")] HRESULT ST3([in] BYTE newVal);
+		[propget, id(5), helpstring("property ST4")] HRESULT ST4([out, retval] BYTE *pVal);
+		[propput, id(5), helpstring("property ST4")] HRESULT ST4([in] BYTE newVal);
+		[propget, id(6), helpstring("property wrongTimer")] HRESULT wrongTimer([out, retval] BOOL *pVal);
+		[propget, id(7), helpstring("property wrongDate")] HRESULT wrongDate([out, retval] BOOL *pVal);
+		[propget, id(8), helpstring("property wrongRAM")] HRESULT wrongRAM([out, retval] BOOL *pVal);
+		[propget, id(9), helpstring("property clockHardwareError")] HRESULT clockHardwareError([out, retval] BOOL *pVal);
+		[propget, id(10), helpstring("property paperOutPrinterError")] HRESULT paperOutPrinterError([out, retval] BOOL *pVal);
+		[propget, id(11), helpstring("property reportSumOverflow")] HRESULT reportSumOverflow([out, retval] BOOL *pVal);
+		[propget, id(12), helpstring("property printLogo")] HRESULT printLogo([out, retval] BOOL *pVal);
+		[propget, id(13), helpstring("property nonzeroDailyReport")] HRESULT nonzeroDailyReport([out, retval] BOOL *pVal);
+		[propget, id(14), helpstring("property nonzeroArticleReport")] HRESULT nonzeroArticleReport([out, retval] BOOL *pVal);
+		[propget, id(15), helpstring("property nonzeroOperatorReport")] HRESULT nonzeroOperatorReport([out, retval] BOOL *pVal);
+		[propget, id(16), helpstring("property duplicateNotPrinted")] HRESULT duplicateNotPrinted([out, retval] BOOL *pVal);
+		[propget, id(17), helpstring("property openOfficialBon")] HRESULT openOfficialBon([out, retval] BOOL *pVal);
+		[propget, id(18), helpstring("property OpenFiscalBon")] HRESULT OpenFiscalBon([out, retval] BOOL *pVal);
+		[propget, id(19), helpstring("property detailedInfo")] HRESULT detailedInfo([out, retval] BOOL *pVal);
+		[propget, id(20), helpstring("property VATinfo")] HRESULT VATinfo([out, retval] BOOL *pVal);
+		[propget, id(21), helpstring("property missingFiscalMemory")] HRESULT missingFiscalMemory([out, retval] BOOL *pVal);
+		[propget, id(22), helpstring("property wrongFiscalMemory")] HRESULT wrongFiscalMemory([out, retval] BOOL *pVal);
+		[propget, id(23), helpstring("property fullFiscalMemory")] HRESULT fullFiscalMemory([out, retval] BOOL *pVal);
+		[propget, id(24), helpstring("property fiscalMemoryLimitNear")] HRESULT fiscalMemoryLimitNear([out, retval] BOOL *pVal);
+		[propget, id(25), helpstring("property hasDecimalPoint")] HRESULT hasDecimalPoint([out, retval] BOOL *pVal);
+		[propget, id(26), helpstring("property isFiscal")] HRESULT isFiscal([out, retval] BOOL *pVal);
+		[propget, id(27), helpstring("property hasFiscalAndFactoryNum")] HRESULT hasFiscalAndFactoryNum([out, retval] BOOL *pVal);
+		[propget, id(28), helpstring("property autoCutter")] HRESULT autoCutter([out, retval] BOOL *pVal);
+		[propget, id(29), helpstring("property hasTransparentDisplay")] HRESULT hasTransparentDisplay([out, retval] BOOL *pVal);
+		[propget, id(30), helpstring("property baud9600")] HRESULT baud9600([out, retval] BOOL *pVal);
+		[propget, id(31), helpstring("property autoTillOpen")] HRESULT autoTillOpen([out, retval] BOOL *pVal);
+		[propget, id(32), helpstring("property readOnlyFM")] HRESULT readOnlyFM([out, retval] BOOL *pVal);
+		[propget, id(33), helpstring("property powerDown")] HRESULT powerDown([out, retval] BOOL *pVal);
+		[propget, id(34), helpstring("property printerOverheat")] HRESULT printerOverheat([out, retval] BOOL *pVal);
+		[propget, id(35), helpstring("property Blocked24HoursReport")] HRESULT Blocked24HoursReport([out, retval] BOOL *pVal);
+		[propget, id(36), helpstring("property missingDisplay")] HRESULT missingDisplay([out, retval] BOOL *pVal);
+		[propget, id(37), helpstring("property shortEJMode")] HRESULT shortEJMode([out, retval] BOOL *pVal);
+		[propget, id(38), helpstring("property EJLimitNear")] HRESULT EJLimitNear([out, retval] BOOL *pVal);
+		[propget, id(39), helpstring("property fullEJ")] HRESULT fullEJ([out, retval] BOOL *pVal);
+		[propget, id(40), helpstring("property printCurrency")] HRESULT printCurrency([out, retval] BOOL *pVal);
+	};
+	[
+		object,
+		uuid(6591F815-2562-43F2-888C-6E5653B00284),
+		dual,
+		helpstring("IInvoiceNumbers Interface"),
+		pointer_default(unique)
+	]
+	interface IInvoiceNumbers : IDispatch
+	{
+		[propget, id(1), helpstring("property nextNum")] HRESULT nextNum([out, retval] BSTR *pVal);
+		[propput, id(1), helpstring("property nextNum")] HRESULT nextNum([in] BSTR newVal);
+		[propget, id(2), helpstring("property lastNum")] HRESULT lastNum([out, retval] BSTR *pVal);
+		[propput, id(2), helpstring("property lastNum")] HRESULT lastNum([in] BSTR newVal);
+	};
+	
+	[
+		object,
+		uuid(B5B0717B-6103-4569-8DE7-BD3A1F161049),
+		dual,
+		helpstring("ICurrencyInfo Interface"),
+		pointer_default(unique)
+	]
+	interface ICurrencyInfo : IDispatch
+	{
+		[propget, id(1), helpstring("property price_buy")] HRESULT price_buy([out, retval] double *pVal);
+		[propput, id(1), helpstring("property price_buy")] HRESULT price_buy([in] double newVal);
+		[propget, id(2), helpstring("property price_sell")] HRESULT price_sell([out, retval] double *pVal);
+		[propput, id(2), helpstring("property price_sell")] HRESULT price_sell([in] double newVal);
+		[propget, id(3), helpstring("property price_central_bank")] HRESULT price_central_bank([out, retval] double *pVal);
+		[propput, id(3), helpstring("property price_central_bank")] HRESULT price_central_bank([in] double newVal);
+		[propget, id(4), helpstring("property amount_available")] HRESULT amount_available([out, retval] double *pVal);
+		[propput, id(4), helpstring("property amount_available")] HRESULT amount_available([in] double newVal);
+		[propget, id(5), helpstring("property amount_bought")] HRESULT amount_bought([out, retval] double *pVal);
+		[propput, id(5), helpstring("property amount_bought")] HRESULT amount_bought([in] double newVal);
+		[propget, id(6), helpstring("property amount_sold")] HRESULT amount_sold([out, retval] double *pVal);
+		[propput, id(6), helpstring("property amount_sold")] HRESULT amount_sold([in] double newVal);
+		[propget, id(7), helpstring("property amount_in")] HRESULT amount_in([out, retval] double *pVal);
+		[propput, id(7), helpstring("property amount_in")] HRESULT amount_in([in] double newVal);
+		[propget, id(8), helpstring("property amount_out")] HRESULT amount_out([out, retval] double *pVal);
+		[propput, id(8), helpstring("property amount_out")] HRESULT amount_out([in] double newVal);
+	};
+	
+	[
+		object,
+		uuid(1411DFB5-89AD-47A4-98AC-5F53A3628633),
+		dual,
+		helpstring("IReceiptStatus Interface"),
+		pointer_default(unique)
+	]
+	interface IReceiptStatus : IDispatch
+	{
+		[propget, id(1), helpstring("property is_sale")] HRESULT is_sale([out, retval] BYTE *pVal);
+		[propput, id(1), helpstring("property is_sale")] HRESULT is_sale([in] BYTE newVal);
+		[propget, id(2), helpstring("property is_open")] HRESULT is_open([out, retval] BYTE *pVal);
+		[propput, id(2), helpstring("property is_open")] HRESULT is_open([in] BYTE newVal);
+		[propget, id(3), helpstring("property is_payment_started")] HRESULT is_payment_started([out, retval] BYTE *pVal);
+		[propput, id(3), helpstring("property is_payment_started")] HRESULT is_payment_started([in] BYTE newVal);
+		[propget, id(4), helpstring("property is_payment_finished")] HRESULT is_payment_finished([out, retval] BYTE *pVal);
+		[propput, id(4), helpstring("property is_payment_finished")] HRESULT is_payment_finished([in] BYTE newVal);
+		[propget, id(5), helpstring("property has_power_interrupted")] HRESULT has_power_interrupted([out, retval] BYTE *pVal);
+		[propput, id(5), helpstring("property has_power_interrupted")] HRESULT has_power_interrupted([in] BYTE newVal);
+		[propget, id(6), helpstring("property transactions_count")] HRESULT transactions_count([out, retval] int *pVal);
+		[propput, id(6), helpstring("property transactions_count")] HRESULT transactions_count([in] int newVal);
+		[propget, id(7), helpstring("property taxgroup_subtotal_amount")] HRESULT taxgroup_subtotal_amount([out, retval] double *pVal);
+		[propput, id(7), helpstring("property taxgroup_subtotal_amount")] HRESULT taxgroup_subtotal_amount([in] double newVal);
+		[propget, id(8), helpstring("property change_amount")] HRESULT change_amount([out, retval] double *pVal);
+		[propput, id(8), helpstring("property change_amount")] HRESULT change_amount([in] double newVal);
+	};
+	
+	[
+		uuid(2394FFB1-BB5E-4454-9B40-6F75006D27AA),
+		helpstring("ZekaFP Class")
+	]
+	coclass ZekaFP
+	{
+		[default] interface IZekaFP;
+		[default, source] dispinterface _IZekaFPEvents;
+	};
+	[
+		uuid(A52D1058-A873-4BE7-A94C-1A5DF6E6D345),
+		helpstring("GetCurrentBonInfoRes Class")
+	]
+	coclass GetCurrentBonInfoRes
+	{
+		[default] interface IGetCurrentBonInfoRes;
+	};
+	[
+		uuid(5C5335AF-6042-4246-94CE-4343FD3F7872),
+		helpstring("TaxNumbers Class")
+	]
+	coclass TaxNumbers
+	{
+		[default] interface ITaxNumbers;
+	};
+	[
+		uuid(5F26D9CE-4B61-43B6-900F-ABB48F5AA6A6),
+		helpstring("PayTypes Class")
+	]
+	coclass PayTypes
+	{
+		[default] interface IPayTypes;
+	};
+	[
+		uuid(75E2C498-0DAE-4CFC-BD3F-20CBEC338EA7),
+		helpstring("ZFPParameters Class")
+	]
+	coclass ZFPParameters
+	{
+		[default] interface IZFPParameters;
+	};
+	[
+		uuid(97866887-9FF8-4D60-A7EE-132E46587FA5),
+		helpstring("OperatorInfo Class")
+	]
+	coclass OperatorInfo
+	{
+		[default] interface IOperatorInfo;
+	};
+	[
+		uuid(4B2E1B2E-4C07-471E-BC18-7497D0104348),
+		helpstring("ArticleInfo Class")
+	]
+	coclass ArticleInfo
+	{
+		[default] interface IArticleInfo;
+	};
+	[
+		uuid(52F50CD0-B861-457C-9F2C-6D1295060DC3),
+		helpstring("DailySums Class")
+	]
+	coclass DailySums
+	{
+		[default] interface IDailySums;
+	};
+	[
+		uuid(DDFA7C5F-E120-4293-97D6-2467DBED2B9B),
+		helpstring("FiscalReportData Class")
+	]
+	coclass FiscalReportData
+	{
+		[default] interface IFiscalReportData;
+	};
+	[
+		uuid(1B381FCB-9A9E-456B-87D8-D5883007620C),
+		helpstring("DailyReport Class")
+	]
+	coclass DailyReport
+	{
+		[default] interface IDailyReport;
+	};
+	[
+		uuid(046BF363-4057-4489-B9C6-5C28D48DAF8D),
+		helpstring("ZFPStatus Class")
+	]
+	coclass ZFPStatus
+	{
+		[default] interface IZFPStatus;
+	};
+	[
+		uuid(BEBD9667-9A17-44A0-B568-E1A9232619C5),
+		helpstring("InvoiceNumbers Class")
+	]
+	coclass InvoiceNumbers
+	{
+		[default] interface IInvoiceNumbers;
+	};
+	
+	[
+		uuid(F661C687-5A22-40AB-B4A9-5C396057120A),
+		helpstring("CurrencyInfo Class")
+	]
+	coclass CurrencyInfo
+	{
+		[default] interface ICurrencyInfo;
+	};
+	
+	[
+		uuid(7C5D7CBE-0071-433B-A5F5-311D47DA43F2),
+		helpstring("ReceiptStatus Class")
+	]
+	coclass ReceiptStatus
+	{
+		[default] interface IReceiptStatus;
+	};
+
+};
